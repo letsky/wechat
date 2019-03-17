@@ -30,8 +30,11 @@ public class Content {
 	
 	private String tag;
 	
-	@Column(name = "comments_num")
+	@Column(name = "comment_num")
 	private int commentNum;
+	
+	@Column(name = "like_num")
+	private int likeNum;
 	
 	/**
 	 * 是否允许评论，0为允许，1为不允许，默认为0

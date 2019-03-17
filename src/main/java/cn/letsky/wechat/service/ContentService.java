@@ -9,7 +9,7 @@ public interface ContentService {
 	
 	/**
 	 * 获取正常状态的content
-	 * @param pageable 分页
+	 * @param pageable 分页请求
 	 * @return 分页后正常状态的content列表
 	 */
 	Page<Content> getContent(Pageable pageable);

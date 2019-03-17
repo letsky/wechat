@@ -4,7 +4,6 @@ import java.time.Duration;
 
 import javax.validation.Valid;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.validation.BindingResult;
@@ -41,7 +40,7 @@ public class WxUserController {
 
 	/**
 	 * 获取登录态的session
-	 * 
+	 *
 	 * @param code wx.login换取的code
 	 * @return 自定义的session
 	 */
@@ -52,7 +51,7 @@ public class WxUserController {
 				WxMaJscode2SessionResult session = wxMaService.getUserService().getSessionInfo(code);
 				String wxSession = SessionUtils.create();
 				redisClient.opsForValue().set("wx:session:" + wxSession, session.getOpenid(), Duration.ofDays(7));
-				
+
 				return ResultUtils.success(wxSession);
 			} catch (WxErrorException e) {
 				throw new OperationException(1, "微信异常");
@@ -63,7 +62,7 @@ public class WxUserController {
 
 	/**
 	 * 微信端用户注册
-	 * 
+	 *
 	 * @param userForm      微信端传来的表单
 	 * @param bindingResult 表单验证的结果
 	 * @return 相应的Json结果
@@ -84,7 +83,7 @@ public class WxUserController {
 		}
 		return ResultUtils.success();
 	}
-	
+
 	/**
 	 * 判断用户session是否过期
 	 * @param sessionId 服务端派发的session

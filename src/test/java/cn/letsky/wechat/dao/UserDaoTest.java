@@ -24,7 +24,7 @@ public class UserDaoTest {
 		User user = new User();
 		user.setOpenid("wx6a356c77cc3f80d5");
 		user.setNickname("漠轻桥");
-		user.setGender("1");
+		user.setGender(1);
 		user.setAvatarUrl("http://h.hiphotos.baidu.com/image/pic/item/730e0cf3d7ca7bcb051bd704b0096b63f624a8bc.jpg");
 		userDao.save(user);
 		Assert.assertNotNull(user);

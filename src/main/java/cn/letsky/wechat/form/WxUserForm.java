@@ -14,7 +14,7 @@ public class WxUserForm implements Form {
 	private String nickname;
 	
 	@NotEmpty(message = "微信授权失败")
-	private String gender;
+	private int gender;
 	
 	@NotEmpty(message = "微信授权失败")
 	private String avatarUrl;
@@ -22,7 +22,7 @@ public class WxUserForm implements Form {
 	public WxUserForm() {
 	}
 
-	public WxUserForm(String openid, String nickname, String gender, String avatarUrl) {
+	public WxUserForm(String openid, String nickname, int gender, String avatarUrl) {
 		super();
 		this.openid = openid;
 		this.nickname = nickname;
