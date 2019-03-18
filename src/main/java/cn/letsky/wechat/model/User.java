@@ -17,7 +17,7 @@ public class User {
 	
 	private String nickname;
 	
-	private int gender;
+	private Integer gender;
 	
 	@Column(name = "avatar_url")
 	private String avatarUrl;
@@ -33,7 +33,7 @@ public class User {
 	public User() {	
 	}
 	
-	public User(String openid, String nickname, int gender, String avatarUrl) {
+	public User(String openid, String nickname, Integer gender, String avatarUrl) {
 		this.openid = openid;
 		this.nickname = nickname;
 		this.gender = gender;

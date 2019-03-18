@@ -29,72 +29,66 @@ import me.chanjar.weixin.common.error.WxErrorException;
 @RestController
 public class WxUserController {
 
-	@Autowired
-	private WxMaService wxMaService;
+    @Autowired
+    private WxMaService wxMaService;
 
-	@Autowired
-	private UserService userService;
+    @Autowired
+    private UserService userService;
 
-	@Autowired
-	private RedisTemplate<String, String> redisClient;
+    @Autowired
+    private RedisTemplate<String, String> redisClient;
 
-	/**
-	 * 获取登录态的session
-	 *
-	 * @param code wx.login换取的code
-	 * @return 自定义的session
-	 */
-	@GetMapping("/login")
-	public ResultVO<String> login(@RequestParam("code") String code) {
-		if (code != null) {
-			try {
-				WxMaJscode2SessionResult session = wxMaService.getUserService().getSessionInfo(code);
-				String wxSession = SessionUtils.create();
-				redisClient.opsForValue().set("wx:session:" + wxSession, session.getOpenid(), Duration.ofDays(7));
+    /**
+     * 获取登录态的session
+     *
+     * @param code wx.login换取的code
+     * @return 自定义的session
+     */
+    @GetMapping("/login")
+    public ResultVO<String> login(@RequestParam("code") String code) {
+        if (code != null) {
+            try {
+                WxMaJscode2SessionResult session = wxMaService.getUserService().getSessionInfo(code);
+                String wxSession = SessionUtils.create();
+                redisClient.opsForValue().set("wx:session:" + wxSession, session.getOpenid(), Duration.ofDays(7));
 
-				return ResultUtils.success(wxSession);
-			} catch (WxErrorException e) {
-				throw new OperationException(1, "微信异常");
-			}
-		}
-		return null;
-	}
+                return ResultUtils.success(wxSession);
+            } catch (WxErrorException e) {
+                throw new OperationException(1, "微信异常");
+            }
+        }
+        return null;
+    }
 
-	/**
-	 * 微信端用户注册
-	 *
-	 * @param userForm      微信端传来的表单
-	 * @param bindingResult 表单验证的结果
-	 * @return 相应的Json结果
-	 */
-	@PostMapping("/register")
-	public ResultVO register(@Valid WxUserForm userForm, BindingResult bindingResult) {
-		if (bindingResult.hasErrors()) {
-			String errMsg = bindingResult.getFieldError().getDefaultMessage();
-			return ResultUtils.error(0, errMsg);
-		}
+    /**
+     * 微信端用户注册
+     *
+     * @param userForm      微信端传来的表单
+     * @param bindingResult 表单验证的结果
+     * @return 相应的Json结果
+     */
+    @PostMapping("/register")
+    public ResultVO register(@Valid WxUserForm userForm, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            String errMsg = bindingResult.getFieldError().getDefaultMessage();
+            return ResultUtils.error(0, errMsg);
+        }
+        userService.saveUser(Form2Model.convert(userForm, User.class));
+        return ResultUtils.success();
+    }
 
-		try {
-			userService.saveUser(Form2Model.convert(userForm, User.class));
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
-		return ResultUtils.success();
-	}
-
-	/**
-	 * 判断用户session是否过期
-	 * @param sessionId 服务端派发的session
-	 * @return 返回是否成功的状态码和消息
-	 */
-	@GetMapping("/isexpire")
-	public ResultVO isExpire(@RequestParam("sessionId") String sessionId) {
-		String key = "wx:session:" + sessionId;
-		if (redisClient.getExpire(key) > 0) {
-			return ResultUtils.success();
-		}
-		return ResultUtils.error(1, "过期了");
-	}
+    /**
+     * 判断用户session是否过期
+     *
+     * @param sessionId 服务端派发的session
+     * @return 返回是否成功的状态码和消息
+     */
+    @GetMapping("/isexpire")
+    public ResultVO isExpire(@RequestParam("sessionId") String sessionId) {
+        String key = "wx:session:" + sessionId;
+        if (redisClient.getExpire(key) > 0) {
+            return ResultUtils.success();
+        }
+        return ResultUtils.error(1, "过期了");
+    }
 }

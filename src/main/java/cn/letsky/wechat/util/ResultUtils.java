@@ -1,8 +1,6 @@
 package cn.letsky.wechat.util;
 
-import javax.persistence.criteria.CommonAbstractCriteria;
-
-import cn.letsky.wechat.constant.CommonEnum;
+import cn.letsky.wechat.constant.ResultEnum;
 import cn.letsky.wechat.viewobject.ResultVO;
 
 public class ResultUtils {
@@ -13,7 +11,7 @@ public class ResultUtils {
 	 * @return 状态码200以及数据
 	 */
     public static <T> ResultVO<T> success(T data){
-        return new ResultVO<T>(CommonEnum.SUCCESS.getCode(), data);
+        return new ResultVO<T>(ResultEnum.SUCCESS.getCode(), data);
     }
 
     /**

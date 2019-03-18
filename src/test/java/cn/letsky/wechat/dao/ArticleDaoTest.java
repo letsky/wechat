@@ -1,8 +1,8 @@
 package cn.letsky.wechat.dao;
 
-import java.util.Date;
 import java.util.Optional;
 
+import cn.letsky.wechat.model.Article;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,48 +14,46 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import cn.letsky.wechat.model.Content;
-
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class ContentDaoTest {
+public class ArticleDaoTest {
 
 	@Autowired
-	private ContentDao contentDao;
+	private ArticleDao articleDao;
 	
 //	@Test
 //	@Transactional
 //	public void add() {
 //		for(int i = 10; i < 20; i++) {
-//			Content content = new Content();
+//			Article content = new Article();
 //			content.setContent("这是内容" + i);
 //			content.setCreated(new Date());
 //			content.setAuthorId("wx12345" + i);
-//			Content res = contentDao.save(content);
+//			Article res = articleDao.save(content);
 //			Assert.assertNotNull(res);
 //		}
 //	}
 //	
 	@Test
 	public void findOne() {
-		Optional<Content> res = contentDao.findById(1);
+		Optional<Article> res = articleDao.findById(1);
 		Assert.assertNotNull(res.orElse(null));
 	}
 	
 	@Test
 	public void findAll() {
 		Pageable page = PageRequest.of(0, 3);
-		Page<Content> res = contentDao.findAll(page);
+		Page<Article> res = articleDao.findAll(page);
 		Assert.assertEquals(3, res.getSize());
 	}
 	
 	@Test
 	@Transactional
 	public void modify() {
-		Optional<Content> res = contentDao.findById(1);
-		Content content = res.orElse(null);
-		content.setCommentNum(1);
-		Content result = contentDao.save(content);
+		Optional<Article> res = articleDao.findById(1);
+		Article article = res.orElse(null);
+		article.setCommentNum(1);
+		Article result = articleDao.save(article);
 		Assert.assertNotNull(result);
 	}
 	
@@ -63,7 +61,7 @@ public class ContentDaoTest {
 	@Test
 	public void findAllByStatus() {
 		Pageable page = PageRequest.of(0, 3);
-		Page<Content> res = contentDao.findAllByStatus(0, page);
+		Page<Article> res = articleDao.findAllByStatus(0, page);
 		Assert.assertEquals(3, res.getSize());
 	}
 	

@@ -1,14 +1,13 @@
 package cn.letsky.wechat.dao;
 
+import cn.letsky.wechat.model.Article;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import cn.letsky.wechat.model.Content;
-
 @Repository
-public interface ContentDao extends JpaRepository<Content, Integer> {
+public interface ArticleDao extends JpaRepository<Article, Integer> {
 
 	/**
 	 * 根据状态查询所有的content
@@ -16,5 +15,7 @@ public interface ContentDao extends JpaRepository<Content, Integer> {
 	 * @param pageable 分页参数
 	 * @return 符合条件的content
 	 */
-	 Page<Content> findAllByStatus(int status, Pageable pageable);
+	 Page<Article> findAllByStatus(int status, Pageable pageable);
+
+
 }

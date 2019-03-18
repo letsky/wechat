@@ -2,7 +2,7 @@
 
 ## Quick Start
 
-  First, clone the project.
+  First, clone the project from github.
 
 ```
   git clone https://github.com/letsky/wechat.git

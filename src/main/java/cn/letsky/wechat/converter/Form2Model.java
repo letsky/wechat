@@ -11,12 +11,18 @@ public class Form2Model {
 	 * @param form 在form包下实现Form接口的对象
 	 * @param clazz 转换成model类型
 	 * @return model类型的对象
-	 * @throws InstantiationException
-	 * @throws IllegalAccessException
 	 */
-	public static <T> T convert(Form form, Class<T> clazz) throws InstantiationException, IllegalAccessException {
-		T model = clazz.newInstance();
-		BeanUtils.copyProperties(form, model);
-		return model;
+	public static <T> T convert(Form form, Class<T> clazz) {
+
+		try {
+			T model = clazz.newInstance();
+			BeanUtils.copyProperties(form, model);
+			return model;
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

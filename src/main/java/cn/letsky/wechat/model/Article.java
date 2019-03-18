@@ -10,54 +10,52 @@ import lombok.Data;
 
 @Data
 @Entity
-public class Content {
+public class Article {
 
 	@Id
-	@Column(name = "content_id")
-	private int id;
+	private Integer id;
 	
 	private String content;
 	
 	private Date created;
-	
-	@Column(name = "author_id")
-	private String authorId;
+
+	private String openid;
 	
 	/**
 	 * 0为正常，1为删除，默认为0
 	 */
-	private int status;
+	private Integer status;
 	
 	private String tag;
 	
 	@Column(name = "comment_num")
-	private int commentNum;
+	private Integer commentNum;
 	
 	@Column(name = "like_num")
-	private int likeNum;
+	private Integer likeNum;
 	
 	/**
 	 * 是否允许评论，0为允许，1为不允许，默认为0
 	 */
 	@Column(name = "allow_comment")
-	private int allowComment;
+	private Integer allowComment;
 	
-	public Content() {
+	public Article() {
 		super();
 	}
 	
-	public Content(int id, String content, Date created, String authorId,
-			int commentNum, int allowComment) {
+	public Article(Integer id, String content, Date created, String authorId,
+				   Integer commentNum) {
 		this(id, content, created, authorId, 0, null, commentNum, 0);
 	}
 
-	public Content(int id, String content, Date created, String authorId, int status, String tag,
-			int commentNum, int allowComment) {
+	public Article(Integer id, String content, Date created, String openid, Integer status, String tag,
+				   Integer commentNum, Integer allowComment) {
 		super();
 		this.id = id;
 		this.content = content;
 		this.created = created;
-		this.authorId = authorId;
+		this.openid = openid;
 		this.status = status;
 		this.tag = tag;
 		this.commentNum = commentNum;
