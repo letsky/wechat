@@ -1,6 +1,5 @@
 package cn.letsky.wechat.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import cn.letsky.wechat.constant.ResultEnum;
@@ -9,15 +8,12 @@ import cn.letsky.wechat.exception.CommonException;
 import cn.letsky.wechat.form.ArticleForm;
 import cn.letsky.wechat.model.Article;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import cn.letsky.wechat.model.User;
 import cn.letsky.wechat.service.ArticleService;
 import cn.letsky.wechat.service.UserService;
 import cn.letsky.wechat.util.ResultUtils;
@@ -62,16 +58,8 @@ public class ArticleController {
      * @return 单个文章
      */
     @GetMapping("/{id}")
-    public ResultVO getArticle(@PathVariable("id") Integer id) {
-        Article article = articleService.getOne(id);
-        ArticleVO articleVO = new ArticleVO();
-        BeanUtils.copyProperties(article, articleVO);
-        User user = userService.getUser(article.getOpenid()).orElse(null);
-        if (user != null) {
-            articleVO.setAvatarUrl(user.getAvatarUrl());
-            articleVO.setNickname(user.getNickname());
-        }
-        return ResultUtils.success(articleVO);
+    public ResultVO<ArticleVO> getArticle(@PathVariable("id") Integer id) {
+        return ResultUtils.success(articleService.getOneVO(id));
     }
 
     /**
@@ -82,7 +70,8 @@ public class ArticleController {
      * @return 操作的状态码
      */
     @PostMapping("/sent")
-    public ResultVO sentArticle(@Valid ArticleForm articleForm, BindingResult bindingResult) {
+    public ResultVO sentArticle(@Valid ArticleForm articleForm,
+                                BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             log.error("[发送帖子失败]：articleForm={}", articleForm);
             throw new CommonException(ResultEnum.PARAM_ERROR);

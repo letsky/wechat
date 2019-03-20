@@ -1,24 +1,23 @@
 package cn.letsky.wechat.form;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Date;
+import javax.validation.constraints.NotEmpty;
 
 @Data
 public class ArticleForm implements Form {
 
+    @NotEmpty(message = "你还没有填写内容哦")
     private String content;
 
+    @NotEmpty
     private String openid;
 
     private String tag;
 
-    public ArticleForm() {
-    }
+    private MultipartFile[] imgs;
 
-    public ArticleForm(String content, String openid, String tag) {
-        this.content = content;
-        this.openid = openid;
-        this.tag = tag;
+    public ArticleForm() {
     }
 }

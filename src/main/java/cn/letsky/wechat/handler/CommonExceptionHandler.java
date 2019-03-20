@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import cn.letsky.wechat.exception.OperationException;
 import cn.letsky.wechat.util.ResultUtils;
 import cn.letsky.wechat.viewobject.ResultVO;
 
@@ -19,13 +18,7 @@ public class CommonExceptionHandler {
 	@ExceptionHandler(Exception.class)
 	public ResultVO exceptionHandler() {
 		log.error("[Exception]:" + ResultEnum.ERROR.getMsg());
-		return ResultUtils.error(ResultEnum.ERROR.getCode(), ResultEnum.ERROR.getMsg());
-	}
-
-	@ExceptionHandler(OperationException.class)
-	public ResultVO operationHandler(OperationException e) {
-		log.error("[OperationException]:" + e.getMessage());
-		return ResultUtils.error(e.getCode(), e.getMessage());
+		return ResultUtils.error(ResultEnum.ERROR);
 	}
 	
 	@ExceptionHandler(CommonException.class)
@@ -37,11 +30,12 @@ public class CommonExceptionHandler {
 	@ExceptionHandler(EntityNotFoundException.class)
 	public ResultVO entityNotFoundException(EntityNotFoundException e){
 		log.error("[EntityNotFoundException]:" + e.getMessage());
-		return ResultUtils.error(ResultEnum.ENTITY_NOT_FOUNT.getCode(), ResultEnum.ENTITY_NOT_FOUNT.getMsg());
+		return ResultUtils.error(ResultEnum.ENTITY_NOT_FOUNT);
 	}
 
 	@ExceptionHandler(IllegalArgumentException.class)
 	public ResultVO illegalArgumentException(IllegalArgumentException e){
-		return ResultUtils.error(ResultEnum.PARAM_ERROR.getCode(), ResultEnum.PARAM_ERROR.getMsg());
+		log.error("[IllegalArgumentException]:" + e.getMessage());
+		return ResultUtils.error(ResultEnum.PARAM_ERROR);
 	}
 }

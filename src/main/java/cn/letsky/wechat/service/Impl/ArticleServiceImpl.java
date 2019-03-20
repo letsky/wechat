@@ -34,6 +34,21 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    public ArticleVO getOneVO(Integer id){
+        Article article = articleDao.getOne(id);
+        ArticleVO articleVO = new ArticleVO();
+        BeanUtils.copyProperties(article, articleVO);
+        if (article.getImgs() != null)
+            articleVO.setImgs(article.getImgs().split("#"));
+        User user = userService.getUser(article.getOpenid()).orElse(null);
+        if (user != null) {
+            articleVO.setAvatarUrl(user.getAvatarUrl());
+            articleVO.setNickname(user.getNickname());
+        }
+        return articleVO;
+    }
+
+    @Override
     public Page<Article> getAll(Pageable pageable) {
         return articleDao.findAllByStatus(0, pageable);
     }

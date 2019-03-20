@@ -19,6 +19,13 @@ public interface ArticleService {
     Article getOne(Integer id);
 
     /**
+     * 获取单条文章的内容
+     * @param id 文章的id
+     * @return 展示类的对象
+     */
+    ArticleVO getOneVO(Integer id);
+
+    /**
      * 获取正常状态的content
      *
      * @param pageable 分页请求

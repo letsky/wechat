@@ -4,6 +4,8 @@ import java.time.Duration;
 
 import javax.validation.Valid;
 
+import cn.letsky.wechat.constant.ResultEnum;
+import cn.letsky.wechat.exception.CommonException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.validation.BindingResult;
@@ -16,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
 import cn.letsky.wechat.converter.Form2Model;
-import cn.letsky.wechat.exception.OperationException;
 import cn.letsky.wechat.form.WxUserForm;
 import cn.letsky.wechat.model.User;
 import cn.letsky.wechat.service.UserService;
@@ -54,7 +55,7 @@ public class WxUserController {
 
                 return ResultUtils.success(wxSession);
             } catch (WxErrorException e) {
-                throw new OperationException(1, "微信异常");
+                throw new CommonException(ResultEnum.WECHAT_LOGIN_ERROR);
             }
         }
         return null;
@@ -71,7 +72,7 @@ public class WxUserController {
     public ResultVO register(@Valid WxUserForm userForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             String errMsg = bindingResult.getFieldError().getDefaultMessage();
-            return ResultUtils.error(0, errMsg);
+            return ResultUtils.error(ResultEnum.FAIL);
         }
         userService.saveUser(Form2Model.convert(userForm, User.class));
         return ResultUtils.success();
@@ -89,6 +90,6 @@ public class WxUserController {
         if (redisClient.getExpire(key) > 0) {
             return ResultUtils.success();
         }
-        return ResultUtils.error(1, "过期了");
+        return ResultUtils.error(ResultEnum.SESSION_EXPIRED);
     }
 }
