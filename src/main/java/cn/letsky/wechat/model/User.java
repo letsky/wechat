@@ -12,22 +12,46 @@ import lombok.Data;
 @Entity
 public class User {
 
+	/**
+	 * 用户唯一标识
+	 */
 	@Id
 	private String openid;
-	
+
+	/**
+	 * 昵称
+	 */
 	private String nickname;
-	
+
+	/**
+	 * 性别 0：未知、1：男、2：女
+	 */
 	private Integer gender;
-	
+
+	/**
+	 * 头像
+	 */
 	@Column(name = "avatar_url")
 	private String avatarUrl;
-	
+
+	/**
+	 * 邮箱地址
+	 */
 	private String email;
-	
+
+	/**
+	 * 密码
+	 */
 	private String password;
-	
+
+	/**
+	 * 加密随机字符串
+	 */
 	private String salt;
-	
+
+	/**
+	 * 注册时间
+	 */
 	private Date created;
 	
 	public User() {	

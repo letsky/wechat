@@ -2,9 +2,7 @@ package cn.letsky.wechat.model;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import lombok.Data;
 
@@ -12,25 +10,52 @@ import lombok.Data;
 @Entity
 public class Article {
 
+	/**
+	 * 文章id
+	 */
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
+
+	/**
+	 * 文章内容
+	 */
 	private String content;
-	
+
+	/**
+	 * 创建时间
+	 */
 	private Date created;
 
+	/**
+	 * 发表人openid
+	 */
 	private String openid;
 	
 	/**
-	 * 0为正常，1为删除，默认为0
+	 * 文章状态，0为正常，1为删除，默认为0
 	 */
 	private Integer status;
-	
+
+	/**
+	 * 标签
+	 */
 	private String tag;
-	
+
+	/**
+	 * 图片
+	 */
+	private String imgs;
+
+	/**
+	 * 评论数
+	 */
 	@Column(name = "comment_num")
 	private Integer commentNum;
-	
+
+	/**
+	 * 点赞数
+	 */
 	@Column(name = "like_num")
 	private Integer likeNum;
 	
@@ -43,24 +68,5 @@ public class Article {
 	public Article() {
 		super();
 	}
-	
-	public Article(Integer id, String content, Date created, String authorId,
-				   Integer commentNum) {
-		this(id, content, created, authorId, 0, null, commentNum, 0);
-	}
 
-	public Article(Integer id, String content, Date created, String openid, Integer status, String tag,
-				   Integer commentNum, Integer allowComment) {
-		super();
-		this.id = id;
-		this.content = content;
-		this.created = created;
-		this.openid = openid;
-		this.status = status;
-		this.tag = tag;
-		this.commentNum = commentNum;
-		this.allowComment = allowComment;
-	}
-	
-	
 }

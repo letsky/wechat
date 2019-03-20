@@ -16,6 +16,4 @@ public interface ArticleDao extends JpaRepository<Article, Integer> {
 	 * @return 符合条件的content
 	 */
 	 Page<Article> findAllByStatus(int status, Pageable pageable);
-
-
 }

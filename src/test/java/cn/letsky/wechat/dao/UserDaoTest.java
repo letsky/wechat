@@ -19,13 +19,12 @@ public class UserDaoTest {
 	private UserDao userDao;
 	
 	@Test
-	@Transactional
 	public void save() {
 		User user = new User();
 		user.setOpenid("wx6a356c77cc3f80d5");
 		user.setNickname("漠轻桥");
 		user.setGender(1);
-		user.setAvatarUrl("http://h.hiphotos.baidu.com/image/pic/item/730e0cf3d7ca7bcb051bd704b0096b63f624a8bc.jpg");
+		user.setAvatarUrl("https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTK3scd1NENlOKKXJQYwQibAuJkBbMV3VTCZuPial0DSicl66XSibgI0DJtRZhwfW3n8jcQ5XrTO5ibxepg/132");
 		userDao.save(user);
 		Assert.assertNotNull(user);
 	}

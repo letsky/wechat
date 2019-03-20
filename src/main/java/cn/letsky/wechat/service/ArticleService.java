@@ -1,9 +1,12 @@
 package cn.letsky.wechat.service;
 
+import cn.letsky.wechat.viewobject.ArticleVO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import cn.letsky.wechat.model.Article;
+
+import java.util.List;
 
 public interface ArticleService {
 
@@ -22,6 +25,13 @@ public interface ArticleService {
      * @return 分页后正常状态的文章列表
      */
     Page<Article> getAll(Pageable pageable);
+
+    /**
+     * 获取正常状态的文章
+     * @param pageable
+     * @return 展示类的对象
+     */
+    List<ArticleVO> getAllVO(Pageable pageable);
 
     /**
      * 保存文章

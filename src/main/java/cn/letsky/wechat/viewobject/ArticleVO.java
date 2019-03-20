@@ -16,6 +16,9 @@ public class ArticleVO implements Serializable {
 	private Integer id;
 	
 	private String content;
+
+	@JsonInclude(Include.NON_EMPTY)
+	private String[] imgs;
 	
 	private Date created;
 	
@@ -27,14 +30,17 @@ public class ArticleVO implements Serializable {
 	
 	@JsonInclude(Include.NON_EMPTY)
 	private String tag;
-	
+
+	@JsonInclude(Include.NON_EMPTY)
 	private Integer commentNum;
-	
+
+	@JsonInclude(Include.NON_EMPTY)
 	private Integer likeNum;
 	
 	/**
 	 * 是否允许评论，0为允许，1为不允许，默认为0
 	 */
+	@JsonInclude(Include.NON_EMPTY)
 	private Integer allowComment;
 
 }

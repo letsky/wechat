@@ -47,19 +47,11 @@ public class ArticleController {
     @GetMapping("/list")
     public ResultVO<List<ArticleVO>> getArticleList(@RequestParam(value = "page", defaultValue = "1") int page,
                                                     @RequestParam(value = "size", defaultValue = "5") int size) {
-        Pageable pageable = PageRequest.of(page - 1, size);
-        Page<Article> res = articleService.getAll(pageable);
-        List<ArticleVO> list = new ArrayList<>();
-        for (Article article : res.getContent()) {
-            ArticleVO articleVO = new ArticleVO();
-            BeanUtils.copyProperties(article, articleVO);
-            User user = userService.getUser(article.getOpenid()).orElse(null);
-            if (user != null) {
-                articleVO.setAvatarUrl(user.getAvatarUrl());
-                articleVO.setNickname(user.getNickname());
-            }
-            list.add(articleVO);
+        if (page < 1 || size < 5){
+            throw new IllegalArgumentException();
         }
+        Pageable pageable = PageRequest.of(page - 1, size);
+        List<ArticleVO> list = articleService.getAllVO(pageable);
         return ResultUtils.success(list);
     }
 
@@ -83,7 +75,7 @@ public class ArticleController {
     }
 
     /**
-     * 保存文章
+     * 发送文章
      *
      * @param articleForm   前端表单
      * @param bindingResult 表单验证的结果

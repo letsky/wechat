@@ -39,4 +39,9 @@ public class CommonExceptionHandler {
 		log.error("[EntityNotFoundException]:" + e.getMessage());
 		return ResultUtils.error(ResultEnum.ENTITY_NOT_FOUNT.getCode(), ResultEnum.ENTITY_NOT_FOUNT.getMsg());
 	}
+
+	@ExceptionHandler(IllegalArgumentException.class)
+	public ResultVO illegalArgumentException(IllegalArgumentException e){
+		return ResultUtils.error(ResultEnum.PARAM_ERROR.getCode(), ResultEnum.PARAM_ERROR.getMsg());
+	}
 }
