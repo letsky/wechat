@@ -38,7 +38,8 @@ public class ArticleDaoTest {
 
 	@Test
 	public void findOne() {
-		Optional<Article> res = articleDao.findById(1);
+		Optional<Article> res = articleDao.findById(3);
+		System.err.println(res.orElse(null));
 		Assert.assertNotNull(res.orElse(null));
 	}
 	

@@ -16,8 +16,11 @@ public class ArticleForm implements Form {
 
     private String tag;
 
-    private MultipartFile imgs;
+    private Integer allowComment;
+
+    private String[] imgs;
 
     public ArticleForm() {
+        this.allowComment = 0;
     }
 }

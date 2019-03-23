@@ -43,4 +43,7 @@ public class ArticleVO implements Serializable {
 	@JsonInclude(Include.NON_EMPTY)
 	private Integer allowComment;
 
+	public ArticleVO() {
+
+	}
 }

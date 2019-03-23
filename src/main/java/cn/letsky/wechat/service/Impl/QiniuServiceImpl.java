@@ -34,7 +34,7 @@ public class QiniuServiceImpl implements QiniuService {
         try {
             String upToken = auth.uploadToken(qiNiuProperties.getBucket());
             String fileName = FileUtils.fileName(file);
-            if (fileName == null){
+            if (fileName == null) {
                 throw new CommonException(ResultEnum.NOT_PICTURE);
             }
             Response response = uploadManager.put(file.getBytes(), fileName, upToken);

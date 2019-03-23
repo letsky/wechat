@@ -52,7 +52,6 @@ public class WxUserController {
                 WxMaJscode2SessionResult session = wxMaService.getUserService().getSessionInfo(code);
                 String wxSession = SessionUtils.create();
                 redisClient.opsForValue().set("wx:session:" + wxSession, session.getOpenid(), Duration.ofDays(7));
-
                 return ResultUtils.success(wxSession);
             } catch (WxErrorException e) {
                 throw new CommonException(ResultEnum.WECHAT_LOGIN_ERROR);

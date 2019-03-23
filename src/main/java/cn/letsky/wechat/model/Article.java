@@ -45,7 +45,7 @@ public class Article {
 	/**
 	 * 图片
 	 */
-	private String imgs;
+	private String img;
 
 	/**
 	 * 评论数
@@ -67,6 +67,11 @@ public class Article {
 	
 	public Article() {
 		super();
+		this.status = 0;
+		this.tag = null;
+		this.commentNum = 0;
+		this.likeNum = 0;
+		this.allowComment = 0;
 	}
 
 }

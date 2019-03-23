@@ -1,5 +1,6 @@
 package cn.letsky.wechat.controller;
 
+import java.util.Arrays;
 import java.util.List;
 
 import cn.letsky.wechat.constant.ResultEnum;
@@ -9,6 +10,7 @@ import cn.letsky.wechat.form.ArticleForm;
 import cn.letsky.wechat.model.Article;
 import cn.letsky.wechat.service.QiniuService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -77,7 +79,11 @@ public class ArticleController {
             log.error("[发送帖子失败]：articleForm={}", articleForm);
             throw new CommonException(ResultEnum.PARAM_ERROR);
         }
-        Article article = Form2Model.convert(articleForm, Article.class);
+        Article article = new Article();
+        article.setOpenid(articleForm.getOpenid());
+        article.setContent(articleForm.getContent());
+        article.setAllowComment(articleForm.getAllowComment());
+        article.setImg(StringUtils.join(articleForm.getImgs(), "#"));
         Article result = articleService.save(article);
         if (result == null) {
             throw new CommonException(ResultEnum.ERROR);

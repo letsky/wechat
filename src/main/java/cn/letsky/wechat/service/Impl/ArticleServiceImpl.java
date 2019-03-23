@@ -38,8 +38,8 @@ public class ArticleServiceImpl implements ArticleService {
         Article article = articleDao.getOne(id);
         ArticleVO articleVO = new ArticleVO();
         BeanUtils.copyProperties(article, articleVO);
-        if (article.getImgs() != null)
-            articleVO.setImgs(article.getImgs().split("#"));
+        if (article.getImg() != null && article.getImg().length() != 0)
+            articleVO.setImgs(article.getImg().split("#"));
         User user = userService.getUser(article.getOpenid()).orElse(null);
         if (user != null) {
             articleVO.setAvatarUrl(user.getAvatarUrl());
@@ -60,8 +60,9 @@ public class ArticleServiceImpl implements ArticleService {
         for (Article article : articlePage.getContent()) {
             ArticleVO articleVO = new ArticleVO();
             BeanUtils.copyProperties(article, articleVO);
-            if (article.getImgs() != null)
-                articleVO.setImgs(article.getImgs().split("#"));
+            if (article.getImg() != null && article.getImg().length() != 0)
+                articleVO.setImgs(article.getImg().split("#"));
+            else articleVO.setImgs(null);
             User user = userService.getUser(article.getOpenid()).orElse(null);
             if (user != null) {
                 articleVO.setAvatarUrl(user.getAvatarUrl());
