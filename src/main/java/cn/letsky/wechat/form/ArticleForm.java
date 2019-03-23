@@ -16,7 +16,7 @@ public class ArticleForm implements Form {
 
     private String tag;
 
-    private MultipartFile[] imgs;
+    private MultipartFile imgs;
 
     public ArticleForm() {
     }
