@@ -5,7 +5,6 @@ import lombok.Getter;
 @Getter
 public enum ResultEnum implements CodeEnum {
 
-    DELETE(1, "文章被删除"),
     SUCCESS(200, "success"),
     FAIL(404, "接口调用失败"),
     ERROR(10000, "程序内部错误"),
@@ -13,6 +12,7 @@ public enum ResultEnum implements CodeEnum {
     OPENID_ERROR(10002, "openid错误"),
     ENTITY_NOT_FOUNT(10003, "实体不存在"),
     UPLOAD_ERROR(10004, "服务端上传图片出错"),
+    PAGE_PARAM_ERROR(10005, "分页参数不正确"),
 
     WECHAT_LOGIN_ERROR(80000, "微信登录异常"),
 

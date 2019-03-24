@@ -1,6 +1,7 @@
 package cn.letsky.wechat.service.Impl;
 
 import cn.letsky.wechat.constant.ResultEnum;
+import cn.letsky.wechat.constant.StatusEnum;
 import cn.letsky.wechat.dao.ArticleDao;
 import cn.letsky.wechat.model.Article;
 import cn.letsky.wechat.model.User;
@@ -35,40 +36,23 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public ArticleVO getOneVO(Integer id){
-        Article article = articleDao.getOne(id);
+        Article article = getOne(id);
         ArticleVO articleVO = new ArticleVO();
-        BeanUtils.copyProperties(article, articleVO);
-        if (article.getImg() != null && article.getImg().length() != 0)
-            articleVO.setImgs(article.getImg().split("#"));
-        User user = userService.getUser(article.getOpenid()).orElse(null);
-        if (user != null) {
-            articleVO.setAvatarUrl(user.getAvatarUrl());
-            articleVO.setNickname(user.getNickname());
-        }
-        return articleVO;
+        return transform(article, articleVO);
     }
 
     @Override
     public Page<Article> getAll(Pageable pageable) {
-        return articleDao.findAllByStatus(0, pageable);
+        return articleDao.findAllByStatus(StatusEnum.ARTITLE_NORMAL.getCode(), pageable);
     }
 
     @Override
     public List<ArticleVO> getAllVO(Pageable pageable) {
-        Page<Article> articlePage = articleDao.findAllByStatus(0, pageable);
+        Page<Article> articlePage = getAll(pageable);
         List<ArticleVO> list = new ArrayList<>();
         for (Article article : articlePage.getContent()) {
             ArticleVO articleVO = new ArticleVO();
-            BeanUtils.copyProperties(article, articleVO);
-            if (article.getImg() != null && article.getImg().length() != 0)
-                articleVO.setImgs(article.getImg().split("#"));
-            else articleVO.setImgs(null);
-            User user = userService.getUser(article.getOpenid()).orElse(null);
-            if (user != null) {
-                articleVO.setAvatarUrl(user.getAvatarUrl());
-                articleVO.setNickname(user.getNickname());
-            }
-            list.add(articleVO);
+            list.add(transform(article, articleVO));
         }
         return list;
     }
@@ -82,9 +66,26 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public void delete(Integer id) {
         Article article = articleDao.getOne(id);
-        article.setStatus(ResultEnum.DELETE.getCode());
+        article.setStatus(StatusEnum.ARTITLE_DELETE.getCode());
         articleDao.save(article);
     }
 
 
+    /**
+     * 将Article对象转换成ArticleVO对象
+     * @param article
+     * @param articleVO
+     * @return ArticleVO对象
+     */
+    private ArticleVO transform(Article article, ArticleVO articleVO){
+        BeanUtils.copyProperties(article, articleVO);
+        if (article.getImg() != null && article.getImg().length() != 0)
+            articleVO.setImgs(article.getImg().split("#"));
+        User user = userService.getUser(article.getOpenid()).orElse(null);
+        if (user != null) {
+            articleVO.setAvatarUrl(user.getAvatarUrl());
+            articleVO.setNickname(user.getNickname());
+        }
+        return articleVO;
+    }
 }

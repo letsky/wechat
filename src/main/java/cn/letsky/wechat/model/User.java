@@ -1,5 +1,6 @@
 package cn.letsky.wechat.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -10,8 +11,9 @@ import lombok.Data;
 
 @Data
 @Entity
-public class User {
+public class User implements Serializable {
 
+	private static final long serialVersionUID = 3717836851471119239L;
 	/**
 	 * 用户唯一标识
 	 */

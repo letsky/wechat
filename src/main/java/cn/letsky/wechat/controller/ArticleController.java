@@ -4,16 +4,15 @@ import java.util.Arrays;
 import java.util.List;
 
 import cn.letsky.wechat.constant.ResultEnum;
-import cn.letsky.wechat.converter.Form2Model;
 import cn.letsky.wechat.exception.CommonException;
 import cn.letsky.wechat.form.ArticleForm;
 import cn.letsky.wechat.model.Article;
-import cn.letsky.wechat.service.QiniuService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,8 +45,8 @@ public class ArticleController {
     @GetMapping("/list")
     public ResultVO<List<ArticleVO>> getArticleList(@RequestParam(value = "page", defaultValue = "1") int page,
                                                     @RequestParam(value = "size", defaultValue = "5") int size) {
-        if (page < 1 || size < 5){
-            throw new IllegalArgumentException();
+        if (page < 1){
+            page = 1;
         }
         Pageable pageable = PageRequest.of(page - 1, size);
         List<ArticleVO> list = articleService.getAllVO(pageable);

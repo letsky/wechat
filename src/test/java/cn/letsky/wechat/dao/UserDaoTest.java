@@ -28,4 +28,9 @@ public class UserDaoTest {
 		userDao.save(user);
 		Assert.assertNotNull(user);
 	}
+
+	public void findOne(){
+		User user = userDao.getOne("wx6a356c77cc3f80d5");
+		Assert.assertNotNull(user);
+	}
 }
