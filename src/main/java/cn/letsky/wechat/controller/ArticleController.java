@@ -7,12 +7,11 @@ import cn.letsky.wechat.constant.ResultEnum;
 import cn.letsky.wechat.exception.CommonException;
 import cn.letsky.wechat.form.ArticleForm;
 import cn.letsky.wechat.model.Article;
+import cn.letsky.wechat.util.PageUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,11 +44,8 @@ public class ArticleController {
     @GetMapping("/list")
     public ResultVO<List<ArticleVO>> getArticleList(@RequestParam(value = "page", defaultValue = "1") int page,
                                                     @RequestParam(value = "size", defaultValue = "5") int size) {
-        if (page < 1){
-            page = 1;
-        }
-        Pageable pageable = PageRequest.of(page - 1, size);
-        List<ArticleVO> list = articleService.getAllVO(pageable);
+        Pageable pageable = PageUtils.getPageable(page, size);
+        List<ArticleVO> list = articleService.findAllVO(pageable);
         return ResultUtils.success(list);
     }
 
@@ -59,9 +55,21 @@ public class ArticleController {
      * @param id 文章id
      * @return 单个文章
      */
+    @GetMapping()
+    public ResultVO<ArticleVO> getArticle(@RequestParam("id") Integer id) {
+        return ResultUtils.success(articleService.findByIdVO(id));
+    }
+
+    /**
+     * 获取单个文章 已弃用
+     *
+     * @param id 文章id
+     * @return 单个文章
+     */
+    @Deprecated
     @GetMapping("/{id}")
-    public ResultVO<ArticleVO> getArticle(@PathVariable("id") Integer id) {
-        return ResultUtils.success(articleService.getOneVO(id));
+    public ResultVO<ArticleVO> getArticle1(@PathVariable("id") Integer id) {
+        return ResultUtils.success(articleService.findByIdVO(id));
     }
 
     /**
@@ -96,8 +104,21 @@ public class ArticleController {
      * @param id 帖子id
      * @return 操作的状态码
      */
+    @PostMapping()
+    public ResultVO deleteArticle(@RequestParam("id") Integer id) {
+        articleService.delete(id);
+        return ResultUtils.success();
+    }
+
+    /**
+     * 删除帖子 已弃用
+     *
+     * @param id 帖子id
+     * @return 操作的状态码
+     */
+    @Deprecated
     @PostMapping("/{id}")
-    public ResultVO deleteArticle(@PathVariable("id") Integer id) {
+    public ResultVO deleteArticle1(@PathVariable("id") Integer id) {
         articleService.delete(id);
         return ResultUtils.success();
     }

@@ -1,6 +1,5 @@
 package cn.letsky.wechat.service.Impl;
 
-import cn.letsky.wechat.constant.ResultEnum;
 import cn.letsky.wechat.constant.StatusEnum;
 import cn.letsky.wechat.dao.ArticleDao;
 import cn.letsky.wechat.model.Article;
@@ -18,10 +17,13 @@ import cn.letsky.wechat.service.ArticleService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
 public class ArticleServiceImpl implements ArticleService {
+
+    private final String SPILT = "#";
 
     @Autowired
     private ArticleDao articleDao;
@@ -30,25 +32,28 @@ public class ArticleServiceImpl implements ArticleService {
     private UserService userService;
 
     @Override
-    public Article getOne(Integer id) {
-        return articleDao.getOne(id);
+    public Article findById(Integer id) {
+        Optional<Article> article = articleDao.findById(id);
+        return article.orElse(null);
     }
 
     @Override
-    public ArticleVO getOneVO(Integer id){
-        Article article = getOne(id);
+    public ArticleVO findByIdVO(Integer id){
+        Article article = findById(id);
+        if (article == null)
+            return null;
         ArticleVO articleVO = new ArticleVO();
         return transform(article, articleVO);
     }
 
     @Override
-    public Page<Article> getAll(Pageable pageable) {
+    public Page<Article> findAll(Pageable pageable) {
         return articleDao.findAllByStatus(StatusEnum.ARTITLE_NORMAL.getCode(), pageable);
     }
 
     @Override
-    public List<ArticleVO> getAllVO(Pageable pageable) {
-        Page<Article> articlePage = getAll(pageable);
+    public List<ArticleVO> findAllVO(Pageable pageable) {
+        Page<Article> articlePage = findAll(pageable);
         List<ArticleVO> list = new ArrayList<>();
         for (Article article : articlePage.getContent()) {
             ArticleVO articleVO = new ArticleVO();
@@ -80,8 +85,8 @@ public class ArticleServiceImpl implements ArticleService {
     private ArticleVO transform(Article article, ArticleVO articleVO){
         BeanUtils.copyProperties(article, articleVO);
         if (article.getImg() != null && article.getImg().length() != 0)
-            articleVO.setImgs(article.getImg().split("#"));
-        User user = userService.getUser(article.getOpenid()).orElse(null);
+            articleVO.setImgs(article.getImg().split(SPILT));
+        User user = userService.findById(article.getOpenid());
         if (user != null) {
             articleVO.setAvatarUrl(user.getAvatarUrl());
             articleVO.setNickname(user.getNickname());

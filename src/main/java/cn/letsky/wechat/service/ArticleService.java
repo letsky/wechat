@@ -16,14 +16,14 @@ public interface ArticleService {
      * @param id 文章的id
      * @return 文章的内容
      */
-    Article getOne(Integer id);
+    Article findById(Integer id);
 
     /**
      * 获取单条文章的内容
      * @param id 文章的id
      * @return 展示类的对象
      */
-    ArticleVO getOneVO(Integer id);
+    ArticleVO findByIdVO(Integer id);
 
     /**
      * 获取正常状态的content
@@ -31,14 +31,14 @@ public interface ArticleService {
      * @param pageable 分页请求
      * @return 分页后正常状态的文章列表
      */
-    Page<Article> getAll(Pageable pageable);
+    Page<Article> findAll(Pageable pageable);
 
     /**
      * 获取正常状态的文章
      * @param pageable
      * @return 展示类的对象
      */
-    List<ArticleVO> getAllVO(Pageable pageable);
+    List<ArticleVO> findAllVO(Pageable pageable);
 
     /**
      * 保存文章

@@ -1,7 +1,5 @@
 package cn.letsky.wechat.service.Impl;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,13 +14,13 @@ public class UserServiceImpl implements UserService {
 	private UserDao userDao;
 
 	@Override
-	public User saveUser(User user) {
+	public User save(User user) {
 		return userDao.save(user);
 	}
 
 	@Override
-	public Optional<User> getUser(String id) {
-		return userDao.findById(id);
+	public User findById(String id) {
+		return userDao.findById(id).orElse(null);
 	}
 
 }

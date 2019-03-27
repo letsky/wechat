@@ -1,6 +1,8 @@
 package cn.letsky.wechat.controller;
 
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -46,14 +48,18 @@ public class WxUserController {
      * @return 自定义的session
      */
     @GetMapping("/login")
-    public ResultVO<String> login(@RequestParam("code") String code) {
+    public ResultVO<Map<String, String>> login(@RequestParam("code") String code) {
         if (code != null) {
             try {
                 WxMaJscode2SessionResult session = wxMaService.getUserService().getSessionInfo(code);
+                Map<String, String> map = new HashMap<>();
+
                 String wxSession = SessionUtils.create();
+                map.put("wxSession", wxSession);
+                map.put("openid", session.getOpenid());
                 //传入redis
                 redisClient.opsForValue().set("wx:session:" + wxSession, session.getOpenid(), Duration.ofDays(7));
-                return ResultUtils.success(wxSession);
+                return ResultUtils.success(map);
             } catch (WxErrorException e) {
                 throw new CommonException(ResultEnum.WECHAT_LOGIN_ERROR);
             }
@@ -74,7 +80,7 @@ public class WxUserController {
             String errMsg = bindingResult.getFieldError().getDefaultMessage();
             return ResultUtils.error(ResultEnum.FAIL);
         }
-        userService.saveUser(Form2Model.convert(userForm, User.class));
+        userService.save(Form2Model.convert(userForm, User.class));
         return ResultUtils.success();
     }
 

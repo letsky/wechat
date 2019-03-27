@@ -21,33 +21,22 @@ public class Comment implements Serializable {
     private Integer id;
 
     /**
-     * 该条评论的父评论id
+     * 评论用户id
      */
-    private Integer pid;
+    private String uid;
 
     /**
-     * 评论的资源id。标记这条评论是属于哪个资源的。
-     * 资源可以是人、项目、设计资源
+     * 评论的资源id
      */
-    @Column(name = "owner_id")
-    private Integer ownerId;
+    @Column(name = "entity_id")
+    private Integer entityId;
 
     /**
-     * 评论类型。1用户评论，2项目评论，3资源评论
+     * 评论类型
+     * 0为评论帖子
      */
-    private Integer type;
-
-    /**
-     * 评论者id
-     */
-    @Column(name = "from_id")
-    private String fromId;
-
-    /**
-     * 被评论者id
-     */
-    @Column(name = "to_id")
-    private String toId;
+    @Column(name = "entity_type")
+    private Integer entityType;
 
     /**
      * 评论内容
