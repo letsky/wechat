@@ -59,7 +59,7 @@ public class ArticleController {
         ArticleVO articleVO = articleService.findByIdVO(id);
         if (articleVO == null)
             throw new CommonException(ResultEnum.ENTITY_NOT_FOUNT);
-        return ResultUtils.success();
+        return ResultUtils.success(articleVO);
     }
 
     /**
@@ -71,7 +71,10 @@ public class ArticleController {
     @Deprecated
     @GetMapping("/{id}")
     public ResultVO<ArticleVO> getArticle1(@PathVariable("id") Integer id) {
-        return ResultUtils.success(articleService.findByIdVO(id));
+        ArticleVO articleVO = articleService.findByIdVO(id);
+        if (articleVO == null)
+            throw new CommonException(ResultEnum.ENTITY_NOT_FOUNT);
+        return ResultUtils.success(articleVO);
     }
 
     /**
