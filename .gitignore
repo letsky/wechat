@@ -26,7 +26,6 @@ HELP.md
 /build/
 
 ### Springboot
-application.yml
 *#
 *.iml
 *.ipr
@@ -67,3 +66,6 @@ transaction-logs
 secrets.yml
 .gradletasknamecache
 .sts4-cache
+
+### log
+*.log

@@ -47,7 +47,7 @@ public class CommentServiceImpl implements CommentService {
         Page<Comment> comments = commentDao
                 .findAllByEntityTypeAndEntityId(entityType, entityId, pageable);
         if (comments.isEmpty())
-            return null;
+            return Page.empty();
         return comments;
     }
 
@@ -64,6 +64,7 @@ public class CommentServiceImpl implements CommentService {
             if (user == null) {
                 return null;
             }
+            commentVO.setUid(user.getOpenid());
             commentVO.setNickname(user.getNickname());
             commentVO.setAvatarUrl(user.getAvatarUrl());
             return commentVO;

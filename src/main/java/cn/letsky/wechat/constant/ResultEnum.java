@@ -10,9 +10,11 @@ public enum ResultEnum implements CodeEnum {
     ERROR(10000, "程序内部错误"),
     PARAM_ERROR(10001, "参数不正确"),
     OPENID_ERROR(10002, "openid错误"),
-    ENTITY_NOT_FOUNT(10003, "实体不存在"),
-    UPLOAD_ERROR(10004, "服务端上传图片出错"),
-    PAGE_PARAM_ERROR(10005, "分页参数不正确"),
+    ENTITY_TYPE_ERROR(10003, "实体类型不正确"),
+    ENTITY_NOT_FOUNT(10004, "实体不存在"),
+    UPLOAD_ERROR(10005, "服务端上传图片出错"),
+    PAGE_PARAM_ERROR(10006, "分页参数不正确"),
+    NULL_COMMENT(10007, "还没有评论"),
 
     WECHAT_LOGIN_ERROR(80000, "微信登录异常"),
 

@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public enum EntityType {
 
-    ARTITLE(0, "帖子")
+    ARTICLE(0, "帖子")
     ;
 
     private int code;
@@ -15,5 +15,14 @@ public enum EntityType {
     EntityType(int code, String msg) {
         this.code = code;
         this.msg = msg;
+    }
+
+    public static boolean contains(Integer entityType){
+        for (EntityType type : EntityType.values()){
+            if (type.getCode() == entityType){
+                return true;
+            }
+        }
+        return false;
     }
 }

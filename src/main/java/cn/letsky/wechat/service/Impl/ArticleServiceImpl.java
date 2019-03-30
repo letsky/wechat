@@ -1,9 +1,11 @@
 package cn.letsky.wechat.service.Impl;
 
+import cn.letsky.wechat.constant.EntityType;
 import cn.letsky.wechat.constant.StatusEnum;
 import cn.letsky.wechat.dao.ArticleDao;
 import cn.letsky.wechat.model.Article;
 import cn.letsky.wechat.model.User;
+import cn.letsky.wechat.service.CommentService;
 import cn.letsky.wechat.service.UserService;
 import cn.letsky.wechat.viewobject.ArticleVO;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +32,9 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private CommentService commentService;
 
     @Override
     public Article findById(Integer id) {
@@ -91,6 +96,8 @@ public class ArticleServiceImpl implements ArticleService {
             articleVO.setAvatarUrl(user.getAvatarUrl());
             articleVO.setNickname(user.getNickname());
         }
+        Long commentNum = commentService.count(EntityType.ARTICLE.getCode(), article.getId());
+        articleVO.setCommentNum(commentNum);
         return articleVO;
     }
 }

@@ -32,10 +32,10 @@ public class ArticleVO implements Serializable {
 	private String tag;
 
 	@JsonInclude(Include.NON_EMPTY)
-	private Integer commentNum;
+	private Long commentNum;
 
 	@JsonInclude(Include.NON_EMPTY)
-	private Integer likeNum;
+	private Long likeNum;
 	
 	/**
 	 * 是否允许评论，0为允许，1为不允许，默认为0

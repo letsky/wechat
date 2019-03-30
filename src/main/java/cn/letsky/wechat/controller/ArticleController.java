@@ -1,6 +1,5 @@
 package cn.letsky.wechat.controller;
 
-import java.util.Arrays;
 import java.util.List;
 
 import cn.letsky.wechat.constant.ResultEnum;
