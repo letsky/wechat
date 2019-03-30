@@ -20,6 +20,12 @@ public class UploadController {
     @Autowired
     private QiniuService qiniuService;
 
+    /**
+     * 上传图片
+     *
+     * @param files
+     * @return
+     */
     @PostMapping("/upload")
     public ResultVO uploads(@RequestParam("file") MultipartFile[] files){
         List<String> list = new ArrayList<>();
