@@ -56,7 +56,10 @@ public class ArticleController {
      */
     @GetMapping()
     public ResultVO<ArticleVO> getArticle(@RequestParam("id") Integer id) {
-        return ResultUtils.success(articleService.findByIdVO(id));
+        ArticleVO articleVO = articleService.findByIdVO(id);
+        if (articleVO == null)
+            throw new CommonException(ResultEnum.ENTITY_NOT_FOUNT);
+        return ResultUtils.success();
     }
 
     /**
