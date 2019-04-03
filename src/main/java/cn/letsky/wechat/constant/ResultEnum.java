@@ -17,6 +17,7 @@ public enum ResultEnum implements CodeEnum {
     NULL_COMMENT(10007, "还没有评论"),
 
     WECHAT_LOGIN_ERROR(80000, "微信登录异常"),
+    WECHAT_CODE_EMPTY(80001, "微信code为空"),
 
     SESSION_EXPIRED(90000, "客户端session过期"),
     NULL_PICTURE(90001, "上传的图片为空"),

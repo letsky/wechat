@@ -14,4 +14,9 @@ public class CommonException extends RuntimeException {
         super(resultEnum.getMsg());
         this.code = resultEnum.getCode();
     }
+
+    public CommonException(String msg) {
+        super(msg);
+        this.code = ResultEnum.PARAM_ERROR.getCode();
+    }
 }

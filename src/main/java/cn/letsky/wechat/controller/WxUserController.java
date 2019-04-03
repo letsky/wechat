@@ -8,14 +8,11 @@ import javax.validation.Valid;
 
 import cn.letsky.wechat.constant.ResultEnum;
 import cn.letsky.wechat.exception.CommonException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
@@ -49,22 +46,22 @@ public class WxUserController {
      */
     @GetMapping("/login")
     public ResultVO<Map<String, String>> login(@RequestParam("code") String code) {
-        if (code != null) {
-            try {
-                WxMaJscode2SessionResult session = wxMaService.getUserService().getSessionInfo(code);
-                Map<String, String> map = new HashMap<>();
-
-                String wxSession = SessionUtils.create();
-                map.put("wxSession", wxSession);
-                map.put("openid", session.getOpenid());
-                //传入redis
-                redisClient.opsForValue().set("wx:session:" + wxSession, session.getOpenid(), Duration.ofDays(7));
-                return ResultUtils.success(map);
-            } catch (WxErrorException e) {
-                throw new CommonException(ResultEnum.WECHAT_LOGIN_ERROR);
+        try {
+            if (StringUtils.isEmpty(code)){
+                throw new CommonException(ResultEnum.WECHAT_CODE_EMPTY);
             }
+            WxMaJscode2SessionResult session = wxMaService.getUserService().getSessionInfo(code);
+            Map<String, String> map = new HashMap<>();
+
+            String wxSession = SessionUtils.create();
+            map.put("wxSession", wxSession);
+            map.put("openid", session.getOpenid());
+            //传入redis
+            redisClient.opsForValue().set("wx:session:" + wxSession, session.getOpenid(), Duration.ofDays(7));
+            return ResultUtils.success(map);
+        } catch (WxErrorException e) {
+            throw new CommonException(ResultEnum.WECHAT_LOGIN_ERROR);
         }
-        return null;
     }
 
     /**
@@ -78,7 +75,7 @@ public class WxUserController {
     public ResultVO register(@Valid WxUserForm userForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             String errMsg = bindingResult.getFieldError().getDefaultMessage();
-            return ResultUtils.error(ResultEnum.FAIL);
+            throw new CommonException(errMsg);
         }
         userService.save(Form2Model.convert(userForm, User.class));
         return ResultUtils.success();

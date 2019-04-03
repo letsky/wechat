@@ -16,8 +16,8 @@ import javax.persistence.EntityNotFoundException;
 public class CommonExceptionHandler {
 	
 	@ExceptionHandler(Exception.class)
-	public ResultVO exceptionHandler() {
-		log.error("[Exception]:" + ResultEnum.ERROR.getMsg());
+	public ResultVO exceptionHandler(Exception e) {
+		log.error("[Exception]:" + e.getMessage());
 		return ResultUtils.error(ResultEnum.ERROR);
 	}
 	

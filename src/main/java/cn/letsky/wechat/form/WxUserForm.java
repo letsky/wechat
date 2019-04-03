@@ -1,5 +1,7 @@
 package cn.letsky.wechat.form;
 
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
 import lombok.Data;
@@ -7,23 +9,21 @@ import lombok.Data;
 @Data
 public class WxUserForm implements Form {
 
-	@NotEmpty(message = "微信授权失败")
+	@NotEmpty(message = "openid为空")
 	private String openid;
 	
-	@NotEmpty(message = "微信授权失败")
+	@NotEmpty(message = "昵称为空")
 	private String nickname;
+
+	private Integer gender;
 	
-	@NotEmpty(message = "微信授权失败")
-	private int gender;
-	
-	@NotEmpty(message = "微信授权失败")
+	@NotEmpty(message = "头像为空")
 	private String avatarUrl;
-	
+
 	public WxUserForm() {
 	}
 
-	public WxUserForm(String openid, String nickname, int gender, String avatarUrl) {
-		super();
+	public WxUserForm(String openid, String nickname, Integer gender, String avatarUrl) {
 		this.openid = openid;
 		this.nickname = nickname;
 		this.gender = gender;

@@ -53,7 +53,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Page<Article> findAll(Pageable pageable) {
-        return articleDao.findAllByStatus(StatusEnum.ARTITLE_NORMAL.getCode(), pageable);
+        return articleDao.findAllByStatus(StatusEnum.ARTICLE_NORMAL.getCode(), pageable);
     }
 
     @Override
@@ -76,7 +76,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public void delete(Integer id) {
         Article article = articleDao.getOne(id);
-        article.setStatus(StatusEnum.ARTITLE_DELETE.getCode());
+        article.setStatus(StatusEnum.ARTICLE_DELETE.getCode());
         articleDao.save(article);
     }
 
