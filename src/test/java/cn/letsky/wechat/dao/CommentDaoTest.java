@@ -22,7 +22,7 @@ public class CommentDaoTest {
     @Test
     public void findAllByEntityTypeAndEntityId(){
         Pageable pageable = PageRequest.of(0, 5);
-        Page<Comment> comments = commentDao.findAllByEntityTypeAndEntityId(
+        Page<Comment> comments = commentDao.findAllByEntityTypeAndEntityIdOrderByCreatedDesc(
                 EntityType.ARTICLE.getCode(), 2, pageable);
         System.err.println(comments.getContent());
         Assert.assertNotNull(comments.getContent());

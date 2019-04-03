@@ -32,10 +32,11 @@ public class CommentController {
      * @return
      */
     @PostMapping("/sent")
-    public ResultVO addComment(@RequestParam("uid") String uid,
-                               @RequestParam("content") String content,
-                               @RequestParam("entityType") Integer entityType,
-                               @RequestParam("entityId") Integer entityId) {
+    public ResultVO addComment(
+            @RequestParam("uid") String uid,
+            @RequestParam("content") String content,
+            @RequestParam("entityType") Integer entityType,
+            @RequestParam("entityId") Integer entityId) {
 
         if (!EntityType.contains(entityType)) {
             throw new CommonException(ResultEnum.ENTITY_TYPE_ERROR);
@@ -57,12 +58,15 @@ public class CommentController {
      * @return
      */
     @GetMapping
-    public ResultVO<List<CommentVO>> getComment(@RequestParam("entityType") Integer entityType,
-                                                @RequestParam("entityId") Integer entityId,
-                                                @RequestParam(value = "page", defaultValue = "1") Integer page,
-                                                @RequestParam(value = "size", defaultValue = "5") Integer size) {
+    public ResultVO<List<CommentVO>> getComment(
+            @RequestParam("entityType") Integer entityType,
+            @RequestParam("entityId") Integer entityId,
+            @RequestParam(value = "page", defaultValue = "1") Integer page,
+            @RequestParam(value = "size", defaultValue = "5") Integer size) {
+
         Pageable pageable = PageUtils.getPageable(page, size);
-        List<CommentVO> commentVOList = commentService.findAllVO(entityType, entityId, pageable);
+        List<CommentVO> commentVOList =
+                commentService.findAllVO(entityType, entityId, pageable);
         if (commentVOList == null)
             throw new CommonException(ResultEnum.NULL_COMMENT);
         return ResultUtils.success(commentVOList);

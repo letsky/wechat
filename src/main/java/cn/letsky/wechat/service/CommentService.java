@@ -10,11 +10,14 @@ import java.util.List;
 public interface CommentService {
 
 
-    Comment save(String uid, String content, Integer entityType, Integer entityId);
+    Comment save(String uid, String content,
+                 Integer entityType, Integer entityId);
 
     Long count(Integer entityType, Integer entityId);
 
-    Page<Comment> findAll(Integer entityType, Integer entityId, Pageable pageable);
+    Page<Comment> findAll(Integer entityType,
+                          Integer entityId, Pageable pageable);
 
-    List<CommentVO> findAllVO(Integer entityType, Integer entityId, Pageable pageable);
+    List<CommentVO> findAllVO(Integer entityType,
+                              Integer entityId, Pageable pageable);
 }

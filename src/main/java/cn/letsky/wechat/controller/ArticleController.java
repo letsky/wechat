@@ -41,8 +41,10 @@ public class ArticleController {
      * @return 文章列表
      */
     @GetMapping("/list")
-    public ResultVO<List<ArticleVO>> getArticleList(@RequestParam(value = "page", defaultValue = "1") int page,
-                                                    @RequestParam(value = "size", defaultValue = "5") int size) {
+    public ResultVO<List<ArticleVO>> getArticleList(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "5") int size) {
+
         Pageable pageable = PageUtils.getPageable(page, size);
         List<ArticleVO> list = articleService.findAllVO(pageable);
         return ResultUtils.success(list);
@@ -56,6 +58,7 @@ public class ArticleController {
      */
     @GetMapping()
     public ResultVO<ArticleVO> getArticle(@RequestParam("id") Integer id) {
+
         ArticleVO articleVO = articleService.findByIdVO(id);
         if (articleVO == null)
             throw new CommonException(ResultEnum.ENTITY_NOT_FOUNT);
@@ -71,6 +74,7 @@ public class ArticleController {
     @Deprecated
     @GetMapping("/{id}")
     public ResultVO<ArticleVO> getArticle1(@PathVariable("id") Integer id) {
+
         ArticleVO articleVO = articleService.findByIdVO(id);
         if (articleVO == null)
             throw new CommonException(ResultEnum.ENTITY_NOT_FOUNT);
@@ -87,6 +91,7 @@ public class ArticleController {
     @PostMapping("/sent")
     public ResultVO sentArticle(@Valid ArticleForm articleForm,
                                 BindingResult bindingResult) {
+
         if (bindingResult.hasErrors()) {
             log.error("[发送帖子失败]：articleForm={}", articleForm);
             throw new CommonException(ResultEnum.PARAM_ERROR);

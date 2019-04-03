@@ -72,7 +72,9 @@ public class WxUserController {
      * @return 相应的Json结果
      */
     @PostMapping("/register")
-    public ResultVO register(@Valid WxUserForm userForm, BindingResult bindingResult) {
+    public ResultVO register(@Valid WxUserForm userForm,
+                             BindingResult bindingResult) {
+
         if (bindingResult.hasErrors()) {
             String errMsg = bindingResult.getFieldError().getDefaultMessage();
             throw new CommonException(errMsg);

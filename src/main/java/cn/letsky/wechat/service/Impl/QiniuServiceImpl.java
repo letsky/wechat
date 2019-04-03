@@ -37,11 +37,13 @@ public class QiniuServiceImpl implements QiniuService {
             if (fileName == null) {
                 throw new CommonException(ResultEnum.NOT_PICTURE);
             }
-            Response response = uploadManager.put(file.getBytes(), fileName, upToken);
+            Response response = uploadManager.put(file.getBytes(),
+                    fileName, upToken);
             if (response.isOK() && response.isJson()){
                 StringBuilder builder = new StringBuilder();
                 builder.append(qiNiuProperties.getDomain())
-                        .append(new Gson().fromJson(response.bodyString(), DefaultPutRet.class).key);
+                        .append(new Gson().fromJson(response.bodyString(),
+                                DefaultPutRet.class).key);
                 return builder.toString();
             }
             return null;

@@ -7,7 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CommentDao extends JpaRepository<Comment, Integer> {
 
-    Page<Comment> findAllByEntityTypeAndEntityId(Integer entityType, Integer entityId, Pageable pageable);
+    Page<Comment> findAllByEntityTypeAndEntityIdOrderByCreatedDesc(
+            Integer entityType, Integer entityId, Pageable pageable);
 
     Long countByEntityTypeAndEntityId(Integer entityType, Integer entityId);
 }

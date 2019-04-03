@@ -6,8 +6,11 @@ import java.util.UUID;
 
 public class FileUtils {
 
-    public static String QINIU_DOMAIN_PREFIX = "http://ponxfa1er.bkt.clouddn.com/";
-    public static String[] IMAGE_FILE_SUFFIX = new String[] { "png", "jpg", "bmp", "jpeg" };
+    public static String QINIU_DOMAIN_PREFIX =
+            "http://ponxfa1er.bkt.clouddn.com/";
+    
+    public static String[] IMAGE_FILE_SUFFIX =
+            new String[] { "png", "jpg", "bmp", "jpeg" };
 
     /**
      * 判断是否是图片

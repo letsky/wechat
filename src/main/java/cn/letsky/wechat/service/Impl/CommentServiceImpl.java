@@ -45,7 +45,8 @@ public class CommentServiceImpl implements CommentService {
     public Page<Comment> findAll(Integer entityType,
                                  Integer entityId, Pageable pageable) {
         Page<Comment> comments = commentDao
-                .findAllByEntityTypeAndEntityId(entityType, entityId, pageable);
+                .findAllByEntityTypeAndEntityIdOrderByCreatedDesc(
+                        entityType, entityId, pageable);
         if (comments.isEmpty())
             return Page.empty();
         return comments;
@@ -57,18 +58,19 @@ public class CommentServiceImpl implements CommentService {
         Page<Comment> comments = findAll(entityType, entityId, pageable);
         if (comments.isEmpty())
             return null;
-        List<CommentVO> commentVOList = comments.stream().map(comment -> {
-            CommentVO commentVO = new CommentVO();
-            BeanUtils.copyProperties(comment, commentVO);
-            User user = userService.findById(comment.getUid());
-            if (user == null) {
-                return null;
-            }
-            commentVO.setUid(user.getOpenid());
-            commentVO.setNickname(user.getNickname());
-            commentVO.setAvatarUrl(user.getAvatarUrl());
-            return commentVO;
-        }).collect(Collectors.toList());
+        List<CommentVO> commentVOList = comments.stream()
+                .map(comment -> {
+                    CommentVO commentVO = new CommentVO();
+                    BeanUtils.copyProperties(comment, commentVO);
+                    User user = userService.findById(comment.getUid());
+                    if (user == null) {
+                        return null;
+                    }
+                    commentVO.setUid(user.getOpenid());
+                    commentVO.setNickname(user.getNickname());
+                    commentVO.setAvatarUrl(user.getAvatarUrl());
+                    return commentVO;
+                }).collect(Collectors.toList());
         return commentVOList;
     }
 }

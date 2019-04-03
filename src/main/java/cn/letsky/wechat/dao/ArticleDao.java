@@ -10,10 +10,10 @@ import org.springframework.stereotype.Repository;
 public interface ArticleDao extends JpaRepository<Article, Integer> {
 
 	/**
-	 * 根据状态查询所有的content
+	 * 根据状态查询所有的文章(按发表时间降序)
 	 * @param status 状态
 	 * @param pageable 分页参数
 	 * @return 符合条件的content
 	 */
-	 Page<Article> findAllByStatus(int status, Pageable pageable);
+	 Page<Article> findAllByStatusOrderByCreatedDesc(int status, Pageable pageable);
 }

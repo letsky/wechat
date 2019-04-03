@@ -53,7 +53,8 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Page<Article> findAll(Pageable pageable) {
-        return articleDao.findAllByStatus(StatusEnum.ARTICLE_NORMAL.getCode(), pageable);
+        return articleDao.findAllByStatusOrderByCreatedDesc(
+                StatusEnum.ARTICLE_NORMAL.getCode(), pageable);
     }
 
     @Override
@@ -96,7 +97,8 @@ public class ArticleServiceImpl implements ArticleService {
             articleVO.setAvatarUrl(user.getAvatarUrl());
             articleVO.setNickname(user.getNickname());
         }
-        Long commentNum = commentService.count(EntityType.ARTICLE.getCode(), article.getId());
+        Long commentNum = commentService
+                .count(EntityType.ARTICLE.getCode(), article.getId());
         articleVO.setCommentNum(commentNum);
         return articleVO;
     }
