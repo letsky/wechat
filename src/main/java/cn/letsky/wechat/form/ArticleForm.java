@@ -8,7 +8,6 @@ import javax.validation.constraints.NotEmpty;
 @Data
 public class  ArticleForm implements Form {
 
-    @NotEmpty(message = "你还没有填写内容哦")
     private String content;
 
     @NotEmpty

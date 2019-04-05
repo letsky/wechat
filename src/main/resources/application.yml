@@ -9,7 +9,6 @@ spring:
     open-in-view: true
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
-    time-zone: GMT+8
   redis:
     database: 0
     host: 127.0.0.1
