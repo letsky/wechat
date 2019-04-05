@@ -45,8 +45,10 @@ public class ArticleController {
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "size", defaultValue = "5") int size) {
 
-        Pageable pageable = PageUtils.getPageable(page, size);
-        List<ArticleVO> list = articleService.findAllVO(pageable);
+        List<ArticleVO> list = articleService.findAllVO(page, size);
+        if (list.isEmpty()){
+            throw new CommonException(ResultEnum.NULL_ARTICLE);
+        }
         return ResultUtils.success(list);
     }
 

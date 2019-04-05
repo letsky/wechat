@@ -7,6 +7,7 @@ import cn.letsky.wechat.model.Article;
 import cn.letsky.wechat.model.User;
 import cn.letsky.wechat.service.CommentService;
 import cn.letsky.wechat.service.UserService;
+import cn.letsky.wechat.util.PageUtils;
 import cn.letsky.wechat.viewobject.ArticleVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -52,14 +53,17 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Page<Article> findAll(Pageable pageable) {
-        return articleDao.findAllByStatusOrderByCreatedDesc(
+    public Page<Article> findAll(Integer page, Integer size) {
+        Pageable pageable = PageUtils.getPageable(page, size);
+        Page<Article> articlePage = articleDao.findAllByStatusOrderByCreatedDesc(
                 StatusEnum.ARTICLE_NORMAL.getCode(), pageable);
+        return articlePage;
     }
 
     @Override
-    public List<ArticleVO> findAllVO(Pageable pageable) {
-        Page<Article> articlePage = findAll(pageable);
+    public List<ArticleVO> findAllVO(Integer page, Integer size) {
+
+        Page<Article> articlePage = findAll(page, size);
         List<ArticleVO> list = new ArrayList<>();
         for (Article article : articlePage.getContent()) {
             ArticleVO articleVO = new ArticleVO();

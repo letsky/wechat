@@ -28,17 +28,19 @@ public interface ArticleService {
     /**
      * 获取正常状态的content
      *
-     * @param pageable 分页请求
+     * @param page
+     * @param size
      * @return 分页后正常状态的文章列表
      */
-    Page<Article> findAll(Pageable pageable);
+    Page<Article> findAll(Integer page, Integer size);
 
     /**
      * 获取正常状态的文章
-     * @param pageable
+     * @param page
+     * @param size
      * @return 展示类的对象
      */
-    List<ArticleVO> findAllVO(Pageable pageable);
+    List<ArticleVO> findAllVO(Integer page, Integer size);
 
     /**
      * 保存文章

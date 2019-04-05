@@ -15,6 +15,7 @@ public enum ResultEnum implements CodeEnum {
     UPLOAD_ERROR(10005, "服务端上传图片出错"),
     PAGE_PARAM_ERROR(10006, "分页参数不正确"),
     NULL_COMMENT(10007, "还没有评论"),
+    NULL_ARTICLE(10008, "还没有文章"),
 
     WECHAT_LOGIN_ERROR(80000, "微信登录异常"),
     WECHAT_CODE_EMPTY(80001, "微信code为空"),

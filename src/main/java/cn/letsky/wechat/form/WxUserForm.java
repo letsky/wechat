@@ -3,13 +3,14 @@ package cn.letsky.wechat.form;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import lombok.Data;
 
 @Data
 public class WxUserForm implements Form {
 
-	@NotEmpty(message = "openid为空")
+	@NotNull(message = "openid为null")
 	private String openid;
 	
 	@NotEmpty(message = "昵称为空")
