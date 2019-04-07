@@ -72,6 +72,18 @@ public class ArticleServiceImpl implements ArticleService {
         return list;
     }
 
+    @Override
+    public List<ArticleVO> findAllVOByOpenid(String openid, Integer page, Integer size) {
+        Pageable pageable = PageUtils.getPageable(page, size);
+        Page<Article> articlePage = articleDao.findAllByOpenidOrderByCreatedDesc(openid, pageable);
+        List<ArticleVO> list = new ArrayList<>();
+        for (Article article : articlePage.getContent()) {
+            ArticleVO articleVO = new ArticleVO();
+            list.add(transform(article, articleVO));
+        }
+        return list;
+    }
+
 
     @Override
     public Article save(Article article) {

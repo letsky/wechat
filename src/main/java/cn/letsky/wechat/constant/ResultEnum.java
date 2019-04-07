@@ -24,6 +24,7 @@ public enum ResultEnum implements CodeEnum {
     NULL_PICTURE(90001, "上传的图片为空"),
     EXCEED_PICTURE_LIMIT(90002, "图片上传超过限制"),
     NOT_PICTURE(90003, "上传的不是图片"),
+    SEND_NULL_COMMENT(90004, "评论为空"),
     ;
 
     private int code;

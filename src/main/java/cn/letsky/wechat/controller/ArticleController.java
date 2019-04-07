@@ -6,6 +6,7 @@ import cn.letsky.wechat.constant.ResultEnum;
 import cn.letsky.wechat.exception.CommonException;
 import cn.letsky.wechat.form.ArticleForm;
 import cn.letsky.wechat.model.Article;
+import cn.letsky.wechat.service.CommentService;
 import cn.letsky.wechat.util.PageUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -33,6 +34,9 @@ public class ArticleController {
     @Autowired
     private ArticleService articleService;
 
+    @Autowired
+    private CommentService commentService;
+
     /**
      * 获取文章列表
      *
@@ -46,6 +50,19 @@ public class ArticleController {
             @RequestParam(value = "size", defaultValue = "5") int size) {
 
         List<ArticleVO> list = articleService.findAllVO(page, size);
+        if (list.isEmpty()){
+            throw new CommonException(ResultEnum.NULL_ARTICLE);
+        }
+        return ResultUtils.success(list);
+    }
+
+    @GetMapping(value = "/list", params = {"openid"})
+    public ResultVO<List<ArticleVO>> getArticleListByOpenid(
+            @RequestParam("openid") String openid,
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "5") int size) {
+
+        List<ArticleVO> list = articleService.findAllVOByOpenid(openid, page, size);
         if (list.isEmpty()){
             throw new CommonException(ResultEnum.NULL_ARTICLE);
         }

@@ -43,6 +43,15 @@ public interface ArticleService {
     List<ArticleVO> findAllVO(Integer page, Integer size);
 
     /**
+     * 返回给定用户所有已发送的文章
+     * @param openid
+     * @param page
+     * @param size
+     * @return
+     */
+    List<ArticleVO> findAllVOByOpenid(String openid, Integer page, Integer size);
+
+    /**
      * 保存文章
      * @param article 文章实体
      * @return 保存后的文章对象
