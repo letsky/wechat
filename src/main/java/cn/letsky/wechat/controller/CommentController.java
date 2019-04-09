@@ -3,6 +3,7 @@ package cn.letsky.wechat.controller;
 import cn.letsky.wechat.constant.EntityType;
 import cn.letsky.wechat.constant.ResultEnum;
 import cn.letsky.wechat.exception.CommonException;
+import cn.letsky.wechat.form.CommentForm;
 import cn.letsky.wechat.model.Comment;
 import cn.letsky.wechat.service.CommentService;
 import cn.letsky.wechat.util.PageUtils;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RequestMapping("/comment")
@@ -25,23 +27,18 @@ public class CommentController {
     /**
      * 发送评论
      *
-     * @param uid
-     * @param content
-     * @param entityType
-     * @param entityId
+     * @param commentForm
      * @return
      */
     @PostMapping("/sent")
-    public ResultVO addComment(
-            @RequestParam("uid") String uid,
-            @RequestParam("content") String content,
-            @RequestParam("entityType") Integer entityType,
-            @RequestParam("entityId") Integer entityId) {
+    public ResultVO addComment(@Valid CommentForm commentForm) {
 
-        if (!EntityType.contains(entityType)) {
+        if (!EntityType.contains(commentForm.getEntityType())) {
             throw new CommonException(ResultEnum.ENTITY_TYPE_ERROR);
         }
-        Comment res = commentService.save(uid, content, entityType, entityId);
+        Comment res = commentService.save(
+                commentForm.getUid(), commentForm.getContent(),
+                commentForm.getEntityType(), commentForm.getEntityId());
         if (res == null) {
             throw new CommonException(ResultEnum.FAIL);
         }

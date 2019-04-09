@@ -15,7 +15,7 @@ public enum ResultEnum implements CodeEnum {
     UPLOAD_ERROR(10005, "服务端上传图片出错"),
     PAGE_PARAM_ERROR(10006, "分页参数不正确"),
     NULL_COMMENT(10007, "还没有评论"),
-    NULL_ARTICLE(10008, "还没有文章"),
+
 
     WECHAT_LOGIN_ERROR(80000, "微信登录异常"),
     WECHAT_CODE_EMPTY(80001, "微信code为空"),
@@ -25,6 +25,7 @@ public enum ResultEnum implements CodeEnum {
     EXCEED_PICTURE_LIMIT(90002, "图片上传超过限制"),
     NOT_PICTURE(90003, "上传的不是图片"),
     SEND_NULL_COMMENT(90004, "评论为空"),
+    BEYOND_PAGE_LIMIT(90005, "超出页数"),
     ;
 
     private int code;

@@ -31,7 +31,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Comment save(String uid, String content, Integer entityType, Integer entityId) {
-        if (StringUtils.isEmpty(content)){
+        if (StringUtils.isEmpty(content)) {
             throw new CommonException(ResultEnum.SEND_NULL_COMMENT);
         }
         Comment comment = new Comment();

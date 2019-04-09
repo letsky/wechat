@@ -1,8 +1,10 @@
 package cn.letsky.wechat.service.Impl;
 
 import cn.letsky.wechat.constant.EntityType;
+import cn.letsky.wechat.constant.ResultEnum;
 import cn.letsky.wechat.constant.StatusEnum;
 import cn.letsky.wechat.dao.ArticleDao;
+import cn.letsky.wechat.exception.CommonException;
 import cn.letsky.wechat.model.Article;
 import cn.letsky.wechat.model.User;
 import cn.letsky.wechat.service.CommentService;
@@ -57,6 +59,9 @@ public class ArticleServiceImpl implements ArticleService {
         Pageable pageable = PageUtils.getPageable(page, size);
         Page<Article> articlePage = articleDao.findAllByStatusOrderByCreatedDesc(
                 StatusEnum.ARTICLE_NORMAL.getCode(), pageable);
+        if (page > articlePage.getTotalPages()){
+            throw new CommonException(ResultEnum.BEYOND_PAGE_LIMIT);
+        }
         return articlePage;
     }
 
@@ -76,6 +81,9 @@ public class ArticleServiceImpl implements ArticleService {
     public List<ArticleVO> findAllVOByOpenid(String openid, Integer page, Integer size) {
         Pageable pageable = PageUtils.getPageable(page, size);
         Page<Article> articlePage = articleDao.findAllByOpenidOrderByCreatedDesc(openid, pageable);
+        if (page > articlePage.getTotalPages()){
+            throw new CommonException(ResultEnum.BEYOND_PAGE_LIMIT);
+        }
         List<ArticleVO> list = new ArrayList<>();
         for (Article article : articlePage.getContent()) {
             ArticleVO articleVO = new ArticleVO();

@@ -50,9 +50,6 @@ public class ArticleController {
             @RequestParam(value = "size", defaultValue = "5") int size) {
 
         List<ArticleVO> list = articleService.findAllVO(page, size);
-        if (list.isEmpty()){
-            throw new CommonException(ResultEnum.NULL_ARTICLE);
-        }
         return ResultUtils.success(list);
     }
 
@@ -63,9 +60,6 @@ public class ArticleController {
             @RequestParam(value = "size", defaultValue = "5") int size) {
 
         List<ArticleVO> list = articleService.findAllVOByOpenid(openid, page, size);
-        if (list.isEmpty()){
-            throw new CommonException(ResultEnum.NULL_ARTICLE);
-        }
         return ResultUtils.success(list);
     }
 
@@ -77,22 +71,6 @@ public class ArticleController {
      */
     @GetMapping()
     public ResultVO<ArticleVO> getArticle(@RequestParam("id") Integer id) {
-
-        ArticleVO articleVO = articleService.findByIdVO(id);
-        if (articleVO == null)
-            throw new CommonException(ResultEnum.ENTITY_NOT_FOUNT);
-        return ResultUtils.success(articleVO);
-    }
-
-    /**
-     * 获取单个文章 已弃用
-     *
-     * @param id 文章id
-     * @return 单个文章
-     */
-    @Deprecated
-    @GetMapping("/{id}")
-    public ResultVO<ArticleVO> getArticle1(@PathVariable("id") Integer id) {
 
         ArticleVO articleVO = articleService.findByIdVO(id);
         if (articleVO == null)
@@ -135,19 +113,6 @@ public class ArticleController {
      */
     @PostMapping()
     public ResultVO deleteArticle(@RequestParam("id") Integer id) {
-        articleService.delete(id);
-        return ResultUtils.success();
-    }
-
-    /**
-     * 删除帖子 已弃用
-     *
-     * @param id 帖子id
-     * @return 操作的状态码
-     */
-    @Deprecated
-    @PostMapping("/{id}")
-    public ResultVO deleteArticle1(@PathVariable("id") Integer id) {
         articleService.delete(id);
         return ResultUtils.success();
     }
