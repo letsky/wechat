@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import cn.letsky.wechat.constant.ResultEnum;
 import cn.letsky.wechat.exception.CommonException;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.validation.BindingResult;
@@ -96,5 +97,16 @@ public class WxUserController {
             return ResultUtils.success();
         }
         return ResultUtils.error(ResultEnum.SESSION_EXPIRED);
+    }
+
+    @GetMapping("/getuserinfo")
+    public ResultVO getUserInfo(@RequestParam("openid") String openid){
+        User user = userService.findById(openid);
+        if (user == null){
+            throw new CommonException(ResultEnum.NOT_REGISTER);
+        }
+        WxUserForm wxUserForm = new WxUserForm();
+        BeanUtils.copyProperties(user, wxUserForm);
+        return ResultUtils.success(wxUserForm);
     }
 }
