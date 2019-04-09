@@ -26,6 +26,7 @@ public enum ResultEnum implements CodeEnum {
     NOT_PICTURE(90003, "上传的不是图片"),
     SEND_NULL_COMMENT(90004, "评论为空"),
     BEYOND_PAGE_LIMIT(90005, "超出页数"),
+    NOT_REGISTER(90006, "用户未注册"),
     ;
 
     private int code;

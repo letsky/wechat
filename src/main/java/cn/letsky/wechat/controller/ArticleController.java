@@ -6,6 +6,7 @@ import cn.letsky.wechat.constant.ResultEnum;
 import cn.letsky.wechat.exception.CommonException;
 import cn.letsky.wechat.form.ArticleForm;
 import cn.letsky.wechat.model.Article;
+import cn.letsky.wechat.model.User;
 import cn.letsky.wechat.service.CommentService;
 import cn.letsky.wechat.util.PageUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -92,6 +93,10 @@ public class ArticleController {
         if (bindingResult.hasErrors()) {
             log.error("[发送帖子失败]：articleForm={}", articleForm);
             throw new CommonException(ResultEnum.PARAM_ERROR);
+        }
+        User user = userService.findById(articleForm.getOpenid());
+        if (user == null){
+            throw new CommonException(ResultEnum.NOT_REGISTER);
         }
         Article article = new Article();
         article.setOpenid(articleForm.getOpenid());
