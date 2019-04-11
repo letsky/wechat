@@ -64,8 +64,6 @@ public class CommentController {
         Pageable pageable = PageUtils.getPageable(page, size);
         List<CommentVO> commentVOList =
                 commentService.findAllVO(entityType, entityId, pageable);
-        if (commentVOList == null)
-            throw new CommonException(ResultEnum.NULL_COMMENT);
         return ResultUtils.success(commentVOList);
     }
 

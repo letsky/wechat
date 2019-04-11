@@ -53,9 +53,7 @@ public class CommentServiceImpl implements CommentService {
         Page<Comment> comments = commentDao
                 .findAllByEntityTypeAndEntityIdOrderByCreatedDesc(
                         entityType, entityId, pageable);
-        if (comments.isEmpty())
-            return Page.empty();
-        return comments;
+        return comments.isEmpty() ? Page.empty() : comments;
     }
 
     @Override

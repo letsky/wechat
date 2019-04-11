@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class UploadController {
@@ -28,14 +30,12 @@ public class UploadController {
      */
     @PostMapping("/upload")
     public ResultVO uploads(@RequestParam("file") MultipartFile[] files){
-        List<String> list = new ArrayList<>();
-        for (MultipartFile file : files){
+        List<String> list = Arrays.stream(files).map(file -> {
             String url = uploadImage(file);
-            if (url != null)
-                list.add(url);
-            else
+            if (url == null)
                 throw new CommonException(ResultEnum.FAIL);
-        }
+            return url;
+        }).collect(Collectors.toList());
         return ResultUtils.success(list);
     }
 

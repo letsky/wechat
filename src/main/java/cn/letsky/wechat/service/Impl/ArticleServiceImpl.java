@@ -23,6 +23,7 @@ import cn.letsky.wechat.service.ArticleService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -67,13 +68,10 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public List<ArticleVO> findAllVO(Integer page, Integer size) {
-
         Page<Article> articlePage = findAll(page, size);
-        List<ArticleVO> list = new ArrayList<>();
-        for (Article article : articlePage.getContent()) {
-            ArticleVO articleVO = new ArticleVO();
-            list.add(transform(article, articleVO));
-        }
+        List<ArticleVO> list = articlePage.getContent().stream()
+                .map(e -> transform(e, new ArticleVO()))
+                .collect(Collectors.toList());
         return list;
     }
 
@@ -84,11 +82,10 @@ public class ArticleServiceImpl implements ArticleService {
         if (page > articlePage.getTotalPages()){
             throw new CommonException(ResultEnum.BEYOND_PAGE_LIMIT);
         }
-        List<ArticleVO> list = new ArrayList<>();
-        for (Article article : articlePage.getContent()) {
-            ArticleVO articleVO = new ArticleVO();
-            list.add(transform(article, articleVO));
-        }
+
+        List<ArticleVO> list = articlePage.getContent()
+                .stream().map(e -> transform(e, new ArticleVO()))
+                .collect(Collectors.toList());
         return list;
     }
 
@@ -104,7 +101,6 @@ public class ArticleServiceImpl implements ArticleService {
         article.setStatus(StatusEnum.ARTICLE_DELETE.getCode());
         articleDao.save(article);
     }
-
 
     /**
      * 将Article对象转换成ArticleVO对象

@@ -19,8 +19,8 @@ public interface ArticleDao extends JpaRepository<Article, Integer> {
 
 	/**
 	 * 查询用户发表的文章(按发表时间降序)
-	 * @param openid
-	 * @param pageable
+	 * @param openid 微信用户唯一标识
+	 * @param pageable 分页参数
 	 * @return
 	 */
 	 Page<Article> findAllByOpenidOrderByCreatedDesc(String openid, Pageable pageable);
