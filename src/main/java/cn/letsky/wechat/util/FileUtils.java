@@ -2,13 +2,13 @@ package cn.letsky.wechat.util;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 public class FileUtils {
 
-    public static String QINIU_DOMAIN_PREFIX =
-            "http://ponxfa1er.bkt.clouddn.com/";
-    
+    // 图片后缀
     public static String[] IMAGE_FILE_SUFFIX =
             new String[] { "png", "jpg", "bmp", "jpeg" };
 
@@ -18,11 +18,9 @@ public class FileUtils {
      * @return
      */
     private static boolean isFileAllowed(String suffix) {
-        for (String ext : IMAGE_FILE_SUFFIX) {
-            if (ext.equals(suffix)) {
-                return true;
-            }
-        }
+        List<String> ext = Arrays.asList(IMAGE_FILE_SUFFIX);
+        if (ext.contains(suffix))
+            return true;
         return false;
     }
 

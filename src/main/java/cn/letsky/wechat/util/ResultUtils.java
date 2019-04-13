@@ -32,6 +32,12 @@ public class ResultUtils {
         return new ResultVO(codeEnum.getCode(), codeEnum.getMsg());
     }
 
+    /**
+     * 返回错误的状态码及信息
+     * @param code 错误码
+     * @param msg 错误消息
+     * @return 错误的状态码及信息
+     */
     public static ResultVO error(int code, String msg){
         return new ResultVO(code, msg);
     }

@@ -5,7 +5,8 @@ import lombok.Getter;
 @Getter
 public enum EntityType {
 
-    ARTICLE(0, "帖子")
+    ARTICLE(0, "帖子"),
+    COMMENT(1, "评论"),
     ;
 
     private int code;

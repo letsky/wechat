@@ -3,11 +3,13 @@ package cn.letsky.wechat.controller;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.validation.Valid;
 
 import cn.letsky.wechat.constant.ResultEnum;
 import cn.letsky.wechat.exception.CommonException;
+import cn.letsky.wechat.viewobject.UserVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +19,10 @@ import org.springframework.web.bind.annotation.*;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
-import cn.letsky.wechat.converter.Form2Model;
 import cn.letsky.wechat.form.WxUserForm;
 import cn.letsky.wechat.model.User;
 import cn.letsky.wechat.service.UserService;
 import cn.letsky.wechat.util.ResultUtils;
-import cn.letsky.wechat.util.SessionUtils;
 import cn.letsky.wechat.viewobject.ResultVO;
 import me.chanjar.weixin.common.error.WxErrorException;
 
@@ -54,7 +54,7 @@ public class WxUserController {
             WxMaJscode2SessionResult session = wxMaService.getUserService().getSessionInfo(code);
             Map<String, String> map = new HashMap<>();
 
-            String wxSession = SessionUtils.create();
+            String wxSession = createSession();
             map.put("wxSession", wxSession);
             map.put("openid", session.getOpenid());
             //传入redis
@@ -80,7 +80,9 @@ public class WxUserController {
             String errMsg = bindingResult.getFieldError().getDefaultMessage();
             throw new CommonException(errMsg);
         }
-        userService.save(Form2Model.convert(userForm, User.class));
+        User user = new User();
+        BeanUtils.copyProperties(userForm, user);
+        userService.save(user);
         return ResultUtils.success();
     }
 
@@ -93,7 +95,7 @@ public class WxUserController {
     @GetMapping("/isexpire")
     public ResultVO isExpire(@RequestParam("sessionId") String sessionId) {
         String key = "wx:session:" + sessionId;
-        if (redisClient.getExpire(key) > 0) {
+        if (redisClient.getExpire(key) != null) {
             return ResultUtils.success();
         }
         return ResultUtils.error(ResultEnum.SESSION_EXPIRED);
@@ -105,8 +107,16 @@ public class WxUserController {
         if (user == null){
             throw new CommonException(ResultEnum.NOT_REGISTER);
         }
-        WxUserForm wxUserForm = new WxUserForm();
-        BeanUtils.copyProperties(user, wxUserForm);
-        return ResultUtils.success(wxUserForm);
+        UserVO userVO = new UserVO();
+        BeanUtils.copyProperties(user, userVO);
+        return ResultUtils.success(userVO);
+    }
+
+    /**
+     * 创建唯一的登录态
+     * @return 登录状态session
+     */
+    public static String createSession() {
+        return UUID.randomUUID().toString().replace("-", "");
     }
 }
