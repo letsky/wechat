@@ -24,11 +24,10 @@ public class FilterUtils {
     @PostConstruct
     public void init() {
         try {
-            Resource resource = new ClassPathResource("keywords");
-            FileInputStream inputStream = new FileInputStream(resource.getFile());
+            InputStream inputStream = this.getClass().getResourceAsStream("/keywords");
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             bufferedReader.lines().forEach(e -> trie.add(e));
-        } catch (IOException e) {
+        } catch (NullPointerException e) {
             throw new CommonException(ResultEnum.NULL_WORD_FILE);
         }
     }
