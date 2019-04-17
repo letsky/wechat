@@ -4,6 +4,8 @@ import cn.letsky.wechat.constant.ResultEnum;
 import cn.letsky.wechat.exception.CommonException;
 import cn.letsky.wechat.model.Trie;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
@@ -22,11 +24,11 @@ public class FilterUtils {
     @PostConstruct
     public void init() {
         try {
-            File file = ResourceUtils.getFile("classpath:keywords");
-            FileInputStream inputStream = new FileInputStream(file);
+            Resource resource = new ClassPathResource("keywords");
+            FileInputStream inputStream = new FileInputStream(resource.getFile());
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             bufferedReader.lines().forEach(e -> trie.add(e));
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             throw new CommonException(ResultEnum.NULL_WORD_FILE);
         }
     }
