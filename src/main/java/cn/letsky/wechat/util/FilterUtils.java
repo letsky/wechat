@@ -7,10 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.TreeMap;
 
 @Component
@@ -23,10 +20,10 @@ public class FilterUtils {
     @PostConstruct
     public void init() {
         try {
-            FileInputStream inputStream = new FileInputStream(getClass().getClassLoader().getResource("keywords").getFile());
+            InputStream inputStream = this.getClass().getResourceAsStream("/keywords");
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             bufferedReader.lines().forEach(e -> trie.add(e));
-        } catch (FileNotFoundException e) {
+        } catch (NullPointerException e) {
             throw new CommonException(ResultEnum.NULL_WORD_FILE);
         }
     }
