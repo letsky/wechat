@@ -19,9 +19,9 @@ public class FilterUtils {
     public void init() {
         try {
             InputStream inputStream = this.getClass().getResourceAsStream("/keywords");
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
             bufferedReader.lines().forEach(e -> trie.add(e));
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | UnsupportedEncodingException e) {
             throw new CommonException(ResultEnum.NULL_WORD_FILE);
         }
     }
