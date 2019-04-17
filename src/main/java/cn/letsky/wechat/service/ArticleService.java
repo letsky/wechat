@@ -63,4 +63,11 @@ public interface ArticleService {
      * @param id 文章id
      */
     void delete(Integer id);
+
+    /**
+     * 过滤词汇
+     * @param comment
+     * @return
+     */
+    boolean filter(String comment);
 }

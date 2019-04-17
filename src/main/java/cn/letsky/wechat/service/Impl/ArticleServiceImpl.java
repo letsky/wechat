@@ -6,6 +6,7 @@ import cn.letsky.wechat.constant.StatusEnum;
 import cn.letsky.wechat.dao.ArticleDao;
 import cn.letsky.wechat.exception.CommonException;
 import cn.letsky.wechat.model.Article;
+import cn.letsky.wechat.model.Trie;
 import cn.letsky.wechat.model.User;
 import cn.letsky.wechat.service.CommentService;
 import cn.letsky.wechat.service.UserService;
@@ -20,7 +21,6 @@ import org.springframework.stereotype.Service;
 
 import cn.letsky.wechat.service.ArticleService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -100,6 +100,12 @@ public class ArticleServiceImpl implements ArticleService {
         Article article = articleDao.getOne(id);
         article.setStatus(StatusEnum.ARTICLE_DELETE.getCode());
         articleDao.save(article);
+    }
+
+    @Override
+    public boolean filter(String comment) {
+        Trie trie = new Trie();
+        return false;
     }
 
     /**

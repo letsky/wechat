@@ -27,11 +27,19 @@
       database:
       host:
       port:
+  logging:
+    file: wechat-dev.log
   wx:
     miniapp:
       config:
         appid: #enter your appid
         secret: #enter your secret
+  qiniu:
+    enabled: true
+    access-key: 
+    secret-key: 
+    bucket: 
+    domain: 
   ```
   Start the project.
   ```

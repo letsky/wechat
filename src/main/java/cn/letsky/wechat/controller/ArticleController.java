@@ -6,13 +6,13 @@ import cn.letsky.wechat.constant.ResultEnum;
 import cn.letsky.wechat.exception.CommonException;
 import cn.letsky.wechat.form.ArticleForm;
 import cn.letsky.wechat.model.Article;
+import cn.letsky.wechat.model.Trie;
 import cn.letsky.wechat.model.User;
 import cn.letsky.wechat.service.CommentService;
-import cn.letsky.wechat.util.PageUtils;
+import cn.letsky.wechat.util.FilterUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,6 +37,9 @@ public class ArticleController {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private FilterUtils filterUtils;
 
     /**
      * 获取文章列表
@@ -97,6 +100,9 @@ public class ArticleController {
         User user = userService.findById(articleForm.getOpenid());
         if (user == null){
             throw new CommonException(ResultEnum.NOT_REGISTER);
+        }
+        if (filterUtils.isSensitive(articleForm.getContent())) {
+            throw new CommonException(ResultEnum.SENSITIVE_WORD);
         }
         Article article = new Article();
         article.setOpenid(articleForm.getOpenid());
