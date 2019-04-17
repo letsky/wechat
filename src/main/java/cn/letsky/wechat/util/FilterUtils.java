@@ -4,15 +4,9 @@ import cn.letsky.wechat.constant.ResultEnum;
 import cn.letsky.wechat.exception.CommonException;
 import cn.letsky.wechat.model.Trie;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ResourceUtils;
-
 import javax.annotation.PostConstruct;
 import java.io.*;
-import java.util.TreeMap;
 
 @Component
 public class FilterUtils {
