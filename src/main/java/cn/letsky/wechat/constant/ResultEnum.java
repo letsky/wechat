@@ -16,7 +16,7 @@ public enum ResultEnum implements CodeEnum {
     UPLOAD_ERROR(10005, "服务端上传图片出错"),
     PAGE_PARAM_ERROR(10006, "分页参数不正确"),
     NULL_COMMENT(10007, "还没有评论"),
-    NULL_WORD_FILE(10008, "过滤敏感词文件不存在"),
+    NULL_WORD_FILE(10008, "not exist sensitive words file"),
 
 
     WECHAT_LOGIN_ERROR(80000, "微信登录异常"),
@@ -29,7 +29,7 @@ public enum ResultEnum implements CodeEnum {
     SEND_NULL_COMMENT(90004, "评论为空"),
     BEYOND_PAGE_LIMIT(90005, "超出页数"),
     NOT_REGISTER(90006, "用户未注册"),
-    SENSITIVE_WORD(90007, "存在敏感词汇"),
+    SENSITIVE_WORD(90007, "exist sensitive words"),
     ;
 
     private int code;
