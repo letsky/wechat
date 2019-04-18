@@ -6,6 +6,7 @@ import cn.letsky.wechat.exception.CommonException;
 import cn.letsky.wechat.form.CommentForm;
 import cn.letsky.wechat.model.Comment;
 import cn.letsky.wechat.service.CommentService;
+import cn.letsky.wechat.util.FilterUtils;
 import cn.letsky.wechat.util.PageUtils;
 import cn.letsky.wechat.util.ResultUtils;
 import cn.letsky.wechat.viewobject.CommentVO;
@@ -24,6 +25,9 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
 
+    @Autowired
+    private FilterUtils filterUtils;
+
     /**
      * 发送评论
      *
@@ -35,6 +39,9 @@ public class CommentController {
 
         if (!EntityType.contains(commentForm.getEntityType())) {
             throw new CommonException(ResultEnum.ENTITY_TYPE_ERROR);
+        }
+        if (filterUtils.isSensitive(commentForm.getContent())) {
+            throw new CommonException(ResultEnum.SENSITIVE_WORD);
         }
         Comment res = commentService.save(
                 commentForm.getUid(), commentForm.getContent(),

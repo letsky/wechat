@@ -20,7 +20,10 @@ public class FilterUtils {
         try {
             InputStream inputStream = this.getClass().getResourceAsStream("/keywords");
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
-            bufferedReader.lines().forEach(e -> trie.add(e));
+            bufferedReader.lines().forEach(e -> {
+                if (e.length() > 1)
+                    trie.add(e);
+            });
         } catch (NullPointerException | UnsupportedEncodingException e) {
             throw new CommonException(ResultEnum.NULL_WORD_FILE);
         }
@@ -41,7 +44,7 @@ public class FilterUtils {
                 position = begin + 1;
                 begin = position;
                 node = trie.getRoot();
-            } else if (node.isWord) {
+            } else if (node.isWord ) {
                 flag = true;
             } else {
                 ++position;
