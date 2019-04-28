@@ -9,7 +9,7 @@ public interface LikeService {
      * @param entityId
      * @return
      */
-    Integer like(String openid, Integer entityType, Integer entityId);
+    Long like(String openid, Integer entityType, Integer entityId);
 
     /**
      * 取消点赞
@@ -18,14 +18,22 @@ public interface LikeService {
      * @param entityId
      * @return
      */
-    Integer dislike(String openid, Integer entityType, Integer entityId);
+    Long cancelLike(String openid, Integer entityType, Integer entityId);
 
     /**
      * 获取用户点赞状态
      * @param openid
      * @param entityType
      * @param entityId
-     * @return
+     * @return 点赞返回1，未点赞返回0
      */
-    Integer getLikeStatus(String openid, Integer entityType, Integer entityId);
+    int getLikeStatus(String openid, Integer entityType, Integer entityId);
+
+    /**
+     * 获取点赞数
+     * @param entityType
+     * @param entityId
+     * @return 点赞数
+     */
+    Long likeCount(Integer entityType, Integer entityId);
 }

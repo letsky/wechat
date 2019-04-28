@@ -9,6 +9,9 @@ public enum StatusEnum implements CodeEnum {
     ARTICLE_DELETE(1, "文章被删除"),
     ALLOW_COMMENT(0, "允许评论"),
     NOT_ALLOW_COMMENT(1, "不允许评论"),
+    NOT_LIKED(0, "未点赞"),
+    LIKE(1, "点赞了"),
+
     ;
 
     private int code;

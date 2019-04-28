@@ -9,6 +9,7 @@ import cn.letsky.wechat.model.Article;
 import cn.letsky.wechat.model.Trie;
 import cn.letsky.wechat.model.User;
 import cn.letsky.wechat.service.CommentService;
+import cn.letsky.wechat.service.LikeService;
 import cn.letsky.wechat.service.UserService;
 import cn.letsky.wechat.util.PageUtils;
 import cn.letsky.wechat.viewobject.ArticleVO;
@@ -39,6 +40,9 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private LikeService likeService;
 
     @Override
     public Article findById(Integer id) {
@@ -125,6 +129,7 @@ public class ArticleServiceImpl implements ArticleService {
         }
         Long commentNum = commentService
                 .count(EntityType.ARTICLE.getCode(), article.getId());
+//        Long likeNum = likeService;
         articleVO.setCommentNum(commentNum);
         return articleVO;
     }

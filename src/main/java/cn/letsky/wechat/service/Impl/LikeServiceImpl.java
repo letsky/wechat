@@ -1,11 +1,16 @@
 package cn.letsky.wechat.service.Impl;
 
+import cn.letsky.wechat.constant.StatusEnum;
 import cn.letsky.wechat.service.LikeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-
+/**
+ * 使用redis实现点赞，使用set
+ * 相关命令：sismember, scard, sadd, srem
+ * key：like:<entityType>:<entityId> value：userId
+ */
 @Service
 public class LikeServiceImpl implements LikeService {
 
@@ -13,33 +18,54 @@ public class LikeServiceImpl implements LikeService {
     private static final String LIKE = "like";
     private static final String DISLIKE = "dislike";
 
+    private static final Integer LIKE_STATUS = StatusEnum.LIKE.getCode();
+    private static final Integer NOT_LIKED_STATUS = StatusEnum.NOT_LIKED.getCode();
+
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
     @Override
-    public Integer like(String openid, Integer entityType, Integer entityId) {
-        return null;
+    public Long like(String openid, Integer entityType, Integer entityId) {
+        String likeKey = getLikeKey(entityType, entityId);
+        if (!redisTemplate.opsForSet().isMember(likeKey, openid)){
+            redisTemplate.opsForSet().add(likeKey, openid);
+        }
+        return redisTemplate.opsForSet().size(likeKey);
     }
 
     @Override
-    public Integer dislike(String openid, Integer entityType, Integer entityId) {
-        return null;
+    public Long cancelLike(String openid, Integer entityType, Integer entityId) {
+        String likeKey = getLikeKey(entityType, entityId);
+        if (redisTemplate.opsForSet().isMember(likeKey, openid)) {
+            redisTemplate.opsForSet().remove(likeKey, openid);
+        }
+        return redisTemplate.opsForSet().size(likeKey);
     }
 
     @Override
-    public Integer getLikeStatus(String openid, Integer entityType, Integer entityId) {
-        return null;
+    public int getLikeStatus(String openid, Integer entityType, Integer entityId) {
+        String likeKey = getLikeKey(entityType, entityId);
+        if (redisTemplate.opsForSet().isMember(likeKey, openid)) {
+            return LIKE_STATUS;
+        }
+        return NOT_LIKED_STATUS;
     }
 
-    private static String getLikeKey(Integer entityType, Integer entityId){
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(LIKE).append(SPLIT).append(entityType).append(entityId);
-        return stringBuilder.toString();
+    @Override
+    public Long likeCount(Integer entityType, Integer entityId) {
+        String likeKey = getLikeKey(entityType, entityId);
+        return redisTemplate.opsForSet().size(likeKey);
     }
 
-    private static String getDislikeKey(Integer entityType, Integer entityId){
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(DISLIKE).append(SPLIT).append(entityType).append(entityId);
-        return stringBuilder.toString();
+    /**
+     * 返回点赞的key
+     * @param entityType
+     * @param entityId
+     * @return like:<entityType>:<entityId>
+     */
+    private String getLikeKey(Integer entityType, Integer entityId){
+        StringBuilder sb = new StringBuilder();
+        sb.append(LIKE).append(SPLIT).append(entityType).append(SPLIT).append(entityId);
+        return sb.toString();
     }
 }
