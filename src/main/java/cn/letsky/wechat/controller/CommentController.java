@@ -34,7 +34,7 @@ public class CommentController {
      * @param commentForm
      * @return
      */
-    @PostMapping("/sent")
+    @PostMapping("/send")
     public ResultVO addComment(@Valid CommentForm commentForm) {
 
         if (!EntityType.contains(commentForm.getEntityType())) {

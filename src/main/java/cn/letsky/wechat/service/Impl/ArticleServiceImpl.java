@@ -119,6 +119,7 @@ public class ArticleServiceImpl implements ArticleService {
      * @return ArticleVO对象
      */
     private ArticleVO transform(Article article, ArticleVO articleVO){
+
         BeanUtils.copyProperties(article, articleVO);
         if (article.getImg() != null && article.getImg().length() != 0)
             articleVO.setImgs(article.getImg().split(SPILT));
@@ -129,8 +130,9 @@ public class ArticleServiceImpl implements ArticleService {
         }
         Long commentNum = commentService
                 .count(EntityType.ARTICLE.getCode(), article.getId());
-//        Long likeNum = likeService;
+        Long likeNum = likeService.likeCount(EntityType.ARTICLE.getCode(), article.getId());
         articleVO.setCommentNum(commentNum);
+        articleVO.setLikeNum(likeNum);
         return articleVO;
     }
 }

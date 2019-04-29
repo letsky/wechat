@@ -89,7 +89,7 @@ public class ArticleController {
      * @param bindingResult 表单验证的结果
      * @return 操作的状态码
      */
-    @PostMapping("/sent")
+    @PostMapping("/send")
     public ResultVO sentArticle(@Valid ArticleForm articleForm,
                                 BindingResult bindingResult) {
 

@@ -54,6 +54,12 @@ public class LikeController {
         return likeService.cancelLike(openid, entityType, entityId);
     }
 
+    /**
+     * 文章的点赞总数
+     * @param entityType
+     * @param entityId
+     * @return
+     */
     @GetMapping(params = {"entityType", "entityId"})
     public Long likeCount(@RequestParam("entityType") Integer entityType,
                           @RequestParam("entityId") Integer entityId) {
