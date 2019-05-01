@@ -44,22 +44,24 @@ public class ArticleController {
     /**
      * 获取文章列表
      *
+     * @param openid
      * @param page 页数
      * @param size 每页的数量
      * @return 文章列表
      */
     @GetMapping("/list")
     public ResultVO<List<ArticleVO>> getArticleList(
+            @RequestParam("openid") String openid,
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "size", defaultValue = "5") int size) {
 
-        List<ArticleVO> list = articleService.findAllVO(page, size);
+        List<ArticleVO> list = articleService.findAllVO(openid, page, size);
         return ResultUtils.success(list);
     }
 
-    @GetMapping(value = "/list", params = {"openid"})
+    @GetMapping(value = "/list", params = {"uid"})
     public ResultVO<List<ArticleVO>> getArticleListByOpenid(
-            @RequestParam("openid") String openid,
+            @RequestParam("uid") String openid,
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "size", defaultValue = "5") int size) {
 
@@ -71,12 +73,14 @@ public class ArticleController {
      * 获取单个文章
      *
      * @param id 文章id
+     * @param openid
      * @return 单个文章
      */
     @GetMapping()
-    public ResultVO<ArticleVO> getArticle(@RequestParam("id") Integer id) {
+    public ResultVO<ArticleVO> getArticle(@RequestParam("id") Integer id,
+                                          @RequestParam("openid") String openid) {
 
-        ArticleVO articleVO = articleService.findByIdVO(id);
+        ArticleVO articleVO = articleService.findByIdVO(id, openid);
         if (articleVO == null)
             throw new CommonException(ResultEnum.ENTITY_NOT_FOUNT);
         return ResultUtils.success(articleVO);

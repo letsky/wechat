@@ -23,7 +23,7 @@ public interface ArticleService {
      * @param id 文章的id
      * @return 展示类的对象
      */
-    ArticleVO findByIdVO(Integer id);
+    ArticleVO findByIdVO(Integer id, String openid);
 
     /**
      * 获取正常状态的content
@@ -40,7 +40,7 @@ public interface ArticleService {
      * @param size
      * @return 展示类的对象
      */
-    List<ArticleVO> findAllVO(Integer page, Integer size);
+    List<ArticleVO> findAllVO(String openid, Integer page, Integer size);
 
     /**
      * 返回给定用户所有已发送的文章
@@ -63,11 +63,4 @@ public interface ArticleService {
      * @param id 文章id
      */
     void delete(Integer id);
-
-    /**
-     * 过滤词汇
-     * @param comment
-     * @return
-     */
-    boolean filter(String comment);
 }

@@ -51,12 +51,12 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public ArticleVO findByIdVO(Integer id){
+    public ArticleVO findByIdVO(Integer id, String openid){
         Article article = findById(id);
         if (article == null)
             return null;
         ArticleVO articleVO = new ArticleVO();
-        return transform(article, articleVO);
+        return transform(article, articleVO, openid);
     }
 
     @Override
@@ -71,10 +71,10 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public List<ArticleVO> findAllVO(Integer page, Integer size) {
+    public List<ArticleVO> findAllVO(String openid, Integer page, Integer size) {
         Page<Article> articlePage = findAll(page, size);
         List<ArticleVO> list = articlePage.getContent().stream()
-                .map(e -> transform(e, new ArticleVO()))
+                .map(e -> transform(e, new ArticleVO(), openid))
                 .collect(Collectors.toList());
         return list;
     }
@@ -88,7 +88,7 @@ public class ArticleServiceImpl implements ArticleService {
         }
 
         List<ArticleVO> list = articlePage.getContent()
-                .stream().map(e -> transform(e, new ArticleVO()))
+                .stream().map(e -> transform(e, new ArticleVO(), openid))
                 .collect(Collectors.toList());
         return list;
     }
@@ -106,19 +106,13 @@ public class ArticleServiceImpl implements ArticleService {
         articleDao.save(article);
     }
 
-    @Override
-    public boolean filter(String comment) {
-        Trie trie = new Trie();
-        return false;
-    }
-
     /**
      * 将Article对象转换成ArticleVO对象
      * @param article
      * @param articleVO
      * @return ArticleVO对象
      */
-    private ArticleVO transform(Article article, ArticleVO articleVO){
+    private ArticleVO transform(Article article, ArticleVO articleVO, String openid){
 
         BeanUtils.copyProperties(article, articleVO);
         if (article.getImg() != null && article.getImg().length() != 0)
@@ -130,8 +124,11 @@ public class ArticleServiceImpl implements ArticleService {
         }
         Long commentNum = commentService
                 .count(EntityType.ARTICLE.getCode(), article.getId());
+        Integer liked = likeService.getLikeStatus(openid,
+                EntityType.ARTICLE.getCode(), article.getId());
         Long likeNum = likeService.likeCount(EntityType.ARTICLE.getCode(), article.getId());
         articleVO.setCommentNum(commentNum);
+        articleVO.setLiked(liked);
         articleVO.setLikeNum(likeNum);
         return articleVO;
     }

@@ -35,6 +35,9 @@ public class ArticleVO implements Serializable {
 	private Long commentNum;
 
 	@JsonInclude(Include.NON_EMPTY)
+	private Integer liked;
+
+	@JsonInclude(Include.NON_EMPTY)
 	private Long likeNum;
 	
 	/**
