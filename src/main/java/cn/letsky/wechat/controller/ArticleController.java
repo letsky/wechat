@@ -1,5 +1,6 @@
 package cn.letsky.wechat.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import cn.letsky.wechat.constant.ResultEnum;
@@ -59,6 +60,14 @@ public class ArticleController {
         return ResultUtils.success(list);
     }
 
+    /**
+     * 获取用户所有发表的文章
+     *
+     * @param openid
+     * @param page
+     * @param size
+     * @return
+     */
     @GetMapping(value = "/list", params = {"uid"})
     public ResultVO<List<ArticleVO>> getArticleListByOpenid(
             @RequestParam("uid") String openid,
@@ -76,7 +85,7 @@ public class ArticleController {
      * @param openid
      * @return 单个文章
      */
-    @GetMapping()
+    @GetMapping
     public ResultVO<ArticleVO> getArticle(@RequestParam("id") Integer id,
                                           @RequestParam("openid") String openid) {
 

@@ -9,7 +9,6 @@ import javax.validation.Valid;
 
 import cn.letsky.wechat.constant.ResultEnum;
 import cn.letsky.wechat.exception.CommonException;
-import cn.letsky.wechat.model.HostHolder;
 import cn.letsky.wechat.viewobject.UserVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -39,9 +38,6 @@ public class WxUserController {
 
     @Autowired
     private RedisTemplate<String, String> redisClient;
-
-    @Autowired
-    private HostHolder hostHolder;
 
     /**
      * 获取登录态的session

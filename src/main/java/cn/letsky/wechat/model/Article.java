@@ -66,6 +66,11 @@ public class Article implements Serializable {
 	 */
 	@Column(name = "allow_comment")
 	private Integer allowComment;
+
+	/**
+	 * 可见性，0为允许他人可见，1为自己可见
+	 */
+	private Integer visible;
 	
 	public Article() {
 		super();
@@ -74,6 +79,7 @@ public class Article implements Serializable {
 		this.commentNum = 0;
 		this.likeNum = 0;
 		this.allowComment = 0;
+		this.visible = 0;
 	}
 
 }

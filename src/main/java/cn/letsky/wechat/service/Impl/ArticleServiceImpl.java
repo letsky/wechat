@@ -93,7 +93,6 @@ public class ArticleServiceImpl implements ArticleService {
         return list;
     }
 
-
     @Override
     public Article save(Article article) {
         return articleDao.save(article);
@@ -105,6 +104,8 @@ public class ArticleServiceImpl implements ArticleService {
         article.setStatus(StatusEnum.ARTICLE_DELETE.getCode());
         articleDao.save(article);
     }
+
+
 
     /**
      * 将Article对象转换成ArticleVO对象
