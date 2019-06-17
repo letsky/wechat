@@ -30,14 +30,19 @@ import me.chanjar.weixin.common.error.WxErrorException;
 @RestController
 public class WxUserController {
 
-    @Autowired
-    private WxMaService wxMaService;
+    private final WxMaService wxMaService;
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @Autowired
-    private RedisTemplate<String, String> redisClient;
+    private final RedisTemplate<String, String> redisClient;
+
+    public WxUserController(WxMaService wxMaService,
+                            UserService userService,
+                            RedisTemplate<String, String> redisClient) {
+        this.wxMaService = wxMaService;
+        this.userService = userService;
+        this.redisClient = redisClient;
+    }
 
     /**
      * 获取登录态的session
@@ -116,7 +121,7 @@ public class WxUserController {
      * 创建唯一的登录态
      * @return 登录状态session
      */
-    public static String createSession() {
+    private static String createSession() {
         return UUID.randomUUID().toString().replace("-", "");
     }
 }

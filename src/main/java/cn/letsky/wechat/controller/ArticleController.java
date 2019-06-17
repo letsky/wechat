@@ -30,24 +30,26 @@ import javax.validation.Valid;
 @RequestMapping("/article")
 public class ArticleController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @Autowired
-    private ArticleService articleService;
+    private final ArticleService articleService;
 
-    @Autowired
-    private CommentService commentService;
+    private final FilterUtils filterUtils;
 
-    @Autowired
-    private FilterUtils filterUtils;
+    public ArticleController(UserService userService,
+                             ArticleService articleService,
+                             FilterUtils filterUtils) {
+        this.userService = userService;
+        this.articleService = articleService;
+        this.filterUtils = filterUtils;
+    }
 
     /**
      * 获取文章列表
      *
      * @param openid
-     * @param page 页数
-     * @param size 每页的数量
+     * @param page   页数
+     * @param size   每页的数量
      * @return 文章列表
      */
     @GetMapping("/list")
@@ -81,7 +83,7 @@ public class ArticleController {
     /**
      * 获取单个文章
      *
-     * @param id 文章id
+     * @param id     文章id
      * @param openid
      * @return 单个文章
      */
@@ -111,7 +113,7 @@ public class ArticleController {
             throw new CommonException(ResultEnum.PARAM_ERROR);
         }
         User user = userService.findById(articleForm.getOpenid());
-        if (user == null){
+        if (user == null) {
             throw new CommonException(ResultEnum.NOT_REGISTER);
         }
         if (filterUtils.isSensitive(articleForm.getContent())) {

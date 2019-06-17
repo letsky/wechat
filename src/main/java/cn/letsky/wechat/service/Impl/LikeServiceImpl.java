@@ -21,8 +21,11 @@ public class LikeServiceImpl implements LikeService {
     private static final Integer LIKE_STATUS = StatusEnum.LIKE.getCode();
     private static final Integer NOT_LIKED_STATUS = StatusEnum.NOT_LIKED.getCode();
 
-    @Autowired
-    private RedisTemplate<String, String> redisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
+
+    public LikeServiceImpl(RedisTemplate<String, String> redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
 
     @Override
     public Long like(String openid, Integer entityType, Integer entityId) {

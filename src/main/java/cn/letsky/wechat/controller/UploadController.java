@@ -19,8 +19,11 @@ import java.util.stream.Collectors;
 @RestController
 public class UploadController {
 
-    @Autowired
-    private QiniuService qiniuService;
+    private final QiniuService qiniuService;
+
+    public UploadController(QiniuService qiniuService) {
+        this.qiniuService = qiniuService;
+    }
 
     /**
      * 上传图片

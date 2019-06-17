@@ -19,14 +19,19 @@ import java.io.IOException;
 @Service
 public class QiniuServiceImpl implements QiniuService {
 
-    @Autowired
-    private Auth auth;
+    private final Auth auth;
 
-    @Autowired
-    private UploadManager uploadManager;
+    private final UploadManager uploadManager;
 
-    @Autowired
-    private QiNiuProperties qiNiuProperties;
+    private final QiNiuProperties qiNiuProperties;
+
+    public QiniuServiceImpl(Auth auth,
+                            UploadManager uploadManager,
+                            QiNiuProperties qiNiuProperties) {
+        this.auth = auth;
+        this.uploadManager = uploadManager;
+        this.qiNiuProperties = qiNiuProperties;
+    }
 
 
     @Override

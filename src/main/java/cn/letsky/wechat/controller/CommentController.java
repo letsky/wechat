@@ -22,11 +22,15 @@ import java.util.List;
 @RestController
 public class CommentController {
 
-    @Autowired
-    private CommentService commentService;
+    private final CommentService commentService;
 
-    @Autowired
-    private FilterUtils filterUtils;
+    private final FilterUtils filterUtils;
+
+    public CommentController(CommentService commentService,
+                             FilterUtils filterUtils) {
+        this.commentService = commentService;
+        this.filterUtils = filterUtils;
+    }
 
     /**
      * 发送评论

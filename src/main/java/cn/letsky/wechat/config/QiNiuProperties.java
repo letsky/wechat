@@ -3,17 +3,30 @@ package cn.letsky.wechat.config;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+/**
+ * 七牛对象存储相关配置
+ */
 @Data
 @ConfigurationProperties(prefix = "qiniu")
 public class QiNiuProperties {
 
-    private boolean enabled = true;
-
+    /**
+     * 七牛云access key
+     */
     private String accessKey;
 
+    /**
+     * 七牛云secret key
+     */
     private String secretKey;
 
+    /**
+     * 七牛云bucket
+     */
     private String bucket;
 
+    /**
+     * 七牛云domain
+     */
     private String domain;
 }

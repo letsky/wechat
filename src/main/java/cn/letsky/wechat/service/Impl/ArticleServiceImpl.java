@@ -32,17 +32,23 @@ public class ArticleServiceImpl implements ArticleService {
 
     private final String SPILT = "#";
 
-    @Autowired
-    private ArticleDao articleDao;
+    private final ArticleDao articleDao;
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @Autowired
-    private CommentService commentService;
+    private final CommentService commentService;
 
-    @Autowired
-    private LikeService likeService;
+    private final LikeService likeService;
+
+    public ArticleServiceImpl(ArticleDao articleDao,
+                              UserService userService,
+                              CommentService commentService,
+                              LikeService likeService) {
+        this.articleDao = articleDao;
+        this.userService = userService;
+        this.commentService = commentService;
+        this.likeService = likeService;
+    }
 
     @Override
     public Article findById(Integer id) {

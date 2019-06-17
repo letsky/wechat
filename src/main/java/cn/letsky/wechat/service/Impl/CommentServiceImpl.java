@@ -22,11 +22,15 @@ import java.util.stream.Collectors;
 @Service
 public class CommentServiceImpl implements CommentService {
 
-    @Autowired
-    private CommentDao commentDao;
+    private final CommentDao commentDao;
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    public CommentServiceImpl(CommentDao commentDao,
+                              UserService userService) {
+        this.commentDao = commentDao;
+        this.userService = userService;
+    }
 
 
     @Override

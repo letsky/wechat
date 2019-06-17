@@ -13,8 +13,11 @@ import java.util.Map;
 @RestController
 public class LikeController {
 
-    @Autowired
-    private LikeService likeService;
+    private final LikeService likeService;
+
+    public LikeController(LikeService likeService) {
+        this.likeService = likeService;
+    }
 
     /**
      * 获取点赞状态
