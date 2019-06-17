@@ -1,4 +1,4 @@
-package cn.letsky.wechat.config;
+package cn.letsky.wechat.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

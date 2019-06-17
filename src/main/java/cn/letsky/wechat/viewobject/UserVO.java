@@ -8,6 +8,9 @@ import java.util.Date;
 @Data
 public class UserVO {
 
+    /**
+     * 微信用户唯一标识
+     */
     private String openid;
 
     /**

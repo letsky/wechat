@@ -1,6 +1,6 @@
 package cn.letsky.wechat.service.Impl;
 
-import cn.letsky.wechat.config.QiNiuProperties;
+import cn.letsky.wechat.properties.QiNiuProperties;
 import cn.letsky.wechat.constant.ResultEnum;
 import cn.letsky.wechat.exception.CommonException;
 import cn.letsky.wechat.service.QiniuService;
@@ -10,7 +10,6 @@ import com.qiniu.http.Response;
 import com.qiniu.storage.UploadManager;
 import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.util.Auth;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 

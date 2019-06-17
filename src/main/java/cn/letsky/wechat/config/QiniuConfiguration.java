@@ -1,5 +1,6 @@
 package cn.letsky.wechat.config;
 
+import cn.letsky.wechat.properties.QiNiuProperties;
 import com.qiniu.common.Zone;
 import com.qiniu.storage.UploadManager;
 import com.qiniu.util.Auth;
@@ -9,11 +10,11 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableConfigurationProperties(QiNiuProperties.class)
-public class QiniuUploadConfiguration {
+public class QiniuConfiguration {
 
     private final QiNiuProperties qiNiuProperties;
 
-    public QiniuUploadConfiguration(QiNiuProperties qiNiuProperties) {
+    public QiniuConfiguration(QiNiuProperties qiNiuProperties) {
         this.qiNiuProperties = qiNiuProperties;
     }
 

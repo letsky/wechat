@@ -1,5 +1,6 @@
 package cn.letsky.wechat.config;
 
+import cn.letsky.wechat.properties.WxMaProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
