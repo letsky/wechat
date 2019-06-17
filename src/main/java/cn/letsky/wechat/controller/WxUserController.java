@@ -1,30 +1,25 @@
 package cn.letsky.wechat.controller;
 
-import java.time.Duration;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
-import javax.validation.Valid;
-
-import cn.letsky.wechat.constant.ResultEnum;
-import cn.letsky.wechat.exception.CommonException;
-import cn.letsky.wechat.viewobject.UserVO;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
+import cn.letsky.wechat.constant.ResultEnum;
+import cn.letsky.wechat.exception.CommonException;
 import cn.letsky.wechat.form.WxUserForm;
 import cn.letsky.wechat.model.User;
+import cn.letsky.wechat.service.TokenService;
 import cn.letsky.wechat.service.UserService;
 import cn.letsky.wechat.util.ResultUtils;
 import cn.letsky.wechat.viewobject.ResultVO;
+import cn.letsky.wechat.viewobject.UserVO;
 import me.chanjar.weixin.common.error.WxErrorException;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
 @RequestMapping("/wx")
 @RestController
@@ -34,14 +29,14 @@ public class WxUserController {
 
     private final UserService userService;
 
-    private final RedisTemplate<String, String> redisClient;
+    private final TokenService tokenService;
 
     public WxUserController(WxMaService wxMaService,
                             UserService userService,
-                            RedisTemplate<String, String> redisClient) {
+                            TokenService tokenService) {
         this.wxMaService = wxMaService;
         this.userService = userService;
-        this.redisClient = redisClient;
+        this.tokenService = tokenService;
     }
 
     /**
@@ -56,14 +51,15 @@ public class WxUserController {
             if (StringUtils.isEmpty(code)){
                 throw new CommonException(ResultEnum.WECHAT_CODE_EMPTY);
             }
+            System.out.println(code);
             WxMaJscode2SessionResult session = wxMaService.getUserService().getSessionInfo(code);
             Map<String, String> map = new HashMap<>();
 
-            String wxSession = createSession();
+            String wxSession = tokenService.create();
             map.put("wxSession", wxSession);
             map.put("openid", session.getOpenid());
             //传入redis
-            redisClient.opsForValue().set("wx:session:" + wxSession, session.getOpenid(), Duration.ofDays(7));
+            tokenService.save(wxSession, session.getOpenid());
             return ResultUtils.success(map);
         } catch (WxErrorException e) {
             throw new CommonException(ResultEnum.WECHAT_LOGIN_ERROR);
@@ -100,7 +96,7 @@ public class WxUserController {
     @GetMapping("/isexpire")
     public ResultVO isExpire(@RequestParam("sessionId") String sessionId) {
         String key = "wx:session:" + sessionId;
-        if (redisClient.getExpire(key) != null) {
+        if (tokenService.isExpire(key)) {
             return ResultUtils.success();
         }
         return ResultUtils.error(ResultEnum.SESSION_EXPIRED);
@@ -117,11 +113,4 @@ public class WxUserController {
         return ResultUtils.success(userVO);
     }
 
-    /**
-     * 创建唯一的登录态
-     * @return 登录状态session
-     */
-    private static String createSession() {
-        return UUID.randomUUID().toString().replace("-", "");
-    }
 }

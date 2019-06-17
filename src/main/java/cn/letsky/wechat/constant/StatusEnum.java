@@ -11,8 +11,8 @@ public enum StatusEnum implements CodeEnum {
     NOT_ALLOW_COMMENT(1, "不允许评论"),
     NOT_LIKED(0, "未点赞"),
     LIKE(1, "点赞了"),
-    VISIBLE_ALL(0, "对所有人可见"),
-    VISIBLE_SELF(1, "仅对自己可见"),
+    VISIBLE_ALL(0, "公开"),
+    VISIBLE_SELF(1, "私有"),
     ;
 
     private int code;

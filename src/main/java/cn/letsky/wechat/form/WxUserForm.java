@@ -3,29 +3,24 @@ package cn.letsky.wechat.form;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class WxUserForm implements Form {
 
-	@NotNull(message = "openid为null")
-	private String openid;
-	
-	@NotEmpty(message = "昵称为空")
-	private String nickname;
+    @NotNull(message = "openid为null")
+    private String openid;
 
-	private Integer gender;
-	
-	@NotEmpty(message = "头像为空")
-	private String avatarUrl;
+    @NotEmpty(message = "昵称为空")
+    private String nickname;
 
-	public WxUserForm() {
-	}
+    private Integer gender;
 
-	public WxUserForm(String openid, String nickname, Integer gender, String avatarUrl) {
-		this.openid = openid;
-		this.nickname = nickname;
-		this.gender = gender;
-		this.avatarUrl = avatarUrl;
-	}
+    @NotEmpty(message = "头像为空")
+    private String avatarUrl;
+
 }

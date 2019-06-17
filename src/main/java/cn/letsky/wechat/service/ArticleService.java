@@ -19,13 +19,6 @@ public interface ArticleService {
     Article findById(Integer id);
 
     /**
-     * 获取单条文章的内容
-     * @param id 文章的id
-     * @return 展示类的对象
-     */
-    ArticleVO findByIdVO(Integer id, String openid);
-
-    /**
      * 获取正常状态的content
      *
      * @param page
@@ -35,21 +28,13 @@ public interface ArticleService {
     Page<Article> findAll(Integer page, Integer size);
 
     /**
-     * 获取正常状态的文章
-     * @param page
-     * @param size
-     * @return 展示类的对象
-     */
-    List<ArticleVO> findAllVO(String openid, Integer page, Integer size);
-
-    /**
      * 返回给定用户所有已发送的文章
      * @param openid
      * @param page
      * @param size
      * @return
      */
-    List<ArticleVO> findAllVOByOpenid(String openid, Integer page, Integer size);
+    Page<Article> findAllByOpenid(String openid, Integer page, Integer size);
 
     /**
      * 保存文章

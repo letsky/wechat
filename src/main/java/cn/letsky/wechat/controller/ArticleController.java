@@ -1,19 +1,22 @@
 package cn.letsky.wechat.controller;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import cn.letsky.wechat.constant.EntityType;
 import cn.letsky.wechat.constant.ResultEnum;
 import cn.letsky.wechat.exception.CommonException;
 import cn.letsky.wechat.form.ArticleForm;
 import cn.letsky.wechat.model.Article;
-import cn.letsky.wechat.model.Trie;
+import cn.letsky.wechat.model.UserHolder;
 import cn.letsky.wechat.model.User;
 import cn.letsky.wechat.service.CommentService;
+import cn.letsky.wechat.service.LikeService;
 import cn.letsky.wechat.util.FilterUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,102 +30,81 @@ import javax.validation.Valid;
 
 @Slf4j
 @RestController
-@RequestMapping("/article")
+@RequestMapping("/articles")
 public class ArticleController {
 
     private final UserService userService;
-
     private final ArticleService articleService;
-
     private final FilterUtils filterUtils;
+    private final CommentService commentService;
+    private final LikeService likeService;
+    private final UserHolder userHolder;
 
     public ArticleController(UserService userService,
                              ArticleService articleService,
-                             FilterUtils filterUtils) {
+                             FilterUtils filterUtils,
+                             CommentService commentService,
+                             LikeService likeService,
+                             UserHolder userHolder) {
         this.userService = userService;
         this.articleService = articleService;
         this.filterUtils = filterUtils;
+        this.commentService = commentService;
+        this.likeService = likeService;
+        this.userHolder = userHolder;
     }
 
-    /**
-     * 获取文章列表
-     *
-     * @param openid
-     * @param page   页数
-     * @param size   每页的数量
-     * @return 文章列表
-     */
-    @GetMapping("/list")
-    public ResultVO<List<ArticleVO>> getArticleList(
-            @RequestParam("openid") String openid,
-            @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "size", defaultValue = "5") int size) {
-
-        List<ArticleVO> list = articleService.findAllVO(openid, page, size);
-        return ResultUtils.success(list);
-    }
-
-    /**
-     * 获取用户所有发表的文章
-     *
-     * @param openid
-     * @param page
-     * @param size
-     * @return
-     */
-    @GetMapping(value = "/list", params = {"uid"})
-    public ResultVO<List<ArticleVO>> getArticleListByOpenid(
-            @RequestParam("uid") String openid,
-            @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "size", defaultValue = "5") int size) {
-
-        List<ArticleVO> list = articleService.findAllVOByOpenid(openid, page, size);
-        return ResultUtils.success(list);
-    }
-
-    /**
-     * 获取单个文章
-     *
-     * @param id     文章id
-     * @param openid
-     * @return 单个文章
-     */
     @GetMapping
-    public ResultVO<ArticleVO> getArticle(@RequestParam("id") Integer id,
-                                          @RequestParam("openid") String openid) {
+    public ResultVO<List<ArticleVO>> getArticleList(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "20") int size) {
 
-        ArticleVO articleVO = articleService.findByIdVO(id, openid);
-        if (articleVO == null)
+        Page<Article> articlePage = articleService.findAll(page, size);
+        List<ArticleVO> list = articlePage.get()
+                .map(e -> transform(e, new ArticleVO(), userHolder.get().getOpenid()))
+                .collect(Collectors.toList());
+        return ResultUtils.success(list);
+    }
+
+    @GetMapping("/user/{openid}")
+    public ResultVO<List<ArticleVO>> getArticleListByOpenid(
+            @PathVariable("openid") String openid,
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "20") int size) {
+
+        Page<Article> articlePage = articleService.findAllByOpenid(openid, page, size);
+        List<ArticleVO> list = articlePage.get()
+                .map(e -> transform(e, new ArticleVO(), openid))
+                .collect(Collectors.toList());
+        return ResultUtils.success(list);
+    }
+
+    @GetMapping("/{id}")
+    public ResultVO<ArticleVO> getArticle(@PathVariable("id") Integer id) {
+
+        String openid = userHolder.get().getOpenid();
+        Article article = articleService.findById(id);
+        if (article == null)
             throw new CommonException(ResultEnum.ENTITY_NOT_FOUNT);
+        ArticleVO articleVO = new ArticleVO();
+        transform(article, articleVO, openid);
         return ResultUtils.success(articleVO);
     }
 
-    /**
-     * 发送文章
-     *
-     * @param articleForm   前端表单
-     * @param bindingResult 表单验证的结果
-     * @return 操作的状态码
-     */
-    @PostMapping("/send")
-    public ResultVO sentArticle(@Valid ArticleForm articleForm,
+    @PostMapping
+    public ResultVO sendArticle(@Valid ArticleForm articleForm,
                                 BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            log.error("[发送帖子失败]：articleForm={}", articleForm);
+            log.error("[保存帖子失败]：articleForm={}", articleForm);
             throw new CommonException(ResultEnum.PARAM_ERROR);
         }
         User user = userService.findById(articleForm.getOpenid());
-        if (user == null) {
-            throw new CommonException(ResultEnum.NOT_REGISTER);
-        }
         if (filterUtils.isSensitive(articleForm.getContent())) {
             throw new CommonException(ResultEnum.SENSITIVE_WORD);
         }
         Article article = new Article();
-        article.setOpenid(articleForm.getOpenid());
-        article.setContent(articleForm.getContent());
-        article.setAllowComment(articleForm.getAllowComment());
+        BeanUtils.copyProperties(articleForm, article);
         article.setImg(StringUtils.join(articleForm.getImgs(), "#"));
         Article result = articleService.save(article);
         if (result == null) {
@@ -131,15 +113,37 @@ public class ArticleController {
         return ResultUtils.success();
     }
 
-    /**
-     * 删除帖子
-     *
-     * @param id 帖子id
-     * @return 操作的状态码
-     */
-    @PostMapping()
+    @DeleteMapping
     public ResultVO deleteArticle(@RequestParam("id") Integer id) {
         articleService.delete(id);
         return ResultUtils.success();
+    }
+
+    /**
+     * 将Article对象转换成ArticleVO对象
+     *
+     * @param article
+     * @param articleVO
+     * @return ArticleVO对象
+     */
+    private ArticleVO transform(Article article, ArticleVO articleVO, String openid) {
+
+        BeanUtils.copyProperties(article, articleVO);
+        if (article.getImg() != null && article.getImg().length() != 0)
+            articleVO.setImgs(article.getImg().split("#"));
+        User user = userService.findById(article.getOpenid());
+        if (user != null) {
+            articleVO.setAvatarUrl(user.getAvatarUrl());
+            articleVO.setNickname(user.getNickname());
+        }
+        Long commentNum = commentService
+                .count(EntityType.ARTICLE.getCode(), article.getId());
+        Integer liked = likeService.getLikeStatus(openid,
+                EntityType.ARTICLE.getCode(), article.getId());
+        Long likeNum = likeService.likeCount(EntityType.ARTICLE.getCode(), article.getId());
+        articleVO.setCommentNum(commentNum);
+        articleVO.setLiked(liked);
+        articleVO.setLikeNum(likeNum);
+        return articleVO;
     }
 }

@@ -70,7 +70,7 @@ public class CommentController {
             @RequestParam("entityType") Integer entityType,
             @RequestParam("entityId") Integer entityId,
             @RequestParam(value = "page", defaultValue = "1") Integer page,
-            @RequestParam(value = "size", defaultValue = "5") Integer size) {
+            @RequestParam(value = "size", defaultValue = "20") Integer size) {
 
         Pageable pageable = PageUtils.getPageable(page, size);
         List<CommentVO> commentVOList =

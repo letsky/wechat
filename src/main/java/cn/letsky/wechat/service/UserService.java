@@ -16,4 +16,5 @@ public interface UserService {
 	 * @return user对象
 	 */
 	User findById(String id);
+
 }

@@ -23,6 +23,7 @@ public enum ResultEnum implements CodeEnum {
     WECHAT_CODE_EMPTY(80001, "微信code为空"),
 
     SESSION_EXPIRED(90000, "客户端session过期"),
+    SESSION_ERROR(90001, "session无效"),
     NULL_PICTURE(90001, "上传的图片为空"),
     EXCEED_PICTURE_LIMIT(90002, "图片上传超过限制"),
     NOT_PICTURE(90003, "上传的不是图片"),

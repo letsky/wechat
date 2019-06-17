@@ -33,11 +33,8 @@ public class ArticleServiceImpl implements ArticleService {
     private final String SPILT = "#";
 
     private final ArticleDao articleDao;
-
     private final UserService userService;
-
     private final CommentService commentService;
-
     private final LikeService likeService;
 
     public ArticleServiceImpl(ArticleDao articleDao,
@@ -57,19 +54,10 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public ArticleVO findByIdVO(Integer id, String openid){
-        Article article = findById(id);
-        if (article == null)
-            return null;
-        ArticleVO articleVO = new ArticleVO();
-        return transform(article, articleVO, openid);
-    }
-
-    @Override
     public Page<Article> findAll(Integer page, Integer size) {
         Pageable pageable = PageUtils.getPageable(page, size);
-        Page<Article> articlePage = articleDao.findAllByStatusOrderByCreatedDesc(
-                StatusEnum.ARTICLE_NORMAL.getCode(), pageable);
+        Page<Article> articlePage = articleDao.findAllByStatusAndVisibleOrderByCreatedDesc(
+                StatusEnum.ARTICLE_NORMAL.getCode(),StatusEnum.VISIBLE_ALL.getCode(), pageable);
         if (page > articlePage.getTotalPages()){
             throw new CommonException(ResultEnum.BEYOND_PAGE_LIMIT);
         }
@@ -77,26 +65,13 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public List<ArticleVO> findAllVO(String openid, Integer page, Integer size) {
-        Page<Article> articlePage = findAll(page, size);
-        List<ArticleVO> list = articlePage.getContent().stream()
-                .map(e -> transform(e, new ArticleVO(), openid))
-                .collect(Collectors.toList());
-        return list;
-    }
-
-    @Override
-    public List<ArticleVO> findAllVOByOpenid(String openid, Integer page, Integer size) {
+    public Page<Article> findAllByOpenid(String openid, Integer page, Integer size) {
         Pageable pageable = PageUtils.getPageable(page, size);
         Page<Article> articlePage = articleDao.findAllByOpenidOrderByCreatedDesc(openid, pageable);
         if (page > articlePage.getTotalPages()){
             throw new CommonException(ResultEnum.BEYOND_PAGE_LIMIT);
         }
-
-        List<ArticleVO> list = articlePage.getContent()
-                .stream().map(e -> transform(e, new ArticleVO(), openid))
-                .collect(Collectors.toList());
-        return list;
+        return articlePage;
     }
 
     @Override
@@ -111,32 +86,30 @@ public class ArticleServiceImpl implements ArticleService {
         articleDao.save(article);
     }
 
-
-
     /**
      * 将Article对象转换成ArticleVO对象
      * @param article
      * @param articleVO
      * @return ArticleVO对象
      */
-    private ArticleVO transform(Article article, ArticleVO articleVO, String openid){
-
-        BeanUtils.copyProperties(article, articleVO);
-        if (article.getImg() != null && article.getImg().length() != 0)
-            articleVO.setImgs(article.getImg().split(SPILT));
-        User user = userService.findById(article.getOpenid());
-        if (user != null) {
-            articleVO.setAvatarUrl(user.getAvatarUrl());
-            articleVO.setNickname(user.getNickname());
-        }
-        Long commentNum = commentService
-                .count(EntityType.ARTICLE.getCode(), article.getId());
-        Integer liked = likeService.getLikeStatus(openid,
-                EntityType.ARTICLE.getCode(), article.getId());
-        Long likeNum = likeService.likeCount(EntityType.ARTICLE.getCode(), article.getId());
-        articleVO.setCommentNum(commentNum);
-        articleVO.setLiked(liked);
-        articleVO.setLikeNum(likeNum);
-        return articleVO;
-    }
+//    private ArticleVO transform(Article article, ArticleVO articleVO, String openid){
+//
+//        BeanUtils.copyProperties(article, articleVO);
+//        if (article.getImg() != null && article.getImg().length() != 0)
+//            articleVO.setImgs(article.getImg().split(SPILT));
+//        User user = userService.findById(article.getOpenid());
+//        if (user != null) {
+//            articleVO.setAvatarUrl(user.getAvatarUrl());
+//            articleVO.setNickname(user.getNickname());
+//        }
+//        Long commentNum = commentService
+//                .count(EntityType.ARTICLE.getCode(), article.getId());
+//        Integer liked = likeService.getLikeStatus(openid,
+//                EntityType.ARTICLE.getCode(), article.getId());
+//        Long likeNum = likeService.likeCount(EntityType.ARTICLE.getCode(), article.getId());
+//        articleVO.setCommentNum(commentNum);
+//        articleVO.setLiked(liked);
+//        articleVO.setLikeNum(likeNum);
+//        return articleVO;
+//    }
 }

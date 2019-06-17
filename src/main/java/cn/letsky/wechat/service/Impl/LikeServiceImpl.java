@@ -66,7 +66,7 @@ public class LikeServiceImpl implements LikeService {
      * @param entityId
      * @return like:<entityType>:<entityId>
      */
-    private String getLikeKey(Integer entityType, Integer entityId){
+    private String getLikeKey(Integer entityType, Integer entityId) {
         StringBuilder sb = new StringBuilder();
         sb.append(LIKE).append(SPLIT).append(entityType).append(SPLIT).append(entityId);
         return sb.toString();
