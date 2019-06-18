@@ -25,25 +25,16 @@ public class UploadController {
         this.qiniuService = qiniuService;
     }
 
-    /**
-     * 上传图片
-     *
-     * @param files
-     * @return
-     */
     @PostMapping("/upload")
     public ResultVO uploads(@RequestParam("file") MultipartFile[] files){
-        List<String> list = Arrays.stream(files).map(file -> {
-            String url = uploadImage(file);
-            if (url == null)
-                throw new CommonException(ResultEnum.FAIL);
-            return url;
-        }).collect(Collectors.toList());
+        List<String> list = Arrays.stream(files)
+                .map(file -> uploadImage(file))
+                .collect(Collectors.toList());
         return ResultUtils.success(list);
     }
 
     private String uploadImage(MultipartFile file){
-        if (file.isEmpty()) {
+        if (file.isEmpty() || file.equals("undefined")) {
             throw new CommonException(ResultEnum.NULL_PICTURE);
         }
         String url = qiniuService.uploadFile(file);

@@ -5,6 +5,8 @@ import cn.letsky.wechat.constant.ResultEnum;
 import cn.letsky.wechat.exception.CommonException;
 import cn.letsky.wechat.form.CommentForm;
 import cn.letsky.wechat.model.Comment;
+import cn.letsky.wechat.model.User;
+import cn.letsky.wechat.model.UserHolder;
 import cn.letsky.wechat.service.CommentService;
 import cn.letsky.wechat.util.FilterUtils;
 import cn.letsky.wechat.util.PageUtils;
@@ -16,55 +18,25 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.net.Socket;
 import java.util.List;
 
-@RequestMapping("/comment")
+@RequestMapping("/comments")
 @RestController
 public class CommentController {
 
     private final CommentService commentService;
-
     private final FilterUtils filterUtils;
+    private final UserHolder userHolder;
 
     public CommentController(CommentService commentService,
-                             FilterUtils filterUtils) {
+                             FilterUtils filterUtils,
+                             UserHolder userHolder) {
         this.commentService = commentService;
         this.filterUtils = filterUtils;
+        this.userHolder = userHolder;
     }
 
-    /**
-     * 发送评论
-     *
-     * @param commentForm
-     * @return
-     */
-    @PostMapping("/send")
-    public ResultVO addComment(@Valid CommentForm commentForm) {
-
-        if (!EntityType.contains(commentForm.getEntityType())) {
-            throw new CommonException(ResultEnum.ENTITY_TYPE_ERROR);
-        }
-        if (filterUtils.isSensitive(commentForm.getContent())) {
-            throw new CommonException(ResultEnum.SENSITIVE_WORD);
-        }
-        Comment res = commentService.save(
-                commentForm.getUid(), commentForm.getContent(),
-                commentForm.getEntityType(), commentForm.getEntityId());
-        if (res == null) {
-            throw new CommonException(ResultEnum.FAIL);
-        }
-        return ResultUtils.success();
-    }
-
-    /**
-     * 获取评论
-     *
-     * @param entityType
-     * @param entityId
-     * @param page
-     * @param size
-     * @return
-     */
     @GetMapping
     public ResultVO<List<CommentVO>> getComment(
             @RequestParam("entityType") Integer entityType,
@@ -78,5 +50,21 @@ public class CommentController {
         return ResultUtils.success(commentVOList);
     }
 
+    @PostMapping
+    public ResultVO addComment(@Valid CommentForm commentForm) {
 
+        if (!EntityType.contains(commentForm.getEntityType())) {
+            throw new CommonException(ResultEnum.ENTITY_TYPE_ERROR);
+        }
+        if (filterUtils.isSensitive(commentForm.getContent())) {
+            throw new CommonException(ResultEnum.SENSITIVE_WORD);
+        }
+        Comment res = commentService.save(
+                userHolder.get().getOpenid(), commentForm.getContent(),
+                commentForm.getEntityType(), commentForm.getEntityId());
+        if (res == null) {
+            throw new CommonException(ResultEnum.FAIL);
+        }
+        return ResultUtils.success();
+    }
 }

@@ -19,12 +19,6 @@ public class  ArticleForm implements Form {
     private String content;
 
     /**
-     * 发表人的openid
-     */
-    @NotBlank
-    private String openid;
-
-    /**
      * 是否允许评论，0为允许，1为不允许，默认为0
      */
     private Integer allowComment;

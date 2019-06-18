@@ -19,6 +19,6 @@ public class WechatWebConfiguration implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(tokenInterceptor)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/wx/login", "/wx/register");
+                .excludePathPatterns("/wx/login", "/wx/register", "/wx/isexpire");
     }
 }

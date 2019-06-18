@@ -12,9 +12,6 @@ import javax.validation.constraints.NotNull;
 public class CommentForm implements Form {
 
     @NotNull
-    private String uid;
-
-    @NotNull
     private String content;
 
     private Integer entityType;

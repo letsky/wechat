@@ -99,12 +99,12 @@ public class ArticleController {
             log.error("[保存帖子失败]：articleForm={}", articleForm);
             throw new CommonException(ResultEnum.PARAM_ERROR);
         }
-        User user = userService.findById(articleForm.getOpenid());
         if (filterUtils.isSensitive(articleForm.getContent())) {
             throw new CommonException(ResultEnum.SENSITIVE_WORD);
         }
         Article article = new Article();
         BeanUtils.copyProperties(articleForm, article);
+        article.setOpenid(userHolder.get().getOpenid());
         article.setImg(StringUtils.join(articleForm.getImgs(), "#"));
         Article result = articleService.save(article);
         if (result == null) {

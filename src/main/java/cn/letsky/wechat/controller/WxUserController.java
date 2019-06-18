@@ -39,12 +39,6 @@ public class WxUserController {
         this.tokenService = tokenService;
     }
 
-    /**
-     * 获取登录态的session
-     *
-     * @param code wx.login换取的code
-     * @return 自定义的session
-     */
     @GetMapping("/login")
     public ResultVO<Map<String, String>> login(@RequestParam("code") String code) {
         try {
@@ -66,13 +60,6 @@ public class WxUserController {
         }
     }
 
-    /**
-     * 微信端用户注册
-     *
-     * @param userForm      微信端传来的表单
-     * @param bindingResult 表单验证的结果
-     * @return 相应的Json结果
-     */
     @PostMapping("/register")
     public ResultVO register(@Valid WxUserForm userForm,
                              BindingResult bindingResult) {
@@ -87,12 +74,6 @@ public class WxUserController {
         return ResultUtils.success();
     }
 
-    /**
-     * 判断用户session是否过期
-     *
-     * @param sessionId 服务端派发的session
-     * @return 返回是否成功的状态码和消息
-     */
     @GetMapping("/isexpire")
     public ResultVO isExpire(@RequestParam("sessionId") String sessionId) {
         String key = "wx:session:" + sessionId;
