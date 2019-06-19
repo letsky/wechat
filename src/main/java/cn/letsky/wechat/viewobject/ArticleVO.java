@@ -31,13 +31,11 @@ public class ArticleVO implements Serializable {
 	@JsonInclude(Include.NON_EMPTY)
 	private String tag;
 
-	@JsonInclude(Include.NON_EMPTY)
 	private Long commentNum;
 
 	@JsonInclude(Include.NON_EMPTY)
 	private Integer liked;
 
-	@JsonInclude(Include.NON_EMPTY)
 	private Long likeNum;
 	
 	/**

@@ -55,9 +55,14 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Page<Article> findAll(Integer page, Integer size) {
+        return findAll(StatusEnum.VISIBLE_ALL.getCode(), page, size);
+    }
+
+    @Override
+    public Page<Article> findAll(Integer visible, Integer page, Integer size) {
         Pageable pageable = PageUtils.getPageable(page, size);
         Page<Article> articlePage = articleDao.findAllByStatusAndVisibleOrderByCreatedDesc(
-                StatusEnum.ARTICLE_NORMAL.getCode(),StatusEnum.VISIBLE_ALL.getCode(), pageable);
+                StatusEnum.ARTICLE_NORMAL.getCode(),visible, pageable);
         if (page > articlePage.getTotalPages()){
             throw new CommonException(ResultEnum.BEYOND_PAGE_LIMIT);
         }

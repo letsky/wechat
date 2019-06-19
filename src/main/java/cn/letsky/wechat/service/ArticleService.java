@@ -23,9 +23,23 @@ public interface ArticleService {
      *
      * @param page
      * @param size
-     * @return 分页后正常状态的文章列表
+     * @return
+     *
+     * {@link cn.letsky.wechat.constant.StatusEnum#VISIBLE_SELF}
      */
     Page<Article> findAll(Integer page, Integer size);
+
+    /**
+     * 查找文章
+     * @param visible 文章可见性
+     * @param page
+     * @param size
+     * @return
+     *
+     * {@link cn.letsky.wechat.constant.StatusEnum#VISIBLE_ALL}
+     * {@link cn.letsky.wechat.constant.StatusEnum#VISIBLE_SELF}
+     */
+    Page<Article> findAll(Integer visible, Integer page, Integer size);
 
     /**
      * 返回给定用户所有已发送的文章

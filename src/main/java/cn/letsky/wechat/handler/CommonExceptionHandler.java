@@ -18,6 +18,7 @@ public class CommonExceptionHandler {
 	@ExceptionHandler(Exception.class)
 	public ResultVO exceptionHandler(Exception e) {
 		log.error("[Exception]:" + e.getMessage());
+		e.printStackTrace();
 		return ResultUtils.error(ResultEnum.ERROR);
 	}
 	

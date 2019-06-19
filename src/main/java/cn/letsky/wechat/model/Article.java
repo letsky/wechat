@@ -5,6 +5,8 @@ import java.util.Date;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 @Data
@@ -37,11 +39,14 @@ public class Article implements Serializable {
 	/**
 	 * 文章状态，0为正常，1为删除，默认为0
 	 */
+
+	@JsonIgnore
 	private Integer status;
 
 	/**
 	 * 标签
 	 */
+	@JsonIgnore
 	private String tag;
 
 	/**
@@ -64,12 +69,14 @@ public class Article implements Serializable {
 	/**
 	 * 是否允许评论，0为允许，1为不允许，默认为0
 	 */
+	@JsonIgnore
 	@Column(name = "allow_comment")
 	private Integer allowComment;
 
 	/**
 	 * 可见性，0为允许他人可见，1为自己可见
 	 */
+	@JsonIgnore
 	private Integer visible;
 	
 	public Article() {

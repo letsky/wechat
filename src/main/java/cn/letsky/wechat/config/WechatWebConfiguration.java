@@ -3,6 +3,7 @@ package cn.letsky.wechat.config;
 
 import cn.letsky.wechat.interceptor.TokenInterceptor;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -19,6 +20,13 @@ public class WechatWebConfiguration implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(tokenInterceptor)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/wx/login", "/wx/register", "/wx/isexpire");
+                .excludePathPatterns("/wx/login", "/wx/register", "/wx/isexpire")
+                .excludePathPatterns("/admin/**");
     }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**");
+    }
+
 }
