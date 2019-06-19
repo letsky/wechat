@@ -1,6 +1,7 @@
 package cn.letsky.wechat.viewobject;
 
 import java.io.Serializable;
+import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -20,6 +21,9 @@ public class ResultVO<T> implements Serializable{
     @JsonInclude(Include.NON_EMPTY)
     private T data;
 
+    @JsonInclude(Include.NON_EMPTY)
+    private Map ext;
+
     public ResultVO(){
     }
 
@@ -27,11 +31,20 @@ public class ResultVO<T> implements Serializable{
         this.code = code;
         this.errmsg = errmsg;
         this.data = null;
+        this.ext = null;
     }
 
     public ResultVO(Integer code, T data) {
     	this.code = code;
         this.errmsg = null;
         this.data = data;
+        this.ext = null;
 	}
+
+    public ResultVO(Integer code, T data, Map ext) {
+        this.code = code;
+        this.errmsg = null;
+        this.data = data;
+        this.ext = ext;
+    }
 }

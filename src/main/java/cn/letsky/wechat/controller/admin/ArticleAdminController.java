@@ -16,7 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -35,10 +37,14 @@ public class ArticleAdminController {
     public ResultVO getList(@RequestParam(value = "page", defaultValue = "1") Integer page,
                             @RequestParam(value = "size", defaultValue = "20") Integer size){
         Page<Article> articlePage = articleService.findAll(page, size);
+        Long count = articlePage.getTotalElements();
+        Map<String, Long> map = new HashMap<>();
+        map.put("count", count);
         List<ArticleVO> list = articlePage.get()
                 .map(e -> transform(e, new ArticleVO()))
                 .collect(Collectors.toList());
-        return ResultUtils.success(list);
+
+        return ResultUtils.success(list, map);
     }
 
     private ArticleVO transform(Article article, ArticleVO articleVO){

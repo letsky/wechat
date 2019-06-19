@@ -4,6 +4,8 @@ import cn.letsky.wechat.constant.CodeEnum;
 import cn.letsky.wechat.constant.ResultEnum;
 import cn.letsky.wechat.viewobject.ResultVO;
 
+import java.util.Map;
+
 public class ResultUtils {
 
 	/**
@@ -13,6 +15,10 @@ public class ResultUtils {
 	 */
     public static <T> ResultVO<T> success(T data){
         return new ResultVO<>(ResultEnum.SUCCESS.getCode(), data);
+    }
+
+    public static <T> ResultVO<T> success(T data, Map ext){
+        return new ResultVO<>(ResultEnum.SUCCESS.getCode(), data, ext);
     }
 
     /**
