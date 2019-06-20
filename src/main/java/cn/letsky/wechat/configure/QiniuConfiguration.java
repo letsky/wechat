@@ -1,4 +1,4 @@
-package cn.letsky.wechat.config;
+package cn.letsky.wechat.configure;
 
 import cn.letsky.wechat.properties.QiNiuProperties;
 import com.qiniu.common.Zone;
@@ -8,6 +8,9 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * 七牛云对象存储自动配置
+ */
 @Configuration
 @EnableConfigurationProperties(QiNiuProperties.class)
 public class QiniuConfiguration {

@@ -1,11 +1,13 @@
 package cn.letsky.wechat.viewobject;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Date;
 
 @Data
+@NoArgsConstructor
 public class CommentVO implements Serializable {
 
     private static final long serialVersionUID = 3829376821426089909L;

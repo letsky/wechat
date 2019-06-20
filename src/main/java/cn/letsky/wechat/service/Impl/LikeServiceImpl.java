@@ -2,11 +2,11 @@ package cn.letsky.wechat.service.Impl;
 
 import cn.letsky.wechat.constant.StatusEnum;
 import cn.letsky.wechat.service.LikeService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 /**
+ * {@link LikeService}实现类
  * 使用redis实现点赞，使用set
  * 相关命令：sismember, scard, sadd, srem
  * key：like:<entityType>:<entityId> value：userId
@@ -61,7 +61,7 @@ public class LikeServiceImpl implements LikeService {
     }
 
     /**
-     * 返回点赞的key
+     * 获取点赞的key
      * @param entityType
      * @param entityId
      * @return like:<entityType>:<entityId>

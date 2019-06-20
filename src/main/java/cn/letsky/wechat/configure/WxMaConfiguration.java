@@ -1,14 +1,16 @@
-package cn.letsky.wechat.config;
+package cn.letsky.wechat.configure;
 
+import cn.binarywang.wx.miniapp.api.WxMaService;
+import cn.binarywang.wx.miniapp.api.impl.WxMaServiceImpl;
+import cn.binarywang.wx.miniapp.config.WxMaInMemoryConfig;
 import cn.letsky.wechat.properties.WxMaProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import cn.binarywang.wx.miniapp.api.WxMaService;
-import cn.binarywang.wx.miniapp.api.impl.WxMaServiceImpl;
-import cn.binarywang.wx.miniapp.config.WxMaInMemoryConfig;
-
+/**
+ * 微信小程序自动配置
+ */
 @Configuration
 @EnableConfigurationProperties(WxMaProperties.class)
 public class WxMaConfiguration {
@@ -18,7 +20,6 @@ public class WxMaConfiguration {
     public WxMaConfiguration(WxMaProperties properties) {
         this.properties = properties;
     }
-
 
     @Bean
     public WxMaService wxMaService() {

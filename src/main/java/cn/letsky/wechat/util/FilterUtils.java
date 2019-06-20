@@ -5,8 +5,12 @@ import cn.letsky.wechat.exception.CommonException;
 import cn.letsky.wechat.model.Trie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import javax.annotation.PostConstruct;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 
 @Component
 public class FilterUtils {
@@ -29,7 +33,7 @@ public class FilterUtils {
         }
     }
 
-    public boolean isSensitive(String text){
+    public boolean isSensitive(String text) {
         boolean flag = false;
         Trie.Node node = trie.getRoot();
         //回滚数
@@ -44,7 +48,7 @@ public class FilterUtils {
                 position = begin + 1;
                 begin = position;
                 node = trie.getRoot();
-            } else if (node.isWord ) {
+            } else if (node.isWord) {
                 flag = true;
             } else {
                 ++position;

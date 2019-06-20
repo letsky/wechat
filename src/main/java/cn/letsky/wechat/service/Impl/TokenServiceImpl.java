@@ -1,14 +1,15 @@
 package cn.letsky.wechat.service.Impl;
 
 import cn.letsky.wechat.service.TokenService;
-import cn.letsky.wechat.util.ResultUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.util.UUID;
 
+/**
+ * {@link TokenService}实现类
+ */
 @Service
 public class TokenServiceImpl implements TokenService {
 
@@ -34,7 +35,8 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     public void save(String session, String openid) {
-        redisTemplate.opsForValue().set("wx:session:" + session, openid, Duration.ofDays(7));
+        redisTemplate.opsForValue()
+                .set("wx:session:" + session, openid, Duration.ofDays(7));
     }
 
     @Override

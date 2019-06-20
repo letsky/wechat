@@ -5,7 +5,6 @@ import cn.letsky.wechat.constant.ResultEnum;
 import cn.letsky.wechat.exception.CommonException;
 import cn.letsky.wechat.form.CommentForm;
 import cn.letsky.wechat.model.Comment;
-import cn.letsky.wechat.model.User;
 import cn.letsky.wechat.model.UserHolder;
 import cn.letsky.wechat.service.CommentService;
 import cn.letsky.wechat.util.FilterUtils;
@@ -13,16 +12,14 @@ import cn.letsky.wechat.util.PageUtils;
 import cn.letsky.wechat.util.ResultUtils;
 import cn.letsky.wechat.viewobject.CommentVO;
 import cn.letsky.wechat.viewobject.ResultVO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.net.Socket;
 import java.util.List;
 
-@RequestMapping("/comments")
 @RestController
+@RequestMapping("/comments")
 public class CommentController {
 
     private final CommentService commentService;

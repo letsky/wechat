@@ -10,12 +10,13 @@ public class FileUtils {
 
     // 图片后缀
     public static String[] IMAGE_FILE_SUFFIX =
-            new String[] { "png", "jpg", "bmp", "jpeg" };
+            new String[]{"png", "jpg", "bmp", "jpeg"};
 
     /**
      * 判断是否是图片
-     * @param suffix
-     * @return
+     *
+     * @param suffix 文件后缀名
+     * @return 是图片返回<code>true</code>，不是图片返回<code>false</code>
      */
     private static boolean isFileAllowed(String suffix) {
         List<String> ext = Arrays.asList(IMAGE_FILE_SUFFIX);
@@ -26,10 +27,11 @@ public class FileUtils {
 
     /**
      * 生成文件名
-     * @param file
-     * @return
+     *
+     * @param file 需要上传的文件
+     * @return 文件名
      */
-    public static String fileName(MultipartFile file){
+    public static String fileName(MultipartFile file) {
         int doPos = file.getOriginalFilename().lastIndexOf(".");
         if (doPos < 0)
             return null;

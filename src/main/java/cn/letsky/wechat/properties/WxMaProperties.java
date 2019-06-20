@@ -1,16 +1,13 @@
 package cn.letsky.wechat.properties;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
-
 import lombok.Data;
-import lombok.Getter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * 小程序相关配置
  */
 @Data
-@ConfigurationProperties(prefix = "wx.miniapp.config")
+@ConfigurationProperties(prefix = "wx.miniapp.configure")
 public class WxMaProperties {
 
     /**

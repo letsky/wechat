@@ -1,31 +1,25 @@
 package cn.letsky.wechat.service.Impl;
 
-import cn.letsky.wechat.constant.EntityType;
 import cn.letsky.wechat.constant.ResultEnum;
 import cn.letsky.wechat.constant.StatusEnum;
 import cn.letsky.wechat.dao.ArticleDao;
 import cn.letsky.wechat.exception.CommonException;
 import cn.letsky.wechat.model.Article;
-import cn.letsky.wechat.model.Trie;
-import cn.letsky.wechat.model.User;
+import cn.letsky.wechat.service.ArticleService;
 import cn.letsky.wechat.service.CommentService;
 import cn.letsky.wechat.service.LikeService;
 import cn.letsky.wechat.service.UserService;
 import cn.letsky.wechat.util.PageUtils;
-import cn.letsky.wechat.viewobject.ArticleVO;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import cn.letsky.wechat.service.ArticleService;
-
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
+/**
+ * {@link ArticleService}实现类
+ */
 @Slf4j
 @Service
 public class ArticleServiceImpl implements ArticleService {

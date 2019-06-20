@@ -1,14 +1,15 @@
 package cn.letsky.wechat.viewobject;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
-import lombok.Data;
-
 @Data
+@NoArgsConstructor
 public class ArticleVO implements Serializable {
 	 
 	private static final long serialVersionUID = 1635181928183897522L;
@@ -43,8 +44,4 @@ public class ArticleVO implements Serializable {
 	 */
 	@JsonInclude(Include.NON_EMPTY)
 	private Integer allowComment;
-
-	public ArticleVO() {
-
-	}
 }

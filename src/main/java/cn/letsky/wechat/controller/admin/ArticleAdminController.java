@@ -1,7 +1,5 @@
 package cn.letsky.wechat.controller.admin;
 
-import cn.letsky.wechat.constant.EntityType;
-import cn.letsky.wechat.controller.ArticleController;
 import cn.letsky.wechat.model.Article;
 import cn.letsky.wechat.model.User;
 import cn.letsky.wechat.service.ArticleService;
@@ -10,9 +8,7 @@ import cn.letsky.wechat.util.ResultUtils;
 import cn.letsky.wechat.viewobject.ArticleVO;
 import cn.letsky.wechat.viewobject.ResultVO;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,18 +20,20 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/admin/articles")
 @CrossOrigin(allowCredentials = "true")
-@Slf4j
 public class ArticleAdminController {
 
-    @Autowired
-    private ArticleService articleService;
+    private final ArticleService articleService;
+    private final UserService userService;
 
-    @Autowired
-    private UserService userService;
+    public ArticleAdminController(ArticleService articleService,
+                                  UserService userService) {
+        this.articleService = articleService;
+        this.userService = userService;
+    }
 
     @GetMapping
     public ResultVO getList(@RequestParam(value = "page", defaultValue = "1") Integer page,
-                            @RequestParam(value = "size", defaultValue = "20") Integer size){
+                            @RequestParam(value = "size", defaultValue = "20") Integer size) {
         Page<Article> articlePage = articleService.findAll(page, size);
         Long count = articlePage.getTotalElements();
         Map<String, Long> map = new HashMap<>();
@@ -47,7 +45,19 @@ public class ArticleAdminController {
         return ResultUtils.success(list, map);
     }
 
-    private ArticleVO transform(Article article, ArticleVO articleVO){
+    @GetMapping("/{id}")
+    public ResultVO get(@PathVariable("id") Integer id) {
+        Article article = articleService.findById(id);
+        return ResultUtils.success(transform(article, new ArticleVO()));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResultVO delete(@PathVariable("id") Integer id){
+        articleService.delete(id);
+        return ResultUtils.success();
+    }
+
+    private ArticleVO transform(Article article, ArticleVO articleVO) {
         BeanUtils.copyProperties(article, articleVO);
         User user = userService.findById(article.getOpenid());
         articleVO.setNickname(user.getNickname());

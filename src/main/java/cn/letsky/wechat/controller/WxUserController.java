@@ -21,14 +21,12 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
-@RequestMapping("/wx")
 @RestController
+@RequestMapping("/wx")
 public class WxUserController {
 
     private final WxMaService wxMaService;
-
     private final UserService userService;
-
     private final TokenService tokenService;
 
     public WxUserController(WxMaService wxMaService,
@@ -42,7 +40,7 @@ public class WxUserController {
     @GetMapping("/login")
     public ResultVO<Map<String, String>> login(@RequestParam("code") String code) {
         try {
-            if (StringUtils.isEmpty(code)){
+            if (StringUtils.isEmpty(code)) {
                 throw new CommonException(ResultEnum.WECHAT_CODE_EMPTY);
             }
             System.out.println(code);
@@ -84,9 +82,9 @@ public class WxUserController {
     }
 
     @GetMapping("/getuserinfo")
-    public ResultVO getUserInfo(@RequestParam("openid") String openid){
+    public ResultVO getUserInfo(@RequestParam("openid") String openid) {
         User user = userService.findById(openid);
-        if (user == null){
+        if (user == null) {
             throw new CommonException(ResultEnum.NOT_REGISTER);
         }
         UserVO userVO = new UserVO();

@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
-@RequestMapping("/like")
 @RestController
+@RequestMapping("/like")
 public class LikeController {
 
     private final LikeService likeService;

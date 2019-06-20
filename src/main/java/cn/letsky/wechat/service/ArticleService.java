@@ -11,7 +11,7 @@ import java.util.List;
 public interface ArticleService {
 
     /**
-     * 获取单条文章的内容
+     * 获取单条文章
      *
      * @param id 文章的id
      * @return 文章的内容
@@ -19,23 +19,24 @@ public interface ArticleService {
     Article findById(Integer id);
 
     /**
-     * 获取正常状态的content
+     * 获取文章列表
      *
-     * @param page
-     * @param size
-     * @return
-     *
+     * @param page 页码
+     * @param size 每页的数量
+     * @return 可见性为私有的文章列表
+     * <p>
      * {@link cn.letsky.wechat.constant.StatusEnum#VISIBLE_SELF}
      */
     Page<Article> findAll(Integer page, Integer size);
 
     /**
-     * 查找文章
-     * @param visible 文章可见性
-     * @param page
-     * @param size
-     * @return
+     * 查找文章列表
      *
+     * @param visible 文章可见性
+     * @param page    页码
+     * @param size    每页的数量
+     * @return 给定文章可见性的文章列表
+     * <p>
      * {@link cn.letsky.wechat.constant.StatusEnum#VISIBLE_ALL}
      * {@link cn.letsky.wechat.constant.StatusEnum#VISIBLE_SELF}
      */
@@ -43,22 +44,26 @@ public interface ArticleService {
 
     /**
      * 返回给定用户所有已发送的文章
-     * @param openid
-     * @param page
-     * @param size
-     * @return
+     *
+     * @param openid 微信用户id
+     * @param page   页码
+     * @param size   每页的数量
+     * @return 给定用户的文章列表
      */
     Page<Article> findAllByOpenid(String openid, Integer page, Integer size);
 
     /**
      * 保存文章
+     *
      * @param article 文章实体
-     * @return 保存后的文章对象
+     * @return 保存的文章对象
      */
     Article save(Article article);
 
     /**
-     * 将文章状态改为1
+     * 删除文章
+     * 非真实删除，仅将<code>status</code>字段修改
+     *
      * @param id 文章id
      */
     void delete(Integer id);

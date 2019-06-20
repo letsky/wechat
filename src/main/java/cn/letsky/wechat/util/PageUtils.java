@@ -8,15 +8,15 @@ public class PageUtils {
     private static final int DEFAULT_PAGE = 1;
     private static final int DEFAULT_SIZE = 5;
 
-
     /**
-     * 获取Pageable对象，并校验参数
+     * 获取分页对象，并校验参数
+     *
      * @param page 页数
      * @param size 每页大小
-     * @return Pageable对象
+     * @return 分页对象<code>Pageable</code>
      */
-    public static Pageable getPageable(Integer page, Integer size){
-        if (page < 1 && size > 20){
+    public static Pageable getPageable(Integer page, Integer size) {
+        if (page < 1 && size > 20) {
             page = DEFAULT_PAGE;
             size = DEFAULT_SIZE;
         }

@@ -1,14 +1,15 @@
 package cn.letsky.wechat.viewobject;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 import java.util.Map;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
-import lombok.Data;
-
 @Data
+@NoArgsConstructor
 public class ResultVO<T> implements Serializable{
 	
 	private static final long serialVersionUID = -1390040791477926573L;
@@ -23,9 +24,6 @@ public class ResultVO<T> implements Serializable{
 
     @JsonInclude(Include.NON_EMPTY)
     private Map ext;
-
-    public ResultVO(){
-    }
 
     public ResultVO(Integer code, String errmsg){
         this.code = code;
