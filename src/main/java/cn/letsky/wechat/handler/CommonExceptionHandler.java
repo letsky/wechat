@@ -2,12 +2,11 @@ package cn.letsky.wechat.handler;
 
 import cn.letsky.wechat.constant.ResultEnum;
 import cn.letsky.wechat.exception.CommonException;
+import cn.letsky.wechat.util.ResultUtils;
+import cn.letsky.wechat.viewobject.ResultVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import cn.letsky.wechat.util.ResultUtils;
-import cn.letsky.wechat.viewobject.ResultVO;
 
 import javax.persistence.EntityNotFoundException;
 

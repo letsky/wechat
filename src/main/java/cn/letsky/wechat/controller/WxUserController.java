@@ -1,11 +1,13 @@
 package cn.letsky.wechat.controller;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
+import cn.binarywang.wx.miniapp.api.WxMaUserService;
 import cn.binarywang.wx.miniapp.bean.WxMaJscode2SessionResult;
 import cn.letsky.wechat.constant.ResultEnum;
 import cn.letsky.wechat.exception.CommonException;
 import cn.letsky.wechat.form.WxUserForm;
 import cn.letsky.wechat.model.User;
+import cn.letsky.wechat.model.UserHolder;
 import cn.letsky.wechat.service.TokenService;
 import cn.letsky.wechat.service.UserService;
 import cn.letsky.wechat.util.ResultUtils;
@@ -28,13 +30,16 @@ public class WxUserController {
     private final WxMaService wxMaService;
     private final UserService userService;
     private final TokenService tokenService;
+    private final UserHolder userHolder;
 
     public WxUserController(WxMaService wxMaService,
                             UserService userService,
-                            TokenService tokenService) {
+                            TokenService tokenService,
+                            UserHolder userHolder) {
         this.wxMaService = wxMaService;
         this.userService = userService;
         this.tokenService = tokenService;
+        this.userHolder = userHolder;
     }
 
     @GetMapping("/login")
@@ -43,15 +48,10 @@ public class WxUserController {
             if (StringUtils.isEmpty(code)) {
                 throw new CommonException(ResultEnum.WECHAT_CODE_EMPTY);
             }
-            System.out.println(code);
-            WxMaJscode2SessionResult session = wxMaService.getUserService().getSessionInfo(code);
+            WxMaUserService wxMaUserService = wxMaService.getUserService();
+            WxMaJscode2SessionResult result = wxMaUserService.getSessionInfo(code);
             Map<String, String> map = new HashMap<>();
-
-            String wxSession = tokenService.create();
-            map.put("wxSession", wxSession);
-            map.put("openid", session.getOpenid());
-            //传入redis
-            tokenService.save(wxSession, session.getOpenid());
+            map.put("openid", result.getOpenid());
             return ResultUtils.success(map);
         } catch (WxErrorException e) {
             throw new CommonException(ResultEnum.WECHAT_LOGIN_ERROR);
@@ -69,7 +69,11 @@ public class WxUserController {
         User user = new User();
         BeanUtils.copyProperties(userForm, user);
         userService.save(user);
-        return ResultUtils.success();
+        Map<String, String> map = new HashMap<>();
+        String wxSession = tokenService.create();
+        tokenService.save(wxSession, user.getOpenid());
+        map.put("wxSession", wxSession);
+        return ResultUtils.success(map);
     }
 
     @GetMapping("/isexpire")
@@ -78,6 +82,7 @@ public class WxUserController {
         if (tokenService.isExpire(key)) {
             return ResultUtils.success();
         }
+        userHolder.clear();
         return ResultUtils.error(ResultEnum.SESSION_EXPIRED);
     }
 

@@ -1,33 +1,31 @@
 package cn.letsky.wechat.controller;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import cn.letsky.wechat.constant.EntityType;
 import cn.letsky.wechat.constant.ResultEnum;
+import cn.letsky.wechat.constant.StatusEnum;
 import cn.letsky.wechat.exception.CommonException;
 import cn.letsky.wechat.form.ArticleForm;
 import cn.letsky.wechat.model.Article;
-import cn.letsky.wechat.model.UserHolder;
 import cn.letsky.wechat.model.User;
+import cn.letsky.wechat.model.UserHolder;
+import cn.letsky.wechat.service.ArticleService;
 import cn.letsky.wechat.service.CommentService;
 import cn.letsky.wechat.service.LikeService;
+import cn.letsky.wechat.service.UserService;
 import cn.letsky.wechat.util.FilterUtils;
+import cn.letsky.wechat.util.ResultUtils;
+import cn.letsky.wechat.viewobject.ArticleVO;
+import cn.letsky.wechat.viewobject.ResultVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
-import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import cn.letsky.wechat.service.ArticleService;
-import cn.letsky.wechat.service.UserService;
-import cn.letsky.wechat.util.ResultUtils;
-import cn.letsky.wechat.viewobject.ArticleVO;
-import cn.letsky.wechat.viewobject.ResultVO;
-
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -62,7 +60,7 @@ public class ArticleController {
 
         Page<Article> articlePage = articleService.findAll(page, size);
         List<ArticleVO> list = articlePage.get()
-                .map(e -> transform(e, new ArticleVO(), userHolder.get().getOpenid()))
+                .map(e -> transform(e, new ArticleVO(), userHolder))
                 .collect(Collectors.toList());
         return ResultUtils.success(list);
     }
@@ -75,7 +73,7 @@ public class ArticleController {
 
         Page<Article> articlePage = articleService.findAllByOpenid(openid, page, size);
         List<ArticleVO> list = articlePage.get()
-                .map(e -> transform(e, new ArticleVO(), openid))
+                .map(e -> transform(e, new ArticleVO(), userHolder))
                 .collect(Collectors.toList());
         return ResultUtils.success(list);
     }
@@ -88,7 +86,7 @@ public class ArticleController {
         if (article == null)
             throw new CommonException(ResultEnum.ENTITY_NOT_FOUNT);
         ArticleVO articleVO = new ArticleVO();
-        transform(article, articleVO, openid);
+        transform(article, articleVO, userHolder);
         return ResultUtils.success(articleVO);
     }
 
@@ -127,7 +125,7 @@ public class ArticleController {
      * @param articleVO
      * @return ArticleVO对象
      */
-    private ArticleVO transform(Article article, ArticleVO articleVO, String openid) {
+    private ArticleVO transform(Article article, ArticleVO articleVO, UserHolder userHolder) {
 
         BeanUtils.copyProperties(article, articleVO);
         if (article.getImg() != null && article.getImg().length() != 0)
@@ -139,11 +137,16 @@ public class ArticleController {
         }
         Long commentNum = commentService
                 .count(EntityType.ARTICLE.getCode(), article.getId());
-        Integer liked = likeService.getLikeStatus(openid,
-                EntityType.ARTICLE.getCode(), article.getId());
+        Integer liked = StatusEnum.NOT_LIKED.getCode();
+        if (userHolder.get() != null){
+            String openid = userHolder.get().getOpenid();
+            liked = likeService.getLikeStatus(openid,
+                    EntityType.ARTICLE.getCode(), article.getId());
+        }
+        articleVO.setLiked(liked);
         Long likeNum = likeService.likeCount(EntityType.ARTICLE.getCode(), article.getId());
         articleVO.setCommentNum(commentNum);
-        articleVO.setLiked(liked);
+
         articleVO.setLikeNum(likeNum);
         return articleVO;
     }

@@ -13,16 +13,15 @@ import cn.letsky.wechat.model.User;
 
 import java.util.Optional;
 
-
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@Transactional
 public class UserDaoTest {
 
 	@Autowired
 	private UserDao userDao;
 	
 	@Test
-	@Transactional
 	public void save() {
 		User user = new User();
 		user.setOpenid("wx6a356c77cc3f80d5");

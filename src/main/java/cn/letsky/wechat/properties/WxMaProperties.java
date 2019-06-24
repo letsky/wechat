@@ -7,7 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * 小程序相关配置
  */
 @Data
-@ConfigurationProperties(prefix = "wx.miniapp.configure")
+@ConfigurationProperties(prefix = "wx.miniapp.config")
 public class WxMaProperties {
 
     /**

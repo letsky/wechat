@@ -22,31 +22,28 @@ import java.io.PrintWriter;
 public class TokenInterceptor implements HandlerInterceptor {
 
     private final TokenService tokenService;
-    private final UserHolder userHolder;
     private final UserService userService;
+    private final UserHolder userHolder;
 
     public TokenInterceptor(TokenService tokenService,
-                            UserHolder userHolder,
-                            UserService userService) {
+                            UserService userService,
+                            UserHolder userHolder) {
         this.tokenService = tokenService;
-        this.userHolder = userHolder;
         this.userService = userService;
+        this.userHolder = userHolder;
     }
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request,
+                             HttpServletResponse response,
+                             Object handler) throws Exception {
         String session = request.getHeader("wxSession");
         //session未过期
         if (!tokenService.isExpire(session)) {
             String openid = tokenService.getOpenid(session);
             User user = userService.findById(openid);
-            if (user != null) {
-                userHolder.set(user);
-                return true;
-            }else {
-                //用户不存在
-                throw new CommonException(ResultEnum.NOT_REGISTER);
-            }
+            userHolder.set(user);
+            return true;
         }
         //返回错误的信息
         ObjectMapper mapper = new ObjectMapper();
@@ -57,15 +54,5 @@ public class TokenInterceptor implements HandlerInterceptor {
         pw.flush();
         pw.close();
         return false;
-    }
-
-    @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-
-    }
-
-    @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-
     }
 }

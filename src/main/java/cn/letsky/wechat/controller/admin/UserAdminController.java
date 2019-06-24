@@ -10,12 +10,11 @@ import cn.letsky.wechat.viewobject.UserVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -34,7 +33,18 @@ public class UserAdminController {
         List<UserVO> list = userPage.get()
                 .map(e -> transform(e, new UserVO()))
                 .collect(Collectors.toList());
-        return ResultUtils.success(list);
+        Long count = userPage.getTotalElements();
+        Map<String, Long> map = new HashMap<>();
+        map.put("count", count);
+        return ResultUtils.success(list, map);
+    }
+
+    @GetMapping("/{openid}")
+    public ResultVO get(@PathVariable("openid") String openid){
+        User user = userService.findById(openid);
+        UserVO userVO = new UserVO();
+        transform(user, userVO);
+        return ResultUtils.success(userVO);
     }
 
     private UserVO transform(User user, UserVO userVO) {
