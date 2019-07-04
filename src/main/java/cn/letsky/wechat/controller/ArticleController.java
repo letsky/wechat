@@ -59,7 +59,7 @@ public class ArticleController {
             @RequestParam(value = "size", defaultValue = "20") int size) {
 
         Page<Article> articlePage = articleService.findAll(page, size);
-        List<ArticleVO> list = articlePage.get()
+        List<ArticleVO> list = articlePage.stream()
                 .map(e -> transform(e, new ArticleVO(), userHolder))
                 .collect(Collectors.toList());
         return ResultUtils.success(list);
@@ -136,15 +136,15 @@ public class ArticleController {
             articleVO.setNickname(user.getNickname());
         }
         Long commentNum = commentService
-                .count(EntityType.ARTICLE.getCode(), article.getId());
+                .count(EntityType.ARTICLE.getType(), article.getId());
         Integer liked = StatusEnum.NOT_LIKED.getCode();
         if (userHolder.get() != null){
             String openid = userHolder.get().getOpenid();
             liked = likeService.getLikeStatus(openid,
-                    EntityType.ARTICLE.getCode(), article.getId());
+                    EntityType.ARTICLE.getType(), article.getId());
         }
         articleVO.setLiked(liked);
-        Long likeNum = likeService.likeCount(EntityType.ARTICLE.getCode(), article.getId());
+        Long likeNum = likeService.likeCount(EntityType.ARTICLE.getType(), article.getId());
         articleVO.setCommentNum(commentNum);
 
         articleVO.setLikeNum(likeNum);

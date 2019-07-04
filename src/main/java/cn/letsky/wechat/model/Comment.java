@@ -10,7 +10,6 @@ import java.util.Date;
 @Entity
 public class Comment implements Serializable {
 
-
     private static final long serialVersionUID = -1712532973061005548L;
 
     /**

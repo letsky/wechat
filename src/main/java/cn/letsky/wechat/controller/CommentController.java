@@ -5,18 +5,23 @@ import cn.letsky.wechat.constant.ResultEnum;
 import cn.letsky.wechat.exception.CommonException;
 import cn.letsky.wechat.form.CommentForm;
 import cn.letsky.wechat.model.Comment;
+import cn.letsky.wechat.model.User;
 import cn.letsky.wechat.model.UserHolder;
 import cn.letsky.wechat.service.CommentService;
+import cn.letsky.wechat.service.UserService;
 import cn.letsky.wechat.util.FilterUtils;
 import cn.letsky.wechat.util.PageUtils;
 import cn.letsky.wechat.util.ResultUtils;
 import cn.letsky.wechat.viewobject.CommentVO;
 import cn.letsky.wechat.viewobject.ResultVO;
+import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/comments")
@@ -25,13 +30,16 @@ public class CommentController {
     private final CommentService commentService;
     private final FilterUtils filterUtils;
     private final UserHolder userHolder;
+    private final UserService userService;
 
     public CommentController(CommentService commentService,
                              FilterUtils filterUtils,
-                             UserHolder userHolder) {
+                             UserHolder userHolder,
+                             UserService userService) {
         this.commentService = commentService;
         this.filterUtils = filterUtils;
         this.userHolder = userHolder;
+        this.userService = userService;
     }
 
     @GetMapping
@@ -42,8 +50,17 @@ public class CommentController {
             @RequestParam(value = "size", defaultValue = "20") Integer size) {
 
         Pageable pageable = PageUtils.getPageable(page, size);
-        List<CommentVO> commentVOList =
-                commentService.findAllVO(entityType, entityId, pageable);
+        Page<Comment> commentPage =
+                commentService.findAll(entityType, entityId, pageable);
+        List<CommentVO> commentVOList = commentPage.stream().map(e -> transform(e, new CommentVO())).collect(Collectors.toList());
+        commentVOList.stream().forEach(e -> {
+            Page<Comment> childrenPage =
+                    commentService.findAll(EntityType.COMMENT.getType(), e.getId(), pageable);
+            if (!childrenPage.isEmpty()){
+                List<CommentVO> childrenComment = childrenPage.stream().map(c -> transform(c, new CommentVO())).collect(Collectors.toList());
+                e.setChildren(childrenComment);
+            }
+        });
         return ResultUtils.success(commentVOList);
     }
 
@@ -64,4 +81,17 @@ public class CommentController {
         }
         return ResultUtils.success();
     }
+
+    private CommentVO transform(Comment comment, CommentVO commentVO){
+        BeanUtils.copyProperties(comment, commentVO);
+        User user = userService.findById(comment.getUid());
+        if (user == null){
+            return null;
+        }
+        commentVO.setUid(user.getOpenid());
+        commentVO.setNickname(user.getNickname());
+        commentVO.setAvatarUrl(user.getAvatarUrl());
+        return commentVO;
+    }
+
 }

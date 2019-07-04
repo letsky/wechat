@@ -41,7 +41,4 @@ public interface CommentService {
      */
     Page<Comment> findAll(Integer entityType,
                           Integer entityId, Pageable pageable);
-
-    List<CommentVO> findAllVO(Integer entityType,
-                              Integer entityId, Pageable pageable);
 }

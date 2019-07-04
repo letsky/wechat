@@ -1,14 +1,11 @@
 package cn.letsky.wechat.controller.admin;
 
-import cn.letsky.wechat.constant.ResultEnum;
-import cn.letsky.wechat.exception.CommonException;
 import cn.letsky.wechat.model.User;
 import cn.letsky.wechat.service.UserService;
 import cn.letsky.wechat.util.ResultUtils;
 import cn.letsky.wechat.viewobject.ResultVO;
 import cn.letsky.wechat.viewobject.UserVO;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,8 +19,11 @@ import java.util.stream.Collectors;
 @CrossOrigin(allowCredentials = "true")
 public class UserAdminController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    public UserAdminController(UserService userService) {
+        this.userService = userService;
+    }
 
     @RequestMapping
     public ResultVO getList(

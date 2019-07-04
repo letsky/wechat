@@ -4,18 +4,11 @@ import cn.letsky.wechat.constant.ResultEnum;
 import cn.letsky.wechat.dao.CommentDao;
 import cn.letsky.wechat.exception.CommonException;
 import cn.letsky.wechat.model.Comment;
-import cn.letsky.wechat.model.User;
 import cn.letsky.wechat.service.CommentService;
-import cn.letsky.wechat.service.UserService;
-import cn.letsky.wechat.viewobject.CommentVO;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * {@link CommentService}实现类
@@ -24,14 +17,10 @@ import java.util.stream.Collectors;
 public class CommentServiceImpl implements CommentService {
 
     private final CommentDao commentDao;
-    private final UserService userService;
 
-    public CommentServiceImpl(CommentDao commentDao,
-                              UserService userService) {
+    public CommentServiceImpl(CommentDao commentDao) {
         this.commentDao = commentDao;
-        this.userService = userService;
     }
-
 
     @Override
     public Comment save(String openid, String content, Integer entityType, Integer entityId) {
@@ -58,27 +47,5 @@ public class CommentServiceImpl implements CommentService {
                 .findAllByEntityTypeAndEntityIdOrderByCreatedDesc(
                         entityType, entityId, pageable);
         return comments.isEmpty() ? Page.empty() : comments;
-    }
-
-    @Override
-    public List<CommentVO> findAllVO(Integer entityType,
-                                     Integer entityId, Pageable pageable) {
-        Page<Comment> comments = findAll(entityType, entityId, pageable);
-        if (comments.isEmpty())
-            return null;
-        List<CommentVO> commentVOList = comments.stream()
-                .map(comment -> {
-                    CommentVO commentVO = new CommentVO();
-                    BeanUtils.copyProperties(comment, commentVO);
-                    User user = userService.findById(comment.getUid());
-                    if (user == null) {
-                        return null;
-                    }
-                    commentVO.setUid(user.getOpenid());
-                    commentVO.setNickname(user.getNickname());
-                    commentVO.setAvatarUrl(user.getAvatarUrl());
-                    return commentVO;
-                }).collect(Collectors.toList());
-        return commentVOList;
     }
 }
