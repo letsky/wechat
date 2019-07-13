@@ -29,7 +29,7 @@ public class LikeServiceImpl implements LikeService {
 
     @Override
     public Long like(String openid, Integer entityType, Integer entityId) {
-        String likeKey = getLikeKey(entityType, entityId);
+        String likeKey = getKey(entityType, entityId);
         if (!redisTemplate.opsForSet().isMember(likeKey, openid)){
             redisTemplate.opsForSet().add(likeKey, openid);
         }
@@ -38,7 +38,7 @@ public class LikeServiceImpl implements LikeService {
 
     @Override
     public Long cancelLike(String openid, Integer entityType, Integer entityId) {
-        String likeKey = getLikeKey(entityType, entityId);
+        String likeKey = getKey(entityType, entityId);
         if (redisTemplate.opsForSet().isMember(likeKey, openid)) {
             redisTemplate.opsForSet().remove(likeKey, openid);
         }
@@ -47,7 +47,7 @@ public class LikeServiceImpl implements LikeService {
 
     @Override
     public int getLikeStatus(String openid, Integer entityType, Integer entityId) {
-        String likeKey = getLikeKey(entityType, entityId);
+        String likeKey = getKey(entityType, entityId);
         if (redisTemplate.opsForSet().isMember(likeKey, openid)) {
             return LIKE_STATUS;
         }
@@ -56,7 +56,7 @@ public class LikeServiceImpl implements LikeService {
 
     @Override
     public Long likeCount(Integer entityType, Integer entityId) {
-        String likeKey = getLikeKey(entityType, entityId);
+        String likeKey = getKey(entityType, entityId);
         return redisTemplate.opsForSet().size(likeKey);
     }
 
@@ -66,7 +66,7 @@ public class LikeServiceImpl implements LikeService {
      * @param entityId
      * @return like:<entityType>:<entityId>
      */
-    private String getLikeKey(Integer entityType, Integer entityId) {
+    private String getKey(Integer entityType, Integer entityId) {
         StringBuilder sb = new StringBuilder();
         sb.append(LIKE).append(SPLIT).append(entityType).append(SPLIT).append(entityId);
         return sb.toString();

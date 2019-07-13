@@ -1,4 +1,4 @@
-package cn.letsky.wechat.handler;
+package cn.letsky.wechat.exception.handler;
 
 import cn.letsky.wechat.constant.ResultEnum;
 import cn.letsky.wechat.exception.CommonException;
