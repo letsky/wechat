@@ -47,4 +47,12 @@ public interface FollowService {
      * @return
      */
     Long getFansCount(String openid);
+
+    /**
+     * 判断是否关注
+     * @param openid
+     * @param anotherOpenid
+     * @return
+     */
+    Integer isFollowed(String openid, String anotherOpenid);
 }

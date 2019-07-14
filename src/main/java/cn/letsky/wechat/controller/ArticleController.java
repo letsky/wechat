@@ -8,10 +8,7 @@ import cn.letsky.wechat.form.ArticleForm;
 import cn.letsky.wechat.model.Article;
 import cn.letsky.wechat.model.User;
 import cn.letsky.wechat.model.UserHolder;
-import cn.letsky.wechat.service.ArticleService;
-import cn.letsky.wechat.service.CommentService;
-import cn.letsky.wechat.service.LikeService;
-import cn.letsky.wechat.service.UserService;
+import cn.letsky.wechat.service.*;
 import cn.letsky.wechat.util.FilterUtils;
 import cn.letsky.wechat.util.ResultUtils;
 import cn.letsky.wechat.viewobject.ArticleVO;
@@ -38,19 +35,22 @@ public class ArticleController {
     private final CommentService commentService;
     private final LikeService likeService;
     private final UserHolder userHolder;
+    private final FollowService followService;
 
     public ArticleController(UserService userService,
                              ArticleService articleService,
                              FilterUtils filterUtils,
                              CommentService commentService,
                              LikeService likeService,
-                             UserHolder userHolder) {
+                             UserHolder userHolder,
+                             FollowService followService) {
         this.userService = userService;
         this.articleService = articleService;
         this.filterUtils = filterUtils;
         this.commentService = commentService;
         this.likeService = likeService;
         this.userHolder = userHolder;
+        this.followService = followService;
     }
 
     @GetMapping
@@ -136,15 +136,20 @@ public class ArticleController {
             articleVO.setNickname(user.getNickname());
         }
         Long commentNum = commentService
-                .count(EntityType.ARTICLE.getType(), article.getId());
+                .count(EntityType.ARTICLE, article.getId());
         Integer liked = StatusEnum.NOT_LIKED.getCode();
+        Integer followed = StatusEnum.UNFOLLOW.getCode();
         if (userHolder.get() != null){
             String openid = userHolder.get().getOpenid();
             liked = likeService.getLikeStatus(openid,
-                    EntityType.ARTICLE.getType(), article.getId());
+                    EntityType.ARTICLE, article.getId());
+            followed = followService.isFollowed(openid, article.getOpenid());
         }
         articleVO.setLiked(liked);
-        Long likeNum = likeService.likeCount(EntityType.ARTICLE.getType(), article.getId());
+        articleVO.setFollowed(followed);
+        Long likeNum = likeService.likeCount(
+                EntityType.ARTICLE,
+                article.getId());
         articleVO.setCommentNum(commentNum);
 
         articleVO.setLikeNum(likeNum);

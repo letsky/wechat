@@ -13,6 +13,9 @@ public enum StatusEnum implements CodeEnum {
     LIKE(1, "点赞了"),
     VISIBLE_ALL(0, "公开"),
     VISIBLE_SELF(1, "私有"),
+
+    FOLLOW(0, "关注"),
+    UNFOLLOW(1, "未关注"),
     ;
 
     private int code;

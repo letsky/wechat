@@ -27,13 +27,13 @@ public class FollowController {
     }
 
     /**
-     * 获取关注用户
-     * @param openid
+     * 获取给定用户的关注用户
+     * @param openid 给定用户的openid
      * @return
      */
-    @GetMapping("/{openid}")
+    @GetMapping
     public ResultVO<List<UserVO>> getFollows(
-            @PathVariable("openid") String openid){
+            @RequestParam("openid") String openid) {
         Set<String> followIds = followService.getFollows(openid);
         List<UserVO> voList = getUsers(followIds);
         Map<String, Long> map = new HashMap<>();

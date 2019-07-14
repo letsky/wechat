@@ -23,13 +23,13 @@ public class CommentDaoTest {
     public void findAllByEntityTypeAndEntityId(){
         Pageable pageable = PageRequest.of(0, 5);
         Page<Comment> comments = commentDao.findAllByEntityTypeAndEntityIdOrderByCreatedDesc(
-                EntityType.ARTICLE.getType(), 2, pageable);
+                EntityType.ARTICLE, 2, pageable);
         Assert.assertNotNull(comments.getContent());
     }
 
     @Test
     public void countByEntityTypeAndEntityId(){
-        long count = commentDao.countByEntityTypeAndEntityId(EntityType.ARTICLE.getType(), 2);
+        long count = commentDao.countByEntityTypeAndEntityId(EntityType.ARTICLE, 2);
         Assert.assertNotEquals(0, count);
     }
 }

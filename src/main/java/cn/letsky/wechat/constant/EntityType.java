@@ -1,24 +1,21 @@
 package cn.letsky.wechat.constant;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+public class EntityType {
 
-@Getter
-@AllArgsConstructor
-public enum EntityType {
+    /**
+     * 文章实体类型
+     */
+    public static final Integer ARTICLE = 0;
 
-    ARTICLE(0, "帖子"),
-    COMMENT(1, "评论"),
-    ;
+    /**
+     * 评论实体类型
+     */
+    public static final Integer COMMENT = 1;
 
-    private int type;
-    private String msg;
 
     public static boolean contains(Integer entityType){
-        for (EntityType type : EntityType.values()){
-            if (type.getType() == entityType){
-                return true;
-            }
+        if (entityType.equals(ARTICLE) || entityType.equals(COMMENT)) {
+            return true;
         }
         return false;
     }

@@ -1,5 +1,7 @@
 package cn.letsky.wechat.service.Impl;
 
+import cn.letsky.wechat.constant.ResultEnum;
+import cn.letsky.wechat.constant.StatusEnum;
 import cn.letsky.wechat.service.FollowService;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -29,10 +31,10 @@ public class FollowServiceImpl implements FollowService {
     }
 
     @Override
-    public Long unfollow(String openid, String unfollow) {
+    public Long unfollow(String openid, String unFollow) {
         String followKey = getFollowKey(openid);
-        String fansKey = getFansKey(unfollow);
-        Long followCount = redisTemplate.opsForSet().remove(followKey, unfollow);
+        String fansKey = getFansKey(unFollow);
+        Long followCount = redisTemplate.opsForSet().remove(followKey, unFollow);
         redisTemplate.opsForSet().remove(fansKey, openid);
         return followCount;
     }
@@ -57,6 +59,16 @@ public class FollowServiceImpl implements FollowService {
         return redisTemplate.opsForSet().size(getFansKey(openid));
     }
 
+    @Override
+    public Integer isFollowed(String openid, String anotherOpenid) {
+        String key = getFollowKey(openid);
+        boolean result = redisTemplate.opsForSet().isMember(key, anotherOpenid);
+        if (result){
+            return StatusEnum.FOLLOW.getCode();
+        }
+        return StatusEnum.UNFOLLOW.getCode();
+    }
+
     /**
      * 获取存储在redis上关注的key
      * 格式：follow:<openid>:<followId>
@@ -71,6 +83,11 @@ public class FollowServiceImpl implements FollowService {
         return sb.toString();
     }
 
+    /**
+     * 获取粉丝的key
+     * @param openid
+     * @return
+     */
     private String getFansKey(String openid){
         StringBuffer sb = new StringBuffer();
         sb.append(FANS)
