@@ -46,6 +46,12 @@ public class ArticleVO implements Serializable {
     @JsonInclude(Include.NON_EMPTY)
     private Integer followed;
 
+	/**
+	 * 是否显示关注按钮
+	 */
+	@JsonInclude(Include.NON_EMPTY)
+    private boolean showFollowButton;
+
 	private Long likeNum;
 	
 	/**

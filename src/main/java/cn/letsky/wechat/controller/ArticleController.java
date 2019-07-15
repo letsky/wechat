@@ -140,19 +140,24 @@ public class ArticleController {
                 .count(EntityType.ARTICLE, article.getId());
         Integer liked = LikeStatus.UNLIKE;
         Integer followed = UserStatus.UNFOLLOW;
+        boolean showFollowButton = true;
         if (userHolder.get() != null){
             String openid = userHolder.get().getOpenid();
+            String postOpenid = article.getOpenid();
             liked = likeService.getLikeStatus(openid,
                     EntityType.ARTICLE, article.getId());
-            followed = followService.isFollowed(openid, article.getOpenid());
+            followed = followService.isFollowed(openid, postOpenid);
+            if (openid.equals(postOpenid)) {
+                showFollowButton = false;
+            }
         }
         articleVO.setLiked(liked);
         articleVO.setFollowed(followed);
+        articleVO.setShowFollowButton(showFollowButton);
         Long likeNum = likeService.likeCount(
                 EntityType.ARTICLE,
                 article.getId());
         articleVO.setCommentNum(commentNum);
-
         articleVO.setLikeNum(likeNum);
         return articleVO;
     }

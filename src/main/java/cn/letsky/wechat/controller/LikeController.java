@@ -58,17 +58,15 @@ public class LikeController {
     /**
      * 取消点赞
      *
-     * @param openid
      * @param entityType
      * @param entityId
      * @return 点赞数
      */
     @PostMapping("/cancel")
-    public ResultVO cancel(@RequestParam("openid") String openid,
-                                 @RequestParam("entityType") Integer entityType,
-                                 @RequestParam("entityId") Integer entityId) {
+    public ResultVO cancel(@RequestParam("entityType") Integer entityType,
+                           @RequestParam("entityId") Integer entityId) {
         Map<String, Long> map = new HashMap<>();
-        Long likeNum = likeService.cancelLike(openid, entityType, entityId);
+        Long likeNum = likeService.cancelLike(userHolder.get().getOpenid(), entityType, entityId);
         map.put("likeNum", likeNum);
         return ResultUtils.success(map);
     }
