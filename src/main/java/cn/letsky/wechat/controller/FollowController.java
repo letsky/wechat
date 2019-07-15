@@ -4,12 +4,15 @@ import cn.letsky.wechat.model.User;
 import cn.letsky.wechat.service.FollowService;
 import cn.letsky.wechat.service.UserService;
 import cn.letsky.wechat.util.ResultUtils;
-import cn.letsky.wechat.viewobject.ResultVO;
-import cn.letsky.wechat.viewobject.UserVO;
+import cn.letsky.wechat.vo.ResultVO;
+import cn.letsky.wechat.vo.UserVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController

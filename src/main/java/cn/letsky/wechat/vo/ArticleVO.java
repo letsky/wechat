@@ -1,4 +1,4 @@
-package cn.letsky.wechat.viewobject;
+package cn.letsky.wechat.vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -34,11 +34,17 @@ public class ArticleVO implements Serializable {
 
 	private Long commentNum;
 
-	@JsonInclude(Include.NON_EMPTY)
-	private Integer liked;
+    /**
+     * 是否点赞
+     */
+    @JsonInclude(Include.NON_EMPTY)
+    private Integer liked;
 
-	@JsonInclude(Include.NON_EMPTY)
-	private Integer followed;
+    /**
+     * 是否关注
+     */
+    @JsonInclude(Include.NON_EMPTY)
+    private Integer followed;
 
 	private Long likeNum;
 	

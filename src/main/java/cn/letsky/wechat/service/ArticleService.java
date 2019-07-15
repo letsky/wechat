@@ -1,12 +1,8 @@
 package cn.letsky.wechat.service;
 
-import cn.letsky.wechat.viewobject.ArticleVO;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
+import cn.letsky.wechat.constant.status.CommentStatus;
 import cn.letsky.wechat.model.Article;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 public interface ArticleService {
 
@@ -25,7 +21,7 @@ public interface ArticleService {
      * @param size 每页的数量
      * @return 可见性为私有的文章列表
      * <p>
-     * {@link cn.letsky.wechat.constant.StatusEnum#VISIBLE_SELF}
+     * {@link CommentStatus#ALLOW}
      */
     Page<Article> findAll(Integer page, Integer size);
 
@@ -37,8 +33,8 @@ public interface ArticleService {
      * @param size    每页的数量
      * @return 给定文章可见性的文章列表
      * <p>
-     * {@link cn.letsky.wechat.constant.StatusEnum#VISIBLE_ALL}
-     * {@link cn.letsky.wechat.constant.StatusEnum#VISIBLE_SELF}
+     * {@link CommentStatus#ALLOW}
+     * {@link CommentStatus#NOT_ALLOW}
      */
     Page<Article> findAll(Integer visible, Integer page, Integer size);
 

@@ -1,7 +1,6 @@
 package cn.letsky.wechat.service.Impl;
 
-import cn.letsky.wechat.constant.ResultEnum;
-import cn.letsky.wechat.constant.StatusEnum;
+import cn.letsky.wechat.constant.status.UserStatus;
 import cn.letsky.wechat.service.FollowService;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -64,9 +63,9 @@ public class FollowServiceImpl implements FollowService {
         String key = getFollowKey(openid);
         boolean result = redisTemplate.opsForSet().isMember(key, anotherOpenid);
         if (result){
-            return StatusEnum.FOLLOW.getCode();
+            return UserStatus.FOLLOW;
         }
-        return StatusEnum.UNFOLLOW.getCode();
+        return UserStatus.UNFOLLOW;
     }
 
     /**

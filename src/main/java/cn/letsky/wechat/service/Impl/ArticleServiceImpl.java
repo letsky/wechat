@@ -1,7 +1,7 @@
 package cn.letsky.wechat.service.Impl;
 
 import cn.letsky.wechat.constant.ResultEnum;
-import cn.letsky.wechat.constant.StatusEnum;
+import cn.letsky.wechat.constant.status.ArticleStatus;
 import cn.letsky.wechat.dao.ArticleDao;
 import cn.letsky.wechat.exception.CommonException;
 import cn.letsky.wechat.model.Article;
@@ -49,14 +49,14 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Page<Article> findAll(Integer page, Integer size) {
-        return findAll(StatusEnum.VISIBLE_ALL.getCode(), page, size);
+        return findAll(ArticleStatus.PUBLIC, page, size);
     }
 
     @Override
     public Page<Article> findAll(Integer visible, Integer page, Integer size) {
         Pageable pageable = PageUtils.getPageable(page, size);
         Page<Article> articlePage = articleDao.findAllByStatusAndVisibleOrderByCreatedDesc(
-                StatusEnum.ARTICLE_NORMAL.getCode(),visible, pageable);
+                ArticleStatus.NORMAL, visible, pageable);
         if (page > articlePage.getTotalPages()){
             throw new CommonException(ResultEnum.BEYOND_PAGE_LIMIT);
         }
@@ -81,7 +81,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public void delete(Integer id) {
         Article article = articleDao.getOne(id);
-        article.setStatus(StatusEnum.ARTICLE_DELETE.getCode());
+        article.setStatus(ArticleStatus.DELETE);
         articleDao.save(article);
     }
 

@@ -3,6 +3,9 @@ package cn.letsky.wechat.exception;
 import cn.letsky.wechat.constant.ResultEnum;
 import lombok.Getter;
 
+/**
+ * 通用异常类
+ */
 @Getter
 public class CommonException extends RuntimeException {
 

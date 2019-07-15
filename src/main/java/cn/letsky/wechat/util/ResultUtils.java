@@ -1,8 +1,7 @@
 package cn.letsky.wechat.util;
 
-import cn.letsky.wechat.constant.CodeEnum;
 import cn.letsky.wechat.constant.ResultEnum;
-import cn.letsky.wechat.viewobject.ResultVO;
+import cn.letsky.wechat.vo.ResultVO;
 
 import java.util.Map;
 
@@ -34,11 +33,11 @@ public class ResultUtils {
     /**
      * 返回错误的状态码及信息
      *
-     * @param codeEnum 状态码常量
+     * @param resultEnum 状态码常量
      * @return 错误的状态码及信息
      */
-    public static ResultVO error(CodeEnum codeEnum) {
-        return new ResultVO(codeEnum.getCode(), codeEnum.getMsg());
+    public static ResultVO error(ResultEnum resultEnum) {
+        return new ResultVO(resultEnum.getCode(), resultEnum.getMsg());
     }
 
     /**

@@ -4,7 +4,7 @@ import cn.letsky.wechat.constant.ResultEnum;
 import cn.letsky.wechat.exception.CommonException;
 import cn.letsky.wechat.service.QiniuService;
 import cn.letsky.wechat.util.ResultUtils;
-import cn.letsky.wechat.viewobject.ResultVO;
+import cn.letsky.wechat.vo.ResultVO;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;

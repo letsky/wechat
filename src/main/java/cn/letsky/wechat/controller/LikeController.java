@@ -3,7 +3,7 @@ package cn.letsky.wechat.controller;
 import cn.letsky.wechat.model.UserHolder;
 import cn.letsky.wechat.service.LikeService;
 import cn.letsky.wechat.util.ResultUtils;
-import cn.letsky.wechat.viewobject.ResultVO;
+import cn.letsky.wechat.vo.ResultVO;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;

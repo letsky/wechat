@@ -1,15 +1,12 @@
 package cn.letsky.wechat.interceptor;
 
 import cn.letsky.wechat.constant.ResultEnum;
-import cn.letsky.wechat.exception.CommonException;
-import cn.letsky.wechat.model.UserHolder;
 import cn.letsky.wechat.model.User;
+import cn.letsky.wechat.model.UserHolder;
 import cn.letsky.wechat.service.TokenService;
 import cn.letsky.wechat.service.UserService;
 import cn.letsky.wechat.util.ResultUtils;
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.boot.json.JacksonJsonParser;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -18,6 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 
+/**
+ * token拦截器
+ */
 @Component
 public class TokenInterceptor implements HandlerInterceptor {
 

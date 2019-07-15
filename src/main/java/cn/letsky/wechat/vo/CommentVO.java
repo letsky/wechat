@@ -1,4 +1,4 @@
-package cn.letsky.wechat.viewobject;
+package cn.letsky.wechat.vo;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

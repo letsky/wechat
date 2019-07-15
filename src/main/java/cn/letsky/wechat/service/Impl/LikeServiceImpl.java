@@ -1,6 +1,6 @@
 package cn.letsky.wechat.service.Impl;
 
-import cn.letsky.wechat.constant.StatusEnum;
+import cn.letsky.wechat.constant.status.LikeStatus;
 import cn.letsky.wechat.service.LikeService;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -17,9 +17,6 @@ public class LikeServiceImpl implements LikeService {
     private static final String SPLIT = ":";
     private static final String LIKE = "like";
     private static final String DISLIKE = "dislike";
-
-    private static final Integer LIKE_STATUS = StatusEnum.LIKE.getCode();
-    private static final Integer NOT_LIKED_STATUS = StatusEnum.NOT_LIKED.getCode();
 
     private final RedisTemplate<String, String> redisTemplate;
 
@@ -49,9 +46,9 @@ public class LikeServiceImpl implements LikeService {
     public int getLikeStatus(String openid, Integer entityType, Integer entityId) {
         String likeKey = getKey(entityType, entityId);
         if (redisTemplate.opsForSet().isMember(likeKey, openid)) {
-            return LIKE_STATUS;
+            return LikeStatus.LIKE;
         }
-        return NOT_LIKED_STATUS;
+        return LikeStatus.UNLIKE;
     }
 
     @Override

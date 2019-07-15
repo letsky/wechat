@@ -3,24 +3,27 @@ package cn.letsky.wechat.exception.handler;
 import cn.letsky.wechat.constant.ResultEnum;
 import cn.letsky.wechat.exception.CommonException;
 import cn.letsky.wechat.util.ResultUtils;
-import cn.letsky.wechat.viewobject.ResultVO;
+import cn.letsky.wechat.vo.ResultVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.persistence.EntityNotFoundException;
 
+/**
+ * 异常处理类
+ */
 @Slf4j
 @RestControllerAdvice
 public class CommonExceptionHandler {
-	
+
 	@ExceptionHandler(Exception.class)
 	public ResultVO exceptionHandler(Exception e) {
 		log.error("[Exception]:" + e.getMessage());
 		e.printStackTrace();
 		return ResultUtils.error(ResultEnum.ERROR);
 	}
-	
+
 	@ExceptionHandler(CommonException.class)
 	public  ResultVO commonException(CommonException e){
 		log.error("[CommonException]:" + e.getMessage());

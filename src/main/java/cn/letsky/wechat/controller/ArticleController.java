@@ -2,7 +2,8 @@ package cn.letsky.wechat.controller;
 
 import cn.letsky.wechat.constant.EntityType;
 import cn.letsky.wechat.constant.ResultEnum;
-import cn.letsky.wechat.constant.StatusEnum;
+import cn.letsky.wechat.constant.status.LikeStatus;
+import cn.letsky.wechat.constant.status.UserStatus;
 import cn.letsky.wechat.exception.CommonException;
 import cn.letsky.wechat.form.ArticleForm;
 import cn.letsky.wechat.model.Article;
@@ -11,8 +12,8 @@ import cn.letsky.wechat.model.UserHolder;
 import cn.letsky.wechat.service.*;
 import cn.letsky.wechat.util.FilterUtils;
 import cn.letsky.wechat.util.ResultUtils;
-import cn.letsky.wechat.viewobject.ArticleVO;
-import cn.letsky.wechat.viewobject.ResultVO;
+import cn.letsky.wechat.vo.ArticleVO;
+import cn.letsky.wechat.vo.ResultVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -137,8 +138,8 @@ public class ArticleController {
         }
         Long commentNum = commentService
                 .count(EntityType.ARTICLE, article.getId());
-        Integer liked = StatusEnum.NOT_LIKED.getCode();
-        Integer followed = StatusEnum.UNFOLLOW.getCode();
+        Integer liked = LikeStatus.UNLIKE;
+        Integer followed = UserStatus.UNFOLLOW;
         if (userHolder.get() != null){
             String openid = userHolder.get().getOpenid();
             liked = likeService.getLikeStatus(openid,

@@ -1,4 +1,4 @@
-package cn.letsky.wechat.viewobject;
+package cn.letsky.wechat.vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
