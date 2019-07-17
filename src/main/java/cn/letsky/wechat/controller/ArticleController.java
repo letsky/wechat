@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -60,6 +61,18 @@ public class ArticleController {
             @RequestParam(value = "size", defaultValue = "20") int size) {
 
         Page<Article> articlePage = articleService.findAll(page, size);
+        List<ArticleVO> list = articlePage.stream()
+                .map(e -> transform(e, new ArticleVO(), userHolder))
+                .collect(Collectors.toList());
+        return ResultUtils.success(list);
+    }
+
+    @GetMapping("/follows")
+    public ResultVO<List<ArticleVO>> getFollowedArticleList(
+            @RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "size", defaultValue = "20") int size) {
+        Set<String> ids = followService.getFollows(userHolder.get().getOpenid());
+        Page<Article> articlePage = articleService.findAllFollowed(ids, page, size);
         List<ArticleVO> list = articlePage.stream()
                 .map(e -> transform(e, new ArticleVO(), userHolder))
                 .collect(Collectors.toList());

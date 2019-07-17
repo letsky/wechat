@@ -1,6 +1,7 @@
 package cn.letsky.wechat.controller;
 
 import cn.letsky.wechat.model.User;
+import cn.letsky.wechat.model.UserHolder;
 import cn.letsky.wechat.service.FollowService;
 import cn.letsky.wechat.service.UserService;
 import cn.letsky.wechat.util.ResultUtils;
@@ -22,19 +23,24 @@ public class FollowController {
 
     private final FollowService followService;
     private final UserService userService;
+    private final UserHolder userHolder;
 
-    public FollowController(FollowService followService,
-                            UserService userService) {
+    public FollowController(
+            FollowService followService,
+            UserService userService,
+            UserHolder userHolder) {
         this.followService = followService;
         this.userService = userService;
+        this.userHolder = userHolder;
     }
 
     /**
      * 获取给定用户的关注用户
+     *
      * @param openid 给定用户的openid
      * @return
      */
-    @GetMapping
+    @GetMapping(params = {"openid"})
     public ResultVO<List<UserVO>> getFollows(
             @RequestParam("openid") String openid) {
         Set<String> followIds = followService.getFollows(openid);
@@ -47,12 +53,13 @@ public class FollowController {
 
     /**
      * 获取粉丝
+     *
      * @param openid
      * @return
      */
     @GetMapping("/{openid}/fans")
     public ResultVO<List<UserVO>> getFans(
-            @PathVariable("openid") String openid){
+            @PathVariable("openid") String openid) {
         Set<String> fansIds = followService.getFans(openid);
         List<UserVO> voList = getUsers(fansIds);
         Map<String, Long> map = new HashMap<>();
@@ -61,28 +68,54 @@ public class FollowController {
         return ResultUtils.success(voList, map);
     }
 
+    @GetMapping()
+    public ResultVO<Map<String, Long>> getFollowAndFans() {
+        String openid = userHolder.get().getOpenid();
+        Long followCount = followService.getFollowCount(openid);
+        Long fansCount = followService.getFansCount(openid);
+        Map<String, Long> map = new HashMap<>();
+        map.put("followCount", followCount);
+        map.put("fansCount", fansCount);
+        return ResultUtils.success(map);
+    }
+
     /**
      * 关注用户
-     * @param openid 当前用户
+     *
+     * @param openid   当前用户
      * @param followId 被关注用户
      * @return
      */
     @PostMapping
-    public ResultVO<Long> follow(@RequestParam("openid") String openid,
-                                 @RequestParam("followId") String followId){
+    public ResultVO<Long> follow (
+            @RequestParam("openid") String openid,
+            @RequestParam("followId") String followId) {
         Long followCount = followService.follow(openid, followId);
         return ResultUtils.success(followCount);
     }
 
+    /**
+     * 取消关注
+     *
+     * @param openid
+     * @param unFollowId
+     * @return
+     */
     @DeleteMapping
-    public ResultVO<Long> unFollow(@RequestParam("openid") String openid,
-                                 @RequestParam("unFollowId") String unFollowId){
+    public ResultVO<Long> unFollow(
+            @RequestParam("openid") String openid,
+            @RequestParam("unFollowId") String unFollowId) {
         Long followCount = followService.unfollow(openid, unFollowId);
         return ResultUtils.success(followCount);
     }
 
-
-    private List<UserVO> getUsers(Set<String> ids){
+    /**
+     * 将给定的id集合转换成UserVO对象
+     *
+     * @param ids 用户id集合
+     * @return
+     */
+    private List<UserVO> getUsers(Set<String> ids) {
         List<UserVO> userVOList = ids.stream().map(id -> {
             User user = userService.findById(id);
             UserVO userVO = new UserVO();

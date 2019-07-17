@@ -3,6 +3,11 @@ package cn.letsky.wechat.service;
 import cn.letsky.wechat.constant.status.CommentStatus;
 import cn.letsky.wechat.model.Article;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import cn.letsky.wechat.constant.status.ArticleStatus;
+
+import java.util.Collection;
+import java.util.List;
 
 public interface ArticleService {
 
@@ -57,10 +62,18 @@ public interface ArticleService {
     Article save(Article article);
 
     /**
-     * 删除文章
-     * 非真实删除，仅将<code>status</code>字段修改
+     * 删除文章，非真实删除
      *
      * @param id 文章id
      */
     void delete(Integer id);
+
+    /**
+     * 查询关注的人发表的文章
+     * @param ids 关注人的集合
+     * @param page
+     * @param size
+     * @return
+     */
+    Page<Article> findAllFollowed(Collection<String> ids, Integer page, Integer size);
 }
