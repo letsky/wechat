@@ -2,13 +2,16 @@ package cn.letsky.wechat.service;
 
 import org.springframework.web.multipart.MultipartFile;
 
-public interface QiniuService {
+/**
+ * 上传图片服务
+ */
+public interface UploadService {
 
     /**
-     * 上传图片到七牛云
+     * 上传图片
      *
-     * @param file 需要上传的文件
-     * @return 上传后图片的链接
+     * @param file 图像
+     * @return 图像的地址
      */
     String uploadFile(MultipartFile file);
 }

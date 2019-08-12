@@ -2,7 +2,7 @@ package cn.letsky.wechat.controller;
 
 import cn.letsky.wechat.constant.ResultEnum;
 import cn.letsky.wechat.exception.CommonException;
-import cn.letsky.wechat.service.QiniuService;
+import cn.letsky.wechat.service.UploadService;
 import cn.letsky.wechat.util.ResultUtils;
 import cn.letsky.wechat.vo.ResultVO;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,10 +17,10 @@ import java.util.stream.Collectors;
 @RestController
 public class UploadController {
 
-    private final QiniuService qiniuService;
+    private final UploadService uploadService;
 
-    public UploadController(QiniuService qiniuService) {
-        this.qiniuService = qiniuService;
+    public UploadController(UploadService uploadService) {
+        this.uploadService = uploadService;
     }
 
     @PostMapping("/upload")
@@ -40,6 +40,6 @@ public class UploadController {
         if (file.isEmpty() || file.equals("undefined")) {
             throw new CommonException(ResultEnum.NULL_PICTURE);
         }
-        return qiniuService.uploadFile(file);
+        return uploadService.uploadFile(file);
     }
 }

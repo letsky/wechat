@@ -15,26 +15,24 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties(QiNiuProperties.class)
 public class QiniuConfiguration {
 
-    private final QiNiuProperties qiNiuProperties;
+    private final QiNiuProperties properties;
 
-    public QiniuConfiguration(QiNiuProperties qiNiuProperties) {
-        this.qiNiuProperties = qiNiuProperties;
-    }
-
-    @Bean
-    public com.qiniu.storage.Configuration config() {
-        return new com.qiniu.storage.Configuration(Zone.zone0());
+    public QiniuConfiguration(QiNiuProperties properties) {
+        this.properties = properties;
     }
 
     @Bean
     public UploadManager uploadManager() {
-        return new UploadManager(config());
+        com.qiniu.storage.Configuration config =
+                new com.qiniu.storage.Configuration(Zone.zone0());
+        return new UploadManager(config);
     }
 
-    @Bean
-    public Auth auth() {
-        return Auth.create(qiNiuProperties.getAccessKey(),
-                qiNiuProperties.getSecretKey());
+    @Bean("getToken")
+    public String getToken() {
+        Auth auth = Auth.create(properties.getAccessKey(),
+                properties.getSecretKey());
+        return auth.uploadToken(properties.getBucket());
     }
 
 }
