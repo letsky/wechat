@@ -1,6 +1,6 @@
 package cn.letsky.wechat.configure;
 
-import cn.letsky.wechat.properties.QiNiuProperties;
+import cn.letsky.wechat.configure.properties.QiNiuProperties;
 import com.qiniu.common.Zone;
 import com.qiniu.storage.UploadManager;
 import com.qiniu.util.Auth;

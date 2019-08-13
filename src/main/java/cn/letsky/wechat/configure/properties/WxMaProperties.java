@@ -1,4 +1,4 @@
-package cn.letsky.wechat.properties;
+package cn.letsky.wechat.configure.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -7,13 +7,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * 小程序相关配置
  */
 @Data
-@ConfigurationProperties(prefix = "wx.miniapp.config")
+@ConfigurationProperties(prefix = "wechat.miniapp")
 public class WxMaProperties {
 
     /**
-     * 设置微信小程序的appid
+     * 设置微信小程序的appId
      */
-    private String appid;
+    private String appId;
 
     /**
      * 设置微信小程序的secret

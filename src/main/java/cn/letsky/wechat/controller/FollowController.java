@@ -10,10 +10,7 @@ import cn.letsky.wechat.vo.UserVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -117,7 +114,7 @@ public class FollowController {
      */
     private List<UserVO> getUsers(Set<String> ids) {
         List<UserVO> userVOList = ids.stream().map(id -> {
-            User user = userService.getUser(id);
+            User user = userService.getUser(id).orElseThrow(NoSuchElementException::new);
             UserVO userVO = new UserVO();
             BeanUtils.copyProperties(user, userVO);
             return userVO;

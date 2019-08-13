@@ -1,4 +1,4 @@
-package cn.letsky.wechat.properties;
+package cn.letsky.wechat.configure.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -7,7 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * 七牛对象存储相关配置
  */
 @Data
-@ConfigurationProperties(prefix = "qiniu")
+@ConfigurationProperties(prefix = "wechat.qiniu")
 public class QiNiuProperties {
 
     /**

@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/wx")
@@ -32,10 +33,8 @@ public class WxUserController {
     private final TokenService tokenService;
     private final UserHolder userHolder;
 
-    public WxUserController(WxMaService wxMaService,
-                            UserService userService,
-                            TokenService tokenService,
-                            UserHolder userHolder) {
+    public WxUserController(WxMaService wxMaService, UserService userService,
+                            TokenService tokenService, UserHolder userHolder) {
         this.wxMaService = wxMaService;
         this.userService = userService;
         this.tokenService = tokenService;
@@ -86,12 +85,11 @@ public class WxUserController {
         return ResultUtils.error(ResultEnum.SESSION_EXPIRED);
     }
 
-    @GetMapping("/getuserinfo")
-    public ResultVO getUserInfo(@RequestParam("openid") String openid) {
-        User user = userService.getUser(openid);
-        if (user == null) {
-            throw new CommonException(ResultEnum.NOT_REGISTER);
-        }
+    @GetMapping("/users/{openid}")
+    public ResultVO getUserInfo(@PathVariable String openid) {
+        //TODO
+        User user = userService.getUser(openid)
+                .orElseThrow(NoSuchElementException::new);
         UserVO userVO = new UserVO();
         BeanUtils.copyProperties(user, userVO);
         return ResultUtils.success(userVO);

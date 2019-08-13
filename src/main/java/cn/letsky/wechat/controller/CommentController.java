@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @RestController
@@ -84,7 +85,7 @@ public class CommentController {
 
     private CommentVO transform(Comment comment, CommentVO commentVO){
         BeanUtils.copyProperties(comment, commentVO);
-        User user = userService.getUser(comment.getUid());
+        User user = userService.getUser(comment.getUid()).orElseThrow(NoSuchElementException::new);
         if (user == null){
             return null;
         }

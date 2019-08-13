@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -141,7 +142,8 @@ public class ArticleController {
         BeanUtils.copyProperties(article, articleVO);
         if (article.getImg() != null && article.getImg().length() != 0)
             articleVO.setImgs(article.getImg().split("#"));
-        User user = userService.getUser(article.getOpenid());
+        User user = userService.getUser(article.getOpenid())
+                .orElseThrow(NoSuchElementException::new);
         if (user != null) {
             articleVO.setAvatarUrl(user.getAvatarUrl());
             articleVO.setNickname(user.getNickname());

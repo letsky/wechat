@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @RestController
@@ -58,7 +59,8 @@ public class ArticleAdminController {
 
     private ArticleVO transform(Article article, ArticleVO articleVO) {
         BeanUtils.copyProperties(article, articleVO);
-        User user = userService.getUser(article.getOpenid());
+        User user = userService.getUser(article.getOpenid())
+                .orElseThrow(NoSuchElementException::new);
         articleVO.setNickname(user.getNickname());
         articleVO.setAvatarUrl(user.getAvatarUrl());
         articleVO.setImgs(article.getImg().split("#"));

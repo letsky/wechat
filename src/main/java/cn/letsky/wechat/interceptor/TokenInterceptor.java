@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
+import java.util.NoSuchElementException;
 
 /**
  * token拦截器
@@ -41,7 +42,7 @@ public class TokenInterceptor implements HandlerInterceptor {
         //session未过期
         if (!tokenService.isExpire(session)) {
             String openid = tokenService.getOpenid(session);
-            User user = userService.getUser(openid);
+            User user = userService.getUser(openid).orElseThrow(NoSuchElementException::new);
             userHolder.set(user);
             return true;
         }

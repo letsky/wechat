@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @RestController
@@ -41,7 +42,8 @@ public class UserAdminController {
 
     @GetMapping("/{openid}")
     public ResultVO get(@PathVariable("openid") String openid){
-        User user = userService.getUser(openid);
+        User user = userService.getUser(openid)
+                .orElseThrow(NoSuchElementException::new);
         UserVO userVO = new UserVO();
         transform(user, userVO);
         return ResultUtils.success(userVO);

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.NoSuchElementException;
 
 /**
  * 异常处理类
@@ -41,4 +42,9 @@ public class CommonExceptionHandler {
 		log.error("[IllegalArgumentException]:" + e.getMessage());
 		return ResultUtils.error(ResultEnum.PARAM_ERROR);
 	}
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResultVO noSuchElementException(NoSuchElementException e) {
+        return ResultUtils.error(999, "没有找到该对象");
+    }
 }

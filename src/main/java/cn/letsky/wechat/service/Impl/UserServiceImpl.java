@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 /**
  * {@link UserService}实现类
  */
@@ -26,8 +28,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User getUser(String id) {
-		return userDao.findById(id).orElse(null);
+	public Optional<User> getUser(String id) {
+		return userDao.findById(id);
 	}
 
 	@Override

@@ -1,8 +1,8 @@
 package cn.letsky.wechat.service.Impl;
 
+import cn.letsky.wechat.configure.properties.QiNiuProperties;
 import cn.letsky.wechat.constant.ResultEnum;
 import cn.letsky.wechat.exception.CommonException;
-import cn.letsky.wechat.properties.QiNiuProperties;
 import cn.letsky.wechat.service.UploadService;
 import cn.letsky.wechat.util.FileUtils;
 import com.google.gson.Gson;

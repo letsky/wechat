@@ -3,6 +3,8 @@ package cn.letsky.wechat.service;
 import cn.letsky.wechat.model.User;
 import org.springframework.data.domain.Page;
 
+import java.util.Optional;
+
 public interface UserService {
     /**
      * 新增或者更新用户信息
@@ -18,7 +20,7 @@ public interface UserService {
      * @param id 用户唯一标识
      * @return 当前id对应的User实体
      */
-    User getUser(String id);
+    Optional<User> getUser(String id);
 
     /**
      * 获取用户列表

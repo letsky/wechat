@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 public class PageUtils {
 
     private static final int DEFAULT_PAGE = 1;
-    private static final int DEFAULT_SIZE = 5;
+    private static final int DEFAULT_SIZE = 20;
 
     /**
      * 获取分页对象，并校验参数
@@ -16,8 +16,10 @@ public class PageUtils {
      * @return 分页对象<code>Pageable</code>
      */
     public static Pageable getPageable(Integer page, Integer size) {
-        if (page < 1 && size > 20) {
+        if (page < 1) {
             page = DEFAULT_PAGE;
+        }
+        if (size < 1) {
             size = DEFAULT_SIZE;
         }
         return PageRequest.of(page - 1, size);
