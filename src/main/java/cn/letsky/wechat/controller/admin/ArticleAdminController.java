@@ -33,7 +33,7 @@ public class ArticleAdminController {
     @GetMapping
     public ResultVO getList(@RequestParam(value = "page", defaultValue = "1") Integer page,
                             @RequestParam(value = "size", defaultValue = "20") Integer size) {
-        Page<Article> articlePage = articleService.findAll(page, size);
+        Page<Article> articlePage = articleService.getArticles(page, size);
         Long count = articlePage.getTotalElements();
         Map<String, Long> map = new HashMap<>();
         map.put("count", count);
@@ -46,7 +46,7 @@ public class ArticleAdminController {
 
     @GetMapping("/{id}")
     public ResultVO get(@PathVariable("id") Integer id) {
-        Article article = articleService.findById(id);
+        Article article = articleService.getArticle(id);
         return ResultUtils.success(transform(article, new ArticleVO()));
     }
 
@@ -58,7 +58,7 @@ public class ArticleAdminController {
 
     private ArticleVO transform(Article article, ArticleVO articleVO) {
         BeanUtils.copyProperties(article, articleVO);
-        User user = userService.findById(article.getOpenid());
+        User user = userService.getUser(article.getOpenid());
         articleVO.setNickname(user.getNickname());
         articleVO.setAvatarUrl(user.getAvatarUrl());
         articleVO.setImgs(article.getImg().split("#"));

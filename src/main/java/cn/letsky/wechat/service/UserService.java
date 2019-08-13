@@ -18,7 +18,7 @@ public interface UserService {
      * @param id 用户唯一标识
      * @return 当前id对应的User实体
      */
-    User findById(String id);
+    User getUser(String id);
 
     /**
      * 获取用户列表
@@ -27,5 +27,5 @@ public interface UserService {
      * @param size 每页的数量
      * @return
      */
-    Page<User> findAll(Integer page, Integer size);
+    Page<User> getUsers(Integer page, Integer size);
 }

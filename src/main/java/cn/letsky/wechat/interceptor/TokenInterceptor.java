@@ -41,7 +41,7 @@ public class TokenInterceptor implements HandlerInterceptor {
         //session未过期
         if (!tokenService.isExpire(session)) {
             String openid = tokenService.getOpenid(session);
-            User user = userService.findById(openid);
+            User user = userService.getUser(openid);
             userHolder.set(user);
             return true;
         }

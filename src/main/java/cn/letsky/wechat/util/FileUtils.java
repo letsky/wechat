@@ -18,7 +18,7 @@ public class FileUtils {
      * @param suffix 文件后缀名
      * @return 是图片返回<code>true</code>，不是图片返回<code>false</code>
      */
-    private static boolean isFileAllowed(String suffix) {
+    private static boolean isImage(String suffix) {
         List<String> ext = Arrays.asList(IMAGE_FILE_SUFFIX);
         if (ext.contains(suffix))
             return true;
@@ -31,13 +31,13 @@ public class FileUtils {
      * @param file 需要上传的文件
      * @return 文件名
      */
-    public static String fileName(MultipartFile file) {
+    public static String createFileName(MultipartFile file) {
         int doPos = file.getOriginalFilename().lastIndexOf(".");
         if (doPos < 0)
             return null;
         //后缀名
         String suffix = file.getOriginalFilename().substring(doPos + 1);
-        if (!isFileAllowed(suffix)) {
+        if (!isImage(suffix)) {
             return null;
         }
         StringBuilder builder = new StringBuilder();

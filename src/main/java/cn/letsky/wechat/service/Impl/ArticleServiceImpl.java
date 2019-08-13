@@ -30,18 +30,18 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Article findById(Integer id) {
+    public Article getArticle(Integer id) {
         Optional<Article> article = articleDao.findById(id);
         return article.orElse(null);
     }
 
     @Override
-    public Page<Article> findAll(Integer page, Integer size) {
-        return findAll(Visible.PUBLIC, page, size);
+    public Page<Article> getArticles(Integer page, Integer size) {
+        return getArticles(Visible.PUBLIC, page, size);
     }
 
     @Override
-    public Page<Article> findAll(Integer visible, Integer page, Integer size) {
+    public Page<Article> getArticles(Integer visible, Integer page, Integer size) {
         Pageable pageable = PageUtils.getPageable(page, size);
         Page<Article> articlePage = articleDao.findAllByStatusAndVisibleOrderByCreatedDesc(
                 ArticleStatus.NORMAL, visible, pageable);
@@ -52,7 +52,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Page<Article> findAllByOpenid(String openid, Integer page, Integer size) {
+    public Page<Article> getUserArticles(String openid, Integer page, Integer size) {
         Pageable pageable = PageUtils.getPageable(page, size);
         Page<Article> articlePage = articleDao.findAllByOpenidOrderByCreatedDesc(openid, pageable);
         if (page > articlePage.getTotalPages()) {
@@ -62,7 +62,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Article save(Article article) {
+    public Article post(Article article) {
         return articleDao.save(article);
     }
 
@@ -74,7 +74,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Page<Article> findAllFollowed(Collection<String> ids, Integer page, Integer size) {
+    public Page<Article> getFollowUserArticles(Collection<String> ids, Integer page, Integer size) {
         Pageable pageable = PageUtils.getPageable(page, size);
         Page<Article> articlePage = articleDao.findAllByOpenidInAndStatusAndVisibleOrderByCreatedDesc(
                 ids, ArticleStatus.NORMAL, Visible.PUBLIC, pageable

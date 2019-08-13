@@ -3,11 +3,8 @@ package cn.letsky.wechat.service;
 import cn.letsky.wechat.constant.status.CommentStatus;
 import cn.letsky.wechat.model.Article;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import cn.letsky.wechat.constant.status.ArticleStatus;
 
 import java.util.Collection;
-import java.util.List;
 
 public interface ArticleService {
 
@@ -17,7 +14,7 @@ public interface ArticleService {
      * @param id 文章的id
      * @return 文章的内容
      */
-    Article findById(Integer id);
+    Article getArticle(Integer id);
 
     /**
      * 获取文章列表
@@ -28,10 +25,10 @@ public interface ArticleService {
      * <p>
      * {@link CommentStatus#ALLOW}
      */
-    Page<Article> findAll(Integer page, Integer size);
+    Page<Article> getArticles(Integer page, Integer size);
 
     /**
-     * 查找文章列表
+     * 获取文章列表
      *
      * @param visible 文章可见性
      * @param page    页码
@@ -41,7 +38,7 @@ public interface ArticleService {
      * {@link CommentStatus#ALLOW}
      * {@link CommentStatus#NOT_ALLOW}
      */
-    Page<Article> findAll(Integer visible, Integer page, Integer size);
+    Page<Article> getArticles(Integer visible, Integer page, Integer size);
 
     /**
      * 返回给定用户所有已发送的文章
@@ -51,15 +48,15 @@ public interface ArticleService {
      * @param size   每页的数量
      * @return 给定用户的文章列表
      */
-    Page<Article> findAllByOpenid(String openid, Integer page, Integer size);
+    Page<Article> getUserArticles(String openid, Integer page, Integer size);
 
     /**
-     * 保存文章
+     * 发表文章
      *
      * @param article 文章实体
      * @return 保存的文章对象
      */
-    Article save(Article article);
+    Article post(Article article);
 
     /**
      * 删除文章，非真实删除
@@ -70,10 +67,11 @@ public interface ArticleService {
 
     /**
      * 查询关注的人发表的文章
-     * @param ids 关注人的集合
+     *
+     * @param ids  关注人的集合
      * @param page
      * @param size
      * @return
      */
-    Page<Article> findAllFollowed(Collection<String> ids, Integer page, Integer size);
+    Page<Article> getFollowUserArticles(Collection<String> ids, Integer page, Integer size);
 }

@@ -52,7 +52,7 @@ public class LikeServiceImpl implements LikeService {
     }
 
     @Override
-    public Long likeCount(Integer entityType, Integer entityId) {
+    public Long getCount(Integer entityType, Integer entityId) {
         String likeKey = getKey(entityType, entityId);
         return redisTemplate.opsForSet().size(likeKey);
     }

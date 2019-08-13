@@ -51,11 +51,11 @@ public class CommentController {
 
         Pageable pageable = PageUtils.getPageable(page, size);
         Page<Comment> commentPage =
-                commentService.findAll(entityType, entityId, pageable);
+                commentService.getComments(entityType, entityId, pageable);
         List<CommentVO> commentVOList = commentPage.stream().map(e -> transform(e, new CommentVO())).collect(Collectors.toList());
         commentVOList.stream().forEach(e -> {
             Page<Comment> childrenPage =
-                    commentService.findAll(EntityType.COMMENT, e.getId(), pageable);
+                    commentService.getComments(EntityType.COMMENT, e.getId(), pageable);
             if (!childrenPage.isEmpty()){
                 List<CommentVO> childrenComment = childrenPage.stream().map(c -> transform(c, new CommentVO())).collect(Collectors.toList());
                 e.setChildren(childrenComment);
@@ -73,7 +73,7 @@ public class CommentController {
         if (filterUtils.isSensitive(commentForm.getContent())) {
             throw new CommonException(ResultEnum.SENSITIVE_WORD);
         }
-        Comment res = commentService.save(
+        Comment res = commentService.post(
                 userHolder.get().getOpenid(), commentForm.getContent(),
                 commentForm.getEntityType(), commentForm.getEntityId());
         if (res == null) {
@@ -84,7 +84,7 @@ public class CommentController {
 
     private CommentVO transform(Comment comment, CommentVO commentVO){
         BeanUtils.copyProperties(comment, commentVO);
-        User user = userService.findById(comment.getUid());
+        User user = userService.getUser(comment.getUid());
         if (user == null){
             return null;
         }

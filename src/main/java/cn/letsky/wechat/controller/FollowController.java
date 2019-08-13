@@ -105,7 +105,7 @@ public class FollowController {
     public ResultVO<Long> unFollow(
             @RequestParam("openid") String openid,
             @RequestParam("unFollowId") String unFollowId) {
-        Long followCount = followService.unfollow(openid, unFollowId);
+        Long followCount = followService.unFollow(openid, unFollowId);
         return ResultUtils.success(followCount);
     }
 
@@ -117,7 +117,7 @@ public class FollowController {
      */
     private List<UserVO> getUsers(Set<String> ids) {
         List<UserVO> userVOList = ids.stream().map(id -> {
-            User user = userService.findById(id);
+            User user = userService.getUser(id);
             UserVO userVO = new UserVO();
             BeanUtils.copyProperties(user, userVO);
             return userVO;

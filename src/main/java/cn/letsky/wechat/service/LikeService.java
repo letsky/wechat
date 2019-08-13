@@ -39,5 +39,5 @@ public interface LikeService {
      * @param entityId   实体id
      * @return 点赞数
      */
-    Long likeCount(Integer entityType, Integer entityId);
+    Long getCount(Integer entityType, Integer entityId);
 }

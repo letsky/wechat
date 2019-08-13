@@ -1,12 +1,12 @@
 package cn.letsky.wechat.dao;
 
+import cn.letsky.wechat.constant.Visible;
+import cn.letsky.wechat.constant.status.ArticleStatus;
 import cn.letsky.wechat.model.Article;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import cn.letsky.wechat.constant.status.ArticleStatus;
-import cn.letsky.wechat.constant.Visible;
 
 import java.util.Collection;
 
@@ -35,6 +35,7 @@ public interface ArticleDao extends JpaRepository<Article, Integer> {
 
     /**
      * 查询关注用户发表的文章
+     *
      * @param ids 关注用户集合
      * @param status 文章状态
      * @param visible 文章可见性

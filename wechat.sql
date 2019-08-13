@@ -12,17 +12,18 @@
 )ENGINE=InnoDB default charset=utf8mb4 comment='用户表';
 
 create table if not exists `article`(
-    `id` int(10) not null auto_increment comment '文章主键',
-    `content` varchar(512) not null comment '文本内容',
-    `img` varchar(1024) default null comment '图片',
-    `created` timestamp not null comment '发表时间',
-    `openid` varchar(64) not null comment '发表人的openid',
-    `status` tinyint(1) not null default '0' comment '0为正常，1为删除',
-    `tag` varchar(200) default null comment '话题',
-    `comment_num` int(10) unsigned DEFAULT '0' comment '评论数',
-    `like_num` int(10) unsigned DEFAULT '0' comment '点赞数',
-    `allow_comment` tinyint(1) DEFAULT '0' comment '是否允许评论，0为允许，1为不允许',
-    primary key(`id`)
+                                        `id`            int(10)      not null auto_increment comment '文章主键',
+                                        `content`       varchar(512) not null comment '文本内容',
+                                        `img`           varchar(1024)         default null comment '图片',
+                                        `created`       timestamp    not null comment '发表时间',
+                                        `openid`        varchar(64)  not null comment '发表人的openid',
+                                        `status`        tinyint(1)   not null default '0' comment '0为正常，1为删除',
+                                        `visible`       tinyint(1)   not null default '0' comment '可见性',
+                                        `tag`           varchar(200)          default null comment '话题',
+                                        `comment_num`   int(10) unsigned      DEFAULT '0' comment '评论数',
+                                        `like_num`      int(10) unsigned      DEFAULT '0' comment '点赞数',
+                                        `allow_comment` tinyint(1)            DEFAULT '0' comment '是否允许评论，0为允许，1为不允许',
+                                        primary key(`id`)
 )ENGINE=InnoDB default charset=utf8mb4 comment='内容表';
 
 create table if not exists `comment`(

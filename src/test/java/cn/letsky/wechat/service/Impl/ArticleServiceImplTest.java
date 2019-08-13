@@ -30,27 +30,27 @@ public class ArticleServiceImplTest {
         article.setContent("test");
         article.setVisible(1);
         article.setOpenid(OPENId);
-        Article res = articleService.save(article);
+        Article res = articleService.post(article);
         ARTICLE_ID = res.getId();
         Assert.assertNotNull(res);
     }
 
     @Test
     public void findById() {
-        Article res = articleService.findById(ARTICLE_ID);
+        Article res = articleService.getArticle(ARTICLE_ID);
         Assert.assertNotNull(res);
     }
 
     @Test
     public void findAll() {
-        Page<Article> articlePage = articleService.findAll(1,20);
+        Page<Article> articlePage = articleService.getArticles(1, 20);
         Long num = articlePage.getTotalElements();
         Assert.assertNotEquals(Long.valueOf(0), num);
     }
 
     @Test
     public void findAllByOpenid() {
-        Page<Article> articlePage = articleService.findAllByOpenid(OPENId, 1, 20);
+        Page<Article> articlePage = articleService.getUserArticles(OPENId, 1, 20);
         Long num = articlePage.getTotalElements();
         Assert.assertNotEquals(Long.valueOf(0), num);
     }
@@ -58,7 +58,7 @@ public class ArticleServiceImplTest {
     @After
     public void delete() {
         articleService.delete(ARTICLE_ID);
-        Article res = articleService.findById(ARTICLE_ID);
+        Article res = articleService.getArticle(ARTICLE_ID);
         Assert.assertEquals(Integer.valueOf(1), res.getStatus());
     }
 }

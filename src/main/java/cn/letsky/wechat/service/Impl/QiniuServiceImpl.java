@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 /**
+ * 使用七牛云服务上传图片
  * {@link UploadService}实现类
  */
 @Service
@@ -35,7 +36,7 @@ public class QiniuServiceImpl implements UploadService {
     public String uploadFile(MultipartFile file) {
         try {
             String upToken = getToken;
-            String fileName = FileUtils.fileName(file);
+            String fileName = FileUtils.createFileName(file);
             if (fileName == null) {
                 throw new CommonException(ResultEnum.NOT_PICTURE);
             }

@@ -23,7 +23,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment save(String openid, String content, Integer entityType, Integer entityId) {
+    public Comment post(String openid, String content, Integer entityType, Integer entityId) {
         if (StringUtils.isEmpty(content)) {
             throw new CommonException(ResultEnum.SEND_NULL_COMMENT);
         }
@@ -36,13 +36,13 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Long count(Integer entityType, Integer entityId) {
+    public Long getCount(Integer entityType, Integer entityId) {
         return commentDao.countByEntityTypeAndEntityId(entityType, entityId);
     }
 
     @Override
-    public Page<Comment> findAll(Integer entityType,
-                                 Integer entityId, Pageable pageable) {
+    public Page<Comment> getComments(Integer entityType,
+                                     Integer entityId, Pageable pageable) {
         Page<Comment> comments = commentDao
                 .findAllByEntityTypeAndEntityIdOrderByCreatedDesc(
                         entityType, entityId, pageable);

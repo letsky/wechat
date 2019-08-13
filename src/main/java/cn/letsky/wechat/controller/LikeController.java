@@ -82,7 +82,7 @@ public class LikeController {
     public ResultVO likeCount(@RequestParam("entityType") Integer entityType,
                               @RequestParam("entityId") Integer entityId) {
         Map<String, Long> map = new HashMap<>();
-        Long likeNum = likeService.likeCount(entityType, entityId);
+        Long likeNum = likeService.getCount(entityType, entityId);
         map.put("likeNum", likeNum);
         return ResultUtils.success(map);
     }

@@ -39,12 +39,9 @@ public class ArticleController {
     private final UserHolder userHolder;
     private final FollowService followService;
 
-    public ArticleController(UserService userService,
-                             ArticleService articleService,
-                             FilterUtils filterUtils,
-                             CommentService commentService,
-                             LikeService likeService,
-                             UserHolder userHolder,
+    public ArticleController(UserService userService, ArticleService articleService,
+                             FilterUtils filterUtils, CommentService commentService,
+                             LikeService likeService, UserHolder userHolder,
                              FollowService followService) {
         this.userService = userService;
         this.articleService = articleService;
@@ -55,12 +52,12 @@ public class ArticleController {
         this.followService = followService;
     }
 
-    @GetMapping
+    @GetMapping("/")
     public ResultVO<List<ArticleVO>> getArticleList(
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "size", defaultValue = "20") int size) {
 
-        Page<Article> articlePage = articleService.findAll(page, size);
+        Page<Article> articlePage = articleService.getArticles(page, size);
         List<ArticleVO> list = articlePage.stream()
                 .map(e -> transform(e, new ArticleVO(), userHolder))
                 .collect(Collectors.toList());
@@ -72,7 +69,7 @@ public class ArticleController {
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "size", defaultValue = "20") int size) {
         Set<String> ids = followService.getFollows(userHolder.get().getOpenid());
-        Page<Article> articlePage = articleService.findAllFollowed(ids, page, size);
+        Page<Article> articlePage = articleService.getFollowUserArticles(ids, page, size);
         List<ArticleVO> list = articlePage.stream()
                 .map(e -> transform(e, new ArticleVO(), userHolder))
                 .collect(Collectors.toList());
@@ -85,7 +82,7 @@ public class ArticleController {
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "size", defaultValue = "20") int size) {
 
-        Page<Article> articlePage = articleService.findAllByOpenid(openid, page, size);
+        Page<Article> articlePage = articleService.getUserArticles(openid, page, size);
         List<ArticleVO> list = articlePage.get()
                 .map(e -> transform(e, new ArticleVO(), userHolder))
                 .collect(Collectors.toList());
@@ -96,7 +93,7 @@ public class ArticleController {
     public ResultVO<ArticleVO> getArticle(@PathVariable("id") Integer id) {
 
         String openid = userHolder.get().getOpenid();
-        Article article = articleService.findById(id);
+        Article article = articleService.getArticle(id);
         if (article == null)
             throw new CommonException(ResultEnum.ENTITY_NOT_FOUNT);
         ArticleVO articleVO = new ArticleVO();
@@ -119,7 +116,7 @@ public class ArticleController {
         BeanUtils.copyProperties(articleForm, article);
         article.setOpenid(userHolder.get().getOpenid());
         article.setImg(StringUtils.join(articleForm.getImgs(), "#"));
-        Article result = articleService.save(article);
+        Article result = articleService.post(article);
         if (result == null) {
             throw new CommonException(ResultEnum.ERROR);
         }
@@ -144,13 +141,13 @@ public class ArticleController {
         BeanUtils.copyProperties(article, articleVO);
         if (article.getImg() != null && article.getImg().length() != 0)
             articleVO.setImgs(article.getImg().split("#"));
-        User user = userService.findById(article.getOpenid());
+        User user = userService.getUser(article.getOpenid());
         if (user != null) {
             articleVO.setAvatarUrl(user.getAvatarUrl());
             articleVO.setNickname(user.getNickname());
         }
         Long commentNum = commentService
-                .count(EntityType.ARTICLE, article.getId());
+                .getCount(EntityType.ARTICLE, article.getId());
         Integer liked = LikeStatus.UNLIKE;
         Integer followed = UserStatus.UNFOLLOW;
         boolean showFollowButton = true;
@@ -167,7 +164,7 @@ public class ArticleController {
         articleVO.setLiked(liked);
         articleVO.setFollowed(followed);
         articleVO.setShowFollowButton(showFollowButton);
-        Long likeNum = likeService.likeCount(
+        Long likeNum = likeService.getCount(
                 EntityType.ARTICLE,
                 article.getId());
         articleVO.setCommentNum(commentNum);

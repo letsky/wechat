@@ -29,7 +29,7 @@ public class UserAdminController {
     public ResultVO getList(
             @RequestParam(value = "page", defaultValue = "1") Integer page,
             @RequestParam(value = "size", defaultValue = "20") Integer size) {
-        Page<User> userPage = userService.findAll(page, size);
+        Page<User> userPage = userService.getUsers(page, size);
         List<UserVO> list = userPage.get()
                 .map(e -> transform(e, new UserVO()))
                 .collect(Collectors.toList());
@@ -41,7 +41,7 @@ public class UserAdminController {
 
     @GetMapping("/{openid}")
     public ResultVO get(@PathVariable("openid") String openid){
-        User user = userService.findById(openid);
+        User user = userService.getUser(openid);
         UserVO userVO = new UserVO();
         transform(user, userVO);
         return ResultUtils.success(userVO);

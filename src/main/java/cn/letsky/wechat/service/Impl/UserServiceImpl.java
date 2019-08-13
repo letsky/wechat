@@ -26,12 +26,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User findById(String id) {
+	public User getUser(String id) {
 		return userDao.findById(id).orElse(null);
 	}
 
 	@Override
-	public Page<User> findAll(Integer page, Integer size) {
+	public Page<User> getUsers(Integer page, Integer size) {
 		Pageable pageable = PageUtils.getPageable(page, size);
 		return userDao.findAll(pageable);
 	}

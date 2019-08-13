@@ -30,7 +30,7 @@ public class FollowServiceImpl implements FollowService {
     }
 
     @Override
-    public Long unfollow(String openid, String unFollow) {
+    public Long unFollow(String openid, String unFollow) {
         String followKey = getFollowKey(openid);
         String fansKey = getFansKey(unFollow);
         Long followCount = redisTemplate.opsForSet().remove(followKey, unFollow);

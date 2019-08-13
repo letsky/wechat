@@ -88,7 +88,7 @@ public class WxUserController {
 
     @GetMapping("/getuserinfo")
     public ResultVO getUserInfo(@RequestParam("openid") String openid) {
-        User user = userService.findById(openid);
+        User user = userService.getUser(openid);
         if (user == null) {
             throw new CommonException(ResultEnum.NOT_REGISTER);
         }

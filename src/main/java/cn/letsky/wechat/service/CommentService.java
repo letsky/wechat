@@ -6,9 +6,8 @@ import org.springframework.data.domain.Pageable;
 
 public interface CommentService {
 
-
     /**
-     * 保存评论
+     * 发表评论
      *
      * @param openid     微信用户id
      * @param content    评论主体
@@ -16,7 +15,7 @@ public interface CommentService {
      * @param entityId   评论的实体id
      * @return 保存的评论
      */
-    Comment save(String openid, String content,
+    Comment post(String openid, String content,
                  Integer entityType, Integer entityId);
 
     /**
@@ -26,7 +25,7 @@ public interface CommentService {
      * @param entityId   需要获取评论总数的实体id
      * @return 当前实体的评论总数
      */
-    Long count(Integer entityType, Integer entityId);
+    Long getCount(Integer entityType, Integer entityId);
 
     /**
      * 获取评论列表
@@ -36,6 +35,5 @@ public interface CommentService {
      * @param pageable   分页对象
      * @return 当前实体的评论列表
      */
-    Page<Comment> findAll(Integer entityType,
-                          Integer entityId, Pageable pageable);
+    Page<Comment> getComments(Integer entityType, Integer entityId, Pageable pageable);
 }
