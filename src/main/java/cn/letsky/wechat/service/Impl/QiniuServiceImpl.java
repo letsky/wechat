@@ -21,6 +21,7 @@ import java.io.IOException;
 @Service
 public class QiniuServiceImpl implements UploadService {
 
+    //获取七牛云的token
     private final String getToken;
     private final UploadManager uploadManager;
     private final QiNiuProperties qiNiuProperties;
@@ -35,13 +36,10 @@ public class QiniuServiceImpl implements UploadService {
     @Override
     public String uploadFile(MultipartFile file) {
         try {
-            String upToken = getToken;
+            String token = getToken;
             String fileName = FileUtils.createFileName(file);
-            if (fileName == null) {
-                throw new CommonException(ResultEnum.NOT_PICTURE);
-            }
             Response response = uploadManager.put(file.getBytes(),
-                    fileName, upToken);
+                    fileName, token);
             if (response.isOK() && response.isJson()){
                 StringBuilder builder = new StringBuilder();
                 builder.append(qiNiuProperties.getDomain())

@@ -18,15 +18,20 @@ public enum ResultEnum {
     ENTITY_NOT_FOUNT(10004, "实体不存在"),
     UPLOAD_ERROR(10005, "服务端上传图片出错"),
     PAGE_PARAM_ERROR(10006, "分页参数不正确"),
-    NULL_COMMENT(10007, "还没有评论"),
+    EMPTY_COMMENT(10007, "还没有评论"),
     NULL_WORD_FILE(10008, "未找到敏感词文件"),
+
+    NOT_SUPPORT_CONTENT_TYPE(70000, "当前Content-Type不支持"),
+    NOT_SUPPORT_SUFFIX(70001, "当前后缀名不支持"),
+    EMPTY_FILENAME(70002, "文件名为空"),
+    INCORRECT_FILENAME(70003, "文件名有误"),
+    EMPTY_PICTURE(70004, "上传的图片内容为空"),
 
     WECHAT_LOGIN_ERROR(80000, "微信登录异常"),
     WECHAT_CODE_EMPTY(80001, "微信code为空"),
 
     SESSION_EXPIRED(90000, "客户端session过期"),
     SESSION_ERROR(90001, "session无效"),
-    NULL_PICTURE(90001, "上传的图片为空"),
     EXCEED_PICTURE_LIMIT(90002, "图片上传超过限制"),
     NOT_PICTURE(90003, "上传的不是图片"),
     SEND_NULL_COMMENT(90004, "评论为空"),

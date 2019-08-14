@@ -1,5 +1,6 @@
 package cn.letsky.wechat.vo;
 
+import cn.letsky.wechat.constant.ResultEnum;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import lombok.Data;
@@ -44,5 +45,10 @@ public class ResultVO<T> implements Serializable{
         this.errmsg = null;
         this.data = data;
         this.ext = ext;
+    }
+
+    public ResultVO(ResultEnum resultEnum) {
+        this.code = resultEnum.getCode();
+        this.errmsg = resultEnum.getMsg();
     }
 }

@@ -26,15 +26,15 @@ import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/wx")
-public class WxUserController {
+public class WxController {
 
     private final WxMaService wxMaService;
     private final UserService userService;
     private final TokenService tokenService;
     private final UserHolder userHolder;
 
-    public WxUserController(WxMaService wxMaService, UserService userService,
-                            TokenService tokenService, UserHolder userHolder) {
+    public WxController(WxMaService wxMaService, UserService userService,
+                        TokenService tokenService, UserHolder userHolder) {
         this.wxMaService = wxMaService;
         this.userService = userService;
         this.tokenService = tokenService;

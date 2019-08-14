@@ -17,10 +17,10 @@ public interface UserService {
     /**
      * 获取用户
      *
-     * @param id 用户唯一标识
+     * @param openid 用户唯一标识
      * @return 当前id对应的User实体
      */
-    Optional<User> getUser(String id);
+    Optional<User> getUser(String openid);
 
     /**
      * 获取用户列表
@@ -30,4 +30,11 @@ public interface UserService {
      * @return
      */
     Page<User> getUsers(Integer page, Integer size);
+
+    /**
+     * 删除用户
+     *
+     * @param openid
+     */
+    void delete(String openid);
 }
