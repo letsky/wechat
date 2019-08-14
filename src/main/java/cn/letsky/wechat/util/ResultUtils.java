@@ -2,6 +2,7 @@ package cn.letsky.wechat.util;
 
 import cn.letsky.wechat.constant.ResultEnum;
 import cn.letsky.wechat.vo.ResultVO;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Map;
@@ -57,7 +58,6 @@ public class ResultUtils {
         return new ResultVO(code, msg);
     }
 
-
     /**
      * 执行成功 http状态码200
      *
@@ -79,12 +79,36 @@ public class ResultUtils {
     }
 
     /**
+     * 状态码400
+     *
+     * @return
+     */
+    public static ResponseEntity badRequest() {
+        return ResponseEntity.badRequest().build();
+    }
+
+    /**
+     * 状态码400
+     *
+     * @param data 需要返回的数据
+     * @param <T>  数据的类型
+     * @return
+     */
+    public static <T> ResponseEntity<T> badRequest(T data) {
+        return ResponseEntity.badRequest().body(data);
+    }
+
+    /**
      * http状态码404
      *
      * @return
      */
     public static ResponseEntity notFound() {
         return ResponseEntity.notFound().build();
+    }
+
+    public static <T> ResponseEntity<T> notFound(T data) {
+        return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
     }
 
     /**

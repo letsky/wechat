@@ -43,7 +43,7 @@ public class ArticleServiceImplTest {
 
     @Test
     public void findAll() {
-        Page<Article> articlePage = articleService.getArticles(1, 20);
+        Page<Article> articlePage = articleService.getPublicArticles(1, 20);
         Long num = articlePage.getTotalElements();
         Assert.assertNotEquals(Long.valueOf(0), num);
     }

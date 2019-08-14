@@ -1,10 +1,8 @@
 package cn.letsky.wechat.service.Impl;
 
-import cn.letsky.wechat.constant.ResultEnum;
 import cn.letsky.wechat.constant.Visible;
 import cn.letsky.wechat.constant.status.ArticleStatus;
 import cn.letsky.wechat.dao.ArticleDao;
-import cn.letsky.wechat.exception.CommonException;
 import cn.letsky.wechat.model.Article;
 import cn.letsky.wechat.service.ArticleService;
 import cn.letsky.wechat.util.PageUtils;
@@ -12,9 +10,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Collection;
-import java.util.Optional;
 
 /**
  * {@link ArticleService}实现类
@@ -31,44 +30,39 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Article getArticle(Integer id) {
-        Optional<Article> article = articleDao.findById(id);
-        return article.orElse(null);
+        return articleDao.findById(id)
+                .orElseThrow(EntityNotFoundException::new);
     }
 
     @Override
-    public Page<Article> getArticles(Integer page, Integer size) {
+    public Page<Article> getPublicArticles(Integer page, Integer size) {
         return getArticles(Visible.PUBLIC, page, size);
     }
 
     @Override
     public Page<Article> getArticles(Integer visible, Integer page, Integer size) {
         Pageable pageable = PageUtils.getPageable(page, size);
-        Page<Article> articlePage = articleDao.findAllByStatusAndVisibleOrderByCreatedDesc(
+        return articleDao.findAllByStatusAndVisibleOrderByCreatedDesc(
                 ArticleStatus.NORMAL, visible, pageable);
-        if (page > articlePage.getTotalPages()) {
-            throw new CommonException(ResultEnum.BEYOND_PAGE_LIMIT);
-        }
-        return articlePage;
     }
 
     @Override
     public Page<Article> getUserArticles(String openid, Integer page, Integer size) {
         Pageable pageable = PageUtils.getPageable(page, size);
-        Page<Article> articlePage = articleDao.findAllByOpenidOrderByCreatedDesc(openid, pageable);
-        if (page > articlePage.getTotalPages()) {
-            throw new CommonException(ResultEnum.BEYOND_PAGE_LIMIT);
-        }
-        return articlePage;
+        return articleDao.findAllByOpenidOrderByCreatedDesc(openid, pageable);
     }
 
     @Override
+    @Transactional
     public Article post(Article article) {
         return articleDao.save(article);
     }
 
     @Override
+    @Transactional
     public void delete(Integer id) {
-        Article article = articleDao.getOne(id);
+        Article article = articleDao.findById(id)
+                .orElseThrow(EntityNotFoundException::new);
         article.setStatus(ArticleStatus.DELETE);
         articleDao.save(article);
     }
@@ -76,9 +70,8 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public Page<Article> getFollowUserArticles(Collection<String> ids, Integer page, Integer size) {
         Pageable pageable = PageUtils.getPageable(page, size);
-        Page<Article> articlePage = articleDao.findAllByOpenidInAndStatusAndVisibleOrderByCreatedDesc(
+        return articleDao.findAllByOpenidInAndStatusAndVisibleOrderByCreatedDesc(
                 ids, ArticleStatus.NORMAL, Visible.PUBLIC, pageable
         );
-        return articlePage;
     }
 }

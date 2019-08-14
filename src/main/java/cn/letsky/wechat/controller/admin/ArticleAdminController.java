@@ -9,12 +9,13 @@ import cn.letsky.wechat.vo.ArticleVO;
 import cn.letsky.wechat.vo.ResultVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @RestController
@@ -34,7 +35,7 @@ public class ArticleAdminController {
     @GetMapping
     public ResultVO getList(@RequestParam(value = "page", defaultValue = "1") Integer page,
                             @RequestParam(value = "size", defaultValue = "20") Integer size) {
-        Page<Article> articlePage = articleService.getArticles(page, size);
+        Page<Article> articlePage = articleService.getPublicArticles(page, size);
         Long count = articlePage.getTotalElements();
         Map<String, Long> map = new HashMap<>();
         map.put("count", count);
@@ -46,21 +47,21 @@ public class ArticleAdminController {
     }
 
     @GetMapping("/{id}")
-    public ResultVO get(@PathVariable("id") Integer id) {
+    public ResponseEntity<ArticleVO> get(@PathVariable("id") Integer id) {
         Article article = articleService.getArticle(id);
-        return ResultUtils.success(transform(article, new ArticleVO()));
+        return ResultUtils.ok(transform(article, new ArticleVO()));
     }
 
     @DeleteMapping("/{id}")
-    public ResultVO delete(@PathVariable("id") Integer id){
+    public ResponseEntity delete(@PathVariable("id") Integer id) {
         articleService.delete(id);
-        return ResultUtils.success();
+        return ResultUtils.ok();
     }
 
     private ArticleVO transform(Article article, ArticleVO articleVO) {
         BeanUtils.copyProperties(article, articleVO);
         User user = userService.getUser(article.getOpenid())
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(EntityNotFoundException::new);
         articleVO.setNickname(user.getNickname());
         articleVO.setAvatarUrl(user.getAvatarUrl());
         articleVO.setImgs(article.getImg().split("#"));

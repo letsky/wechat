@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.NoSuchElementException;
+import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
 
 /**
@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void delete(String openid) {
 		User user = userDao.findById(openid)
-				.orElseThrow(NoSuchElementException::new);
+                .orElseThrow(EntityNotFoundException::new);
 		userDao.delete(user);
 	}
 

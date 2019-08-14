@@ -21,11 +21,11 @@ public interface ArticleService {
      *
      * @param page 页码
      * @param size 每页的数量
-     * @return 可见性为私有的文章列表
+     * @return 可见性为public的文章列表
      * <p>
      * {@link CommentStatus#ALLOW}
      */
-    Page<Article> getArticles(Integer page, Integer size);
+    Page<Article> getPublicArticles(Integer page, Integer size);
 
     /**
      * 获取文章列表

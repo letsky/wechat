@@ -13,17 +13,17 @@ import cn.letsky.wechat.service.*;
 import cn.letsky.wechat.util.FilterUtils;
 import cn.letsky.wechat.util.ResultUtils;
 import cn.letsky.wechat.vo.ArticleVO;
-import cn.letsky.wechat.vo.ResultVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -54,19 +54,19 @@ public class ArticleController {
     }
 
     @GetMapping("/")
-    public ResultVO<List<ArticleVO>> getArticleList(
+    public ResponseEntity<List<ArticleVO>> getArticleList(
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "size", defaultValue = "20") int size) {
 
-        Page<Article> articlePage = articleService.getArticles(page, size);
+        Page<Article> articlePage = articleService.getPublicArticles(page, size);
         List<ArticleVO> list = articlePage.stream()
                 .map(e -> transform(e, new ArticleVO(), userHolder))
                 .collect(Collectors.toList());
-        return ResultUtils.success(list);
+        return ResultUtils.ok(list);
     }
 
     @GetMapping("/follows")
-    public ResultVO<List<ArticleVO>> getFollowedArticleList(
+    public ResponseEntity<List<ArticleVO>> getFollowedArticleList(
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "size", defaultValue = "20") int size) {
         Set<String> ids = followService.getFollows(userHolder.get().getOpenid());
@@ -74,11 +74,11 @@ public class ArticleController {
         List<ArticleVO> list = articlePage.stream()
                 .map(e -> transform(e, new ArticleVO(), userHolder))
                 .collect(Collectors.toList());
-        return ResultUtils.success(list);
+        return ResultUtils.ok(list);
     }
 
     @GetMapping("/user/{openid}")
-    public ResultVO<List<ArticleVO>> getArticleListByOpenid(
+    public ResponseEntity<List<ArticleVO>> getArticleListByOpenid(
             @PathVariable("openid") String openid,
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "size", defaultValue = "20") int size) {
@@ -87,11 +87,11 @@ public class ArticleController {
         List<ArticleVO> list = articlePage.get()
                 .map(e -> transform(e, new ArticleVO(), userHolder))
                 .collect(Collectors.toList());
-        return ResultUtils.success(list);
+        return ResultUtils.ok(list);
     }
 
     @GetMapping("/{id}")
-    public ResultVO<ArticleVO> getArticle(@PathVariable("id") Integer id) {
+    public ResponseEntity<ArticleVO> getArticle(@PathVariable("id") Integer id) {
 
         String openid = userHolder.get().getOpenid();
         Article article = articleService.getArticle(id);
@@ -99,12 +99,12 @@ public class ArticleController {
             throw new CommonException(ResultEnum.ENTITY_NOT_FOUNT);
         ArticleVO articleVO = new ArticleVO();
         transform(article, articleVO, userHolder);
-        return ResultUtils.success(articleVO);
+        return ResultUtils.ok(articleVO);
     }
 
     @PostMapping
-    public ResultVO sendArticle(@Valid ArticleForm articleForm,
-                                BindingResult bindingResult) {
+    public ResponseEntity sendArticle(@Valid ArticleForm articleForm,
+                                      BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             log.error("[保存帖子失败]：articleForm={}", articleForm);
@@ -121,13 +121,13 @@ public class ArticleController {
         if (result == null) {
             throw new CommonException(ResultEnum.ERROR);
         }
-        return ResultUtils.success();
+        return ResultUtils.ok();
     }
 
     @DeleteMapping
-    public ResultVO deleteArticle(@RequestParam("id") Integer id) {
+    public ResponseEntity deleteArticle(@RequestParam("id") Integer id) {
         articleService.delete(id);
-        return ResultUtils.success();
+        return ResultUtils.ok();
     }
 
     /**
@@ -143,7 +143,7 @@ public class ArticleController {
         if (article.getImg() != null && article.getImg().length() != 0)
             articleVO.setImgs(article.getImg().split("#"));
         User user = userService.getUser(article.getOpenid())
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(EntityNotFoundException::new);
         if (user != null) {
             articleVO.setAvatarUrl(user.getAvatarUrl());
             articleVO.setNickname(user.getNickname());

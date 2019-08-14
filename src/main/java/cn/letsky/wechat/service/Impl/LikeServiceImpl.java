@@ -16,7 +16,6 @@ public class LikeServiceImpl implements LikeService {
 
     private static final String SPLIT = ":";
     private static final String LIKE = "like";
-    private static final String DISLIKE = "dislike";
 
     private final RedisTemplate<String, String> redisTemplate;
 

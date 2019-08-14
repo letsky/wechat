@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import javax.persistence.EntityNotFoundException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.NoSuchElementException;
 
 /**
  * 异常处理类
@@ -24,36 +23,32 @@ import java.util.NoSuchElementException;
 public class CommonExceptionHandler {
 
 	@ExceptionHandler(Exception.class)
-	public ResultVO exceptionHandler(Exception e) {
+	public ResponseEntity<Void> exceptionHandler(Exception e) {
 		log.error("[Exception]:" + getTrace(e));
-		return ResultUtils.error(ResultEnum.ERROR);
+		return ResponseEntity.badRequest().build();
 	}
 
 	@ExceptionHandler(CommonException.class)
 	public ResponseEntity<ResultVO> commonException(CommonException e) {
 		log.error("[CommonException]:" + getTrace(e));
 		ResultVO resultVO = new ResultVO(e.getCode(), e.getMessage());
-		return new ResponseEntity<>(resultVO, HttpStatus.BAD_REQUEST);
+		return ResultUtils.badRequest(resultVO);
 	}
 
+	//返回404
 	@ExceptionHandler(EntityNotFoundException.class)
-	public ResultVO entityNotFoundException(EntityNotFoundException e){
+	public ResponseEntity<ResultVO> entityNotFoundException(EntityNotFoundException e) {
 		log.error("[EntityNotFoundException]:" + getTrace(e));
-		return ResultUtils.error(ResultEnum.ENTITY_NOT_FOUNT);
+		ResultVO resultVO = new ResultVO(ResultEnum.ENTITY_NOT_FOUNT);
+		return ResultUtils.notFound(resultVO);
 	}
 
 	@ExceptionHandler(IllegalArgumentException.class)
-	public ResultVO illegalArgumentException(IllegalArgumentException e){
+	public ResponseEntity<ResultVO> illegalArgumentException(IllegalArgumentException e) {
 		log.error("[IllegalArgumentException]:" + getTrace(e));
-		return ResultUtils.error(ResultEnum.PARAM_ERROR);
+		ResultVO resultVO = new ResultVO(ResultEnum.PARAM_ERROR);
+		return ResultUtils.badRequest(resultVO);
 	}
-
-    @ExceptionHandler(NoSuchElementException.class)
-	public ResponseEntity<ResultVO> noSuchElementException(NoSuchElementException e) {
-		log.error("[NoSuchElementException]:" + getTrace(e));
-		ResultVO resultVO = new ResultVO(ResultEnum.ENTITY_NOT_FOUNT);
-		return new ResponseEntity<>(resultVO, HttpStatus.NOT_FOUND);
-    }
 
 	/**
 	 * 处理MediaType异常

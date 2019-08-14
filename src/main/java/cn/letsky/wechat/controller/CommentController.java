@@ -13,15 +13,15 @@ import cn.letsky.wechat.util.FilterUtils;
 import cn.letsky.wechat.util.PageUtils;
 import cn.letsky.wechat.util.ResultUtils;
 import cn.letsky.wechat.vo.CommentVO;
-import cn.letsky.wechat.vo.ResultVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @RestController
@@ -44,7 +44,7 @@ public class CommentController {
     }
 
     @GetMapping
-    public ResultVO<List<CommentVO>> getComment(
+    public ResponseEntity<List<CommentVO>> getComment(
             @RequestParam("entityType") Integer entityType,
             @RequestParam("entityId") Integer entityId,
             @RequestParam(value = "page", defaultValue = "1") Integer page,
@@ -62,11 +62,11 @@ public class CommentController {
                 e.setChildren(childrenComment);
             }
         });
-        return ResultUtils.success(commentVOList);
+        return ResultUtils.ok(commentVOList);
     }
 
     @PostMapping
-    public ResultVO addComment(@Valid CommentForm commentForm) {
+    public ResponseEntity<Void> addComment(@Valid CommentForm commentForm) {
 
         if (!EntityType.contains(commentForm.getEntityType())) {
             throw new CommonException(ResultEnum.ENTITY_TYPE_ERROR);
@@ -80,12 +80,13 @@ public class CommentController {
         if (res == null) {
             throw new CommonException(ResultEnum.FAIL);
         }
-        return ResultUtils.success();
+        return ResultUtils.ok();
     }
 
     private CommentVO transform(Comment comment, CommentVO commentVO){
         BeanUtils.copyProperties(comment, commentVO);
-        User user = userService.getUser(comment.getUid()).orElseThrow(NoSuchElementException::new);
+        User user = userService.getUser(comment.getUid())
+                .orElseThrow(EntityNotFoundException::new);
         if (user == null){
             return null;
         }

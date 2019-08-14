@@ -7,12 +7,13 @@ import cn.letsky.wechat.vo.ResultVO;
 import cn.letsky.wechat.vo.UserVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @RestController
@@ -41,12 +42,12 @@ public class UserAdminController {
     }
 
     @GetMapping("/{openid}")
-    public ResultVO get(@PathVariable("openid") String openid){
+    public ResponseEntity<UserVO> get(@PathVariable("openid") String openid) {
         User user = userService.getUser(openid)
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(EntityNotFoundException::new);
         UserVO userVO = new UserVO();
         transform(user, userVO);
-        return ResultUtils.success(userVO);
+        return ResultUtils.ok(userVO);
     }
 
     private UserVO transform(User user, UserVO userVO) {
