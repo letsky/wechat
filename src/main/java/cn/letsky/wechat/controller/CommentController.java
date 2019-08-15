@@ -6,7 +6,6 @@ import cn.letsky.wechat.exception.CommonException;
 import cn.letsky.wechat.form.CommentForm;
 import cn.letsky.wechat.model.Comment;
 import cn.letsky.wechat.model.User;
-import cn.letsky.wechat.model.UserHolder;
 import cn.letsky.wechat.service.CommentService;
 import cn.letsky.wechat.service.UserService;
 import cn.letsky.wechat.util.FilterUtils;
@@ -16,6 +15,7 @@ import cn.letsky.wechat.vo.CommentVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,16 +30,12 @@ public class CommentController {
 
     private final CommentService commentService;
     private final FilterUtils filterUtils;
-    private final UserHolder userHolder;
     private final UserService userService;
 
-    public CommentController(CommentService commentService,
-                             FilterUtils filterUtils,
-                             UserHolder userHolder,
+    public CommentController(CommentService commentService, FilterUtils filterUtils,
                              UserService userService) {
         this.commentService = commentService;
         this.filterUtils = filterUtils;
-        this.userHolder = userHolder;
         this.userService = userService;
     }
 
@@ -65,8 +61,8 @@ public class CommentController {
         return ResultUtils.ok(commentVOList);
     }
 
-    @PostMapping
-    public ResponseEntity<Void> addComment(@Valid CommentForm commentForm) {
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<Comment> addComment(@RequestBody @Valid CommentForm commentForm) {
 
         if (!EntityType.contains(commentForm.getEntityType())) {
             throw new CommonException(ResultEnum.ENTITY_TYPE_ERROR);
@@ -75,12 +71,9 @@ public class CommentController {
             throw new CommonException(ResultEnum.SENSITIVE_WORD);
         }
         Comment res = commentService.post(
-                userHolder.get().getOpenid(), commentForm.getContent(),
+                commentForm.getOpenid(), commentForm.getContent(),
                 commentForm.getEntityType(), commentForm.getEntityId());
-        if (res == null) {
-            throw new CommonException(ResultEnum.FAIL);
-        }
-        return ResultUtils.ok();
+        return ResultUtils.ok(res);
     }
 
     private CommentVO transform(Comment comment, CommentVO commentVO){
