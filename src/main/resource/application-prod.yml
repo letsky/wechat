@@ -18,13 +18,12 @@ spring:
       max-file-size: 10MB
 logging:
   file: wechat.log
-wx:
+wechat:
   miniapp:
-    config:
-      appid: wx0cc8960bc84466a1
-      secret: e7786b74eb1293e2eabd6155fcfd294d
-qiniu:
-  access-key: dNM2QQ0Y_tA5f4dVeIy9pYBi3PMKYczXJoF8bJiz
-  secret-key: _E205cCsUnO88Q6Xb2AzlquAvFgGUyU0t0wZ7lRn
-  bucket: wechat
-  domain: http://img.letsky.cn/
+    app-id: wx0cc8960bc84466a1
+    secret: e7786b74eb1293e2eabd6155fcfd294d
+  qiniu:
+    access-key: dNM2QQ0Y_tA5f4dVeIy9pYBi3PMKYczXJoF8bJiz
+    secret-key: _E205cCsUnO88Q6Xb2AzlquAvFgGUyU0t0wZ7lRn
+    bucket: wechat-dev
+    domain: http://img-dev.letsky.cn/

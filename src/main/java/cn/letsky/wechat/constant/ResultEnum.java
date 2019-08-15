@@ -11,7 +11,7 @@ public enum ResultEnum {
     SUCCESS(200, "success"),
     FAIL(404, "接口调用失败"),
 
-    ERROR(10000, "程序内部错误"),,
+    ERROR(10000, "程序内部错误"),
     PARAM_ERROR(10001, "参数不正确"),
     OPENID_ERROR(10002, "openid错误"),
     ENTITY_TYPE_ERROR(10003, "实体类型不正确"),
@@ -26,6 +26,7 @@ public enum ResultEnum {
     EMPTY_FILENAME(70002, "文件名为空"),
     INCORRECT_FILENAME(70003, "文件名有误"),
     EMPTY_PICTURE(70004, "上传的图片内容为空"),
+    NOT_SUPPORT_REQUEST_METHOD(70005, "当前请求方法不支持"),
 
     WECHAT_LOGIN_ERROR(80000, "微信登录异常"),
     WECHAT_CODE_EMPTY(80001, "微信code为空"),

@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -64,6 +65,22 @@ public class CommonExceptionHandler {
 		resultVO.setCode(ResultEnum.NOT_SUPPORT_CONTENT_TYPE.getCode());
 		resultVO.setErrmsg(ex.getMessage());
 		return new ResponseEntity<>(resultVO, HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+	}
+
+	/**
+	 * 处理请求方法异常
+	 *
+	 * @param ex
+	 * @return
+	 */
+	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+	public ResponseEntity<ResultVO> httpRequestMethodNotSupportedException(
+			HttpRequestMethodNotSupportedException ex) {
+		log.error("[HttpRequestMethodNotSupportedException]:" + getTrace(ex));
+		ResultVO resultVO = new ResultVO();
+		resultVO.setCode(ResultEnum.NOT_SUPPORT_REQUEST_METHOD.getCode());
+		resultVO.setErrmsg(ex.getMessage());
+		return new ResponseEntity<>(resultVO, HttpStatus.METHOD_NOT_ALLOWED);
 	}
 
 	/**

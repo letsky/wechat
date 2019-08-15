@@ -1,15 +1,23 @@
 package cn.letsky.wechat.form;
 
-import cn.letsky.wechat.constant.status.ArticleStatus;
+import cn.letsky.wechat.constant.Visible;
 import cn.letsky.wechat.constant.status.CommentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class ArticleForm implements Form {
+
+    /**
+     * 用户openid
+     */
+    @NotBlank(message = "openid不能为空")
+    private String openid;
 
     /**
      * 文章内容
@@ -21,18 +29,15 @@ public class ArticleForm implements Form {
      * {@link CommentStatus#ALLOW}
      * {@link CommentStatus#NOT_ALLOW}
      */
-    private Integer allowComment;
+    private Integer allowComment = CommentStatus.ALLOW;
 
     /**
      * 可见性，0为允许他人可见，1为自己可见
-     * {@link ArticleStatus#PUBLIC}
-     * {@link ArticleStatus#PRIVATE}
      */
-    private Integer visible;
+    private Integer visible = Visible.PUBLIC;
 
     /**
      * 图片链接数组
      */
     private String[] imgs;
-
 }
