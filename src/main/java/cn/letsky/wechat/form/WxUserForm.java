@@ -5,14 +5,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class WxUserForm implements Form {
 
-    @NotNull(message = "openid为null")
+    @NotEmpty(message = "openid为null")
     private String openid;
 
     @NotEmpty(message = "昵称为空")

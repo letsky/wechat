@@ -49,12 +49,16 @@ public class CommentController {
         Pageable pageable = PageUtils.getPageable(page, size);
         Page<Comment> commentPage =
                 commentService.getComments(entityType, entityId, pageable);
-        List<CommentVO> commentVOList = commentPage.stream().map(e -> transform(e, new CommentVO())).collect(Collectors.toList());
+        List<CommentVO> commentVOList = commentPage.stream()
+                .map(e -> transform(e, new CommentVO()))
+                .collect(Collectors.toList());
         commentVOList.stream().forEach(e -> {
             Page<Comment> childrenPage =
                     commentService.getComments(EntityType.COMMENT, e.getId(), pageable);
             if (!childrenPage.isEmpty()){
-                List<CommentVO> childrenComment = childrenPage.stream().map(c -> transform(c, new CommentVO())).collect(Collectors.toList());
+                List<CommentVO> childrenComment = childrenPage.stream()
+                        .map(c -> transform(c, new CommentVO()))
+                        .collect(Collectors.toList());
                 e.setChildren(childrenComment);
             }
         });

@@ -1,13 +1,13 @@
 package cn.letsky.wechat.controller;
 
 import cn.letsky.wechat.model.User;
-import cn.letsky.wechat.model.UserHolder;
 import cn.letsky.wechat.service.FollowService;
 import cn.letsky.wechat.service.UserService;
 import cn.letsky.wechat.util.ResultUtils;
 import cn.letsky.wechat.vo.ResultVO;
 import cn.letsky.wechat.vo.UserVO;
 import org.springframework.beans.BeanUtils;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
@@ -24,15 +24,10 @@ public class FollowController {
 
     private final FollowService followService;
     private final UserService userService;
-    private final UserHolder userHolder;
 
-    public FollowController(
-            FollowService followService,
-            UserService userService,
-            UserHolder userHolder) {
+    public FollowController(FollowService followService, UserService userService) {
         this.followService = followService;
         this.userService = userService;
-        this.userHolder = userHolder;
     }
 
     /**
@@ -69,15 +64,14 @@ public class FollowController {
         return ResultUtils.success(voList, map);
     }
 
-    @GetMapping()
-    public ResultVO<Map<String, Long>> getFollowAndFans() {
-        String openid = userHolder.get().getOpenid();
+    @GetMapping("/{openid}")
+    public ResponseEntity<Map<String, Long>> getFollowAndFans(@PathVariable String openid) {
         Long followCount = followService.getFollowCount(openid);
         Long fansCount = followService.getFansCount(openid);
         Map<String, Long> map = new HashMap<>();
         map.put("followCount", followCount);
         map.put("fansCount", fansCount);
-        return ResultUtils.success(map);
+        return ResultUtils.ok(map);
     }
 
     /**
@@ -88,11 +82,11 @@ public class FollowController {
      * @return
      */
     @PostMapping
-    public ResultVO<Long> follow (
+    public ResponseEntity<Long> follow(
             @RequestParam("openid") String openid,
             @RequestParam("followId") String followId) {
         Long followCount = followService.follow(openid, followId);
-        return ResultUtils.success(followCount);
+        return ResultUtils.ok(followCount);
     }
 
     /**
@@ -103,11 +97,11 @@ public class FollowController {
      * @return
      */
     @DeleteMapping
-    public ResultVO<Long> unFollow(
+    public ResponseEntity<Long> unFollow(
             @RequestParam("openid") String openid,
             @RequestParam("unFollowId") String unFollowId) {
         Long followCount = followService.unFollow(openid, unFollowId);
-        return ResultUtils.success(followCount);
+        return ResultUtils.ok(followCount);
     }
 
     /**

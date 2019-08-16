@@ -1,6 +1,6 @@
 package cn.letsky.wechat.controller;
 
-import cn.letsky.wechat.model.UserHolder;
+import cn.letsky.wechat.constant.EntityType;
 import cn.letsky.wechat.service.LikeService;
 import cn.letsky.wechat.util.ResultUtils;
 import org.springframework.http.ResponseEntity;
@@ -14,29 +14,28 @@ import java.util.Map;
 public class LikeController {
 
     private final LikeService likeService;
-    private final UserHolder userHolder;
 
-    public LikeController(LikeService likeService,
-                          UserHolder userHolder) {
+    public LikeController(LikeService likeService) {
         this.likeService = likeService;
-        this.userHolder = userHolder;
     }
 
     /**
      * 获取点赞状态
      *
+     * @param openid
      * @param entityType
      * @param entityId
      * @return 0未点赞，1已点赞
      */
     @GetMapping("/status")
     public ResponseEntity<Map<String, Integer>> getLikeStatus(
+            @RequestParam("openid") String openid,
             @RequestParam("entityType") Integer entityType,
             @RequestParam("entityId") Integer entityId) {
 
         Map<String, Integer> map = new HashMap<>();
         Integer liked = likeService.getLikeStatus(
-                userHolder.get().getOpenid(), entityType, entityId
+                openid, entityType, entityId
         );
         map.put("liked", liked);
         return ResultUtils.ok(map);
@@ -51,10 +50,11 @@ public class LikeController {
      */
     @PostMapping("/send")
     public ResponseEntity<Map<String, Long>> like(
+            @RequestParam("openid") String openid,
             @RequestParam("entityType") Integer entityType,
             @RequestParam("entityId") Integer entityId) {
         Map<String, Long> map = new HashMap<>();
-        Long likeNum = likeService.like(userHolder.get().getOpenid(), entityType, entityId);
+        Long likeNum = likeService.like(openid, entityType, entityId);
         map.put("likeNum", likeNum);
         return ResultUtils.ok(map);
     }
@@ -68,10 +68,11 @@ public class LikeController {
      */
     @PostMapping("/cancel")
     public ResponseEntity<Map<String, Long>> cancel(
+            @RequestParam("openid") String openid,
             @RequestParam("entityType") Integer entityType,
             @RequestParam("entityId") Integer entityId) {
         Map<String, Long> map = new HashMap<>();
-        Long likeNum = likeService.cancelLike(userHolder.get().getOpenid(), entityType, entityId);
+        Long likeNum = likeService.cancelLike(openid, entityType, entityId);
         map.put("likeNum", likeNum);
         return ResultUtils.ok(map);
     }
@@ -79,16 +80,14 @@ public class LikeController {
     /**
      * 文章的点赞总数
      *
-     * @param entityType
      * @param entityId
      * @return
      */
-    @GetMapping(params = {"entityType", "entityId"})
+    @GetMapping(params = {"entityId"})
     public ResponseEntity<Map<String, Long>> likeCount(
-            @RequestParam("entityType") Integer entityType,
             @RequestParam("entityId") Integer entityId) {
         Map<String, Long> map = new HashMap<>();
-        Long likeNum = likeService.getCount(entityType, entityId);
+        Long likeNum = likeService.getCount(EntityType.ARTICLE, entityId);
         map.put("likeNum", likeNum);
         return ResultUtils.ok(map);
     }

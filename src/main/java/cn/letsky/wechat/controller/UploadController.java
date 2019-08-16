@@ -27,15 +27,16 @@ public class UploadController {
 
     /**
      * 上传图片的接口
+     * Content-Type应该为multipart/form-data
      *
      * @param files
      * @return
      * @throws org.springframework.web.server.MediaTypeNotSupportedStatusException
      */
-    @PostMapping(value = "/", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<List<String>> uploads(@RequestParam("file") MultipartFile[] files) {
         List<String> list = Arrays.stream(files)
-                .map(file -> uploadImage(file))
+                .map(this::uploadImage)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(list);
     }
