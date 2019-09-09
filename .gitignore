@@ -68,3 +68,4 @@ secrets.yml
 ### log
 *.log
 *.gz
+/src/main/resource/*.yml
