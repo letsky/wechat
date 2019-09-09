@@ -19,7 +19,7 @@
       url: jdbc:mariadb://127.0.0.1:3306/wechat?characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
     jpa:
       show-sql: true
-      open-in-view: true
+      open-in-view: false
     jackson:
       date-format: yyyy-MM-dd HH:mm:ss
     redis:
