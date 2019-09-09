@@ -13,33 +13,34 @@
   ```
   spring:
     datasource:
-      driver-class-name:
-      username:
-      password:
-      url:
+      driver-class-name: org.mariadb.jdbc.Driver
+      username: 
+      password: 
+      url: jdbc:mariadb://127.0.0.1:3306/wechat?characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
     jpa:
-      show-sql:  
-      open-in-view:
+      show-sql: true
+      open-in-view: true
     jackson:
       date-format: yyyy-MM-dd HH:mm:ss
-      time-zone: GMT+8
     redis:
-      database:
-      host:
-      port:
+      database: 0
+      host: 127.0.0.1
+      port: 6379
+    servlet:
+      multipart:
+        max-request-size: 10MB
+        max-file-size: 10MB
   logging:
     file: wechat-dev.log
-  wx:
+  wechat:
     miniapp:
-      config:
-        appid: #enter your appid
-        secret: #enter your secret
-  qiniu:
-    enabled: true
-    access-key: 
-    secret-key: 
-    bucket: 
-    domain: 
+      app-id:
+      secret:
+    qiniu:
+      access-key:
+      secret-key:
+      bucket:
+      domain:
   ```
   Start the project.
   ```
