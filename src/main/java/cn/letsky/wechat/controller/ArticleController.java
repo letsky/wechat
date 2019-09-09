@@ -55,7 +55,6 @@ public class ArticleController {
     public ResponseEntity<List<ArticleVO>> getArticleList(
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "size", defaultValue = "20") int size) {
-
         Page<Article> articlePage = articleService.getPublicArticles(page, size);
         List<ArticleVO> list = articlePage.stream()
                 .map(e -> transform(e, null))
@@ -77,13 +76,13 @@ public class ArticleController {
     }
 
     //获取关注用户的文章
-    @GetMapping("/follows")
+    @GetMapping("/following")
     public ResponseEntity<List<ArticleVO>> getFollowedArticleList(
             @RequestParam(value = "openid") String openid,
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "size", defaultValue = "20") int size) {
         Set<String> ids = followService.getFollows(openid);
-        Page<Article> articlePage = articleService.getFollowUserArticles(ids, page, size);
+        Page<Article> articlePage = articleService.getFollowingArticles(ids, page, size);
         List<ArticleVO> list = articlePage.stream()
                 .map(e -> transform(e, openid))
                 .collect(Collectors.toList());
@@ -105,8 +104,8 @@ public class ArticleController {
     }
 
     //根据文章id获取文章
-    @GetMapping("/{articleId}")
-    public ResponseEntity<ArticleVO> getArticle(@PathVariable("articleId") Integer id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<ArticleVO> getArticle(@PathVariable("id") Integer id) {
         Article article = articleService.getArticle(id);
         return ResultUtils.ok(transform(article, null));
     }
@@ -116,7 +115,7 @@ public class ArticleController {
     public ResponseEntity<Article> postArticle(
             @RequestBody @Valid ArticleForm form, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            log.error("[保存帖子失败]：articleForm={}", form);
+            log.error("[保存文章失败]：articleForm={}", form);
             throw new CommonException(ResultEnum.PARAM_ERROR);
         }
         if (filterUtils.isSensitive(form.getContent())) {
@@ -125,8 +124,8 @@ public class ArticleController {
         Article article = new Article();
         BeanUtils.copyProperties(form, article);
         article.setImg(StringUtils.join(form.getImgs(), "#"));
-        Article result = articleService.post(article);
-        return ResultUtils.ok(result);
+        articleService.post(article);
+        return ResultUtils.ok();
     }
 
     //删除文章

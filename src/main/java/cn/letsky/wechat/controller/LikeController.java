@@ -1,11 +1,13 @@
 package cn.letsky.wechat.controller;
 
 import cn.letsky.wechat.constant.EntityType;
+import cn.letsky.wechat.form.LikeForm;
 import cn.letsky.wechat.service.LikeService;
 import cn.letsky.wechat.util.ResultUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,17 +46,13 @@ public class LikeController {
     /**
      * 点赞
      *
-     * @param entityType
-     * @param entityId
+     * @param likeForm
      * @return 点赞数
      */
-    @PostMapping("/send")
-    public ResponseEntity<Map<String, Long>> like(
-            @RequestParam("openid") String openid,
-            @RequestParam("entityType") Integer entityType,
-            @RequestParam("entityId") Integer entityId) {
+    @PostMapping
+    public ResponseEntity<Map<String, Long>> like(@RequestBody @Valid LikeForm likeForm) {
         Map<String, Long> map = new HashMap<>();
-        Long likeNum = likeService.like(openid, entityType, entityId);
+        Long likeNum = likeService.like(likeForm.getOpenid(), likeForm.getEntityType(), likeForm.getEntityId());
         map.put("likeNum", likeNum);
         return ResultUtils.ok(map);
     }
@@ -62,17 +60,13 @@ public class LikeController {
     /**
      * 取消点赞
      *
-     * @param entityType
-     * @param entityId
+     * @param likeForm
      * @return 点赞数
      */
-    @PostMapping("/cancel")
-    public ResponseEntity<Map<String, Long>> cancel(
-            @RequestParam("openid") String openid,
-            @RequestParam("entityType") Integer entityType,
-            @RequestParam("entityId") Integer entityId) {
+    @DeleteMapping
+    public ResponseEntity<Map<String, Long>> cancel(@RequestBody @Valid LikeForm likeForm) {
         Map<String, Long> map = new HashMap<>();
-        Long likeNum = likeService.cancelLike(openid, entityType, entityId);
+        Long likeNum = likeService.cancelLike(likeForm.getOpenid(), likeForm.getEntityType(), likeForm.getEntityId());
         map.put("likeNum", likeNum);
         return ResultUtils.ok(map);
     }

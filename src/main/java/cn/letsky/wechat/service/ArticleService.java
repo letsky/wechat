@@ -69,9 +69,9 @@ public interface ArticleService {
      * 查询关注的人发表的文章
      *
      * @param ids  关注人的集合
-     * @param page
-     * @param size
+     * @param page 页码
+     * @param size 大小
      * @return
      */
-    Page<Article> getFollowUserArticles(Collection<String> ids, Integer page, Integer size);
+    Page<Article> getFollowingArticles(Collection<String> ids, Integer page, Integer size);
 }

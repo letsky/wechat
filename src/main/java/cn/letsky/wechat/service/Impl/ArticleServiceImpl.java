@@ -68,7 +68,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Page<Article> getFollowUserArticles(Collection<String> ids, Integer page, Integer size) {
+    public Page<Article> getFollowingArticles(Collection<String> ids, Integer page, Integer size) {
         Pageable pageable = PageUtils.getPageable(page, size);
         return articleDao.findAllByOpenidInAndStatusAndVisibleOrderByCreatedDesc(
                 ids, ArticleStatus.NORMAL, Visible.PUBLIC, pageable

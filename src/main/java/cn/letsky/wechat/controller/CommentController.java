@@ -40,7 +40,7 @@ public class CommentController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CommentVO>> getComment(
+    public ResponseEntity<List<CommentVO>> getComments(
             @RequestParam("entityType") Integer entityType,
             @RequestParam("entityId") Integer entityId,
             @RequestParam(value = "page", defaultValue = "1") Integer page,
@@ -55,7 +55,7 @@ public class CommentController {
         commentVOList.stream().forEach(e -> {
             Page<Comment> childrenPage =
                     commentService.getComments(EntityType.COMMENT, e.getId(), pageable);
-            if (!childrenPage.isEmpty()){
+            if (!childrenPage.isEmpty()) {
                 List<CommentVO> childrenComment = childrenPage.stream()
                         .map(c -> transform(c, new CommentVO()))
                         .collect(Collectors.toList());
@@ -74,20 +74,20 @@ public class CommentController {
         if (filterUtils.isSensitive(commentForm.getContent())) {
             throw new CommonException(ResultEnum.SENSITIVE_WORD);
         }
-        Comment res = commentService.post(
+        commentService.post(
                 commentForm.getOpenid(), commentForm.getContent(),
                 commentForm.getEntityType(), commentForm.getEntityId());
-        return ResultUtils.ok(res);
+        return ResultUtils.ok();
     }
 
-    private CommentVO transform(Comment comment, CommentVO commentVO){
+    private CommentVO transform(Comment comment, CommentVO commentVO) {
         BeanUtils.copyProperties(comment, commentVO);
         User user = userService.getUser(comment.getUid())
                 .orElseThrow(EntityNotFoundException::new);
-        if (user == null){
+        if (user == null) {
             return null;
         }
-        commentVO.setUid(user.getOpenid());
+        commentVO.setOpenid(user.getOpenid());
         commentVO.setNickname(user.getNickname());
         commentVO.setAvatarUrl(user.getAvatarUrl());
         return commentVO;

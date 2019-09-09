@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ArticleForm implements Form {
+public class ArticleForm {
 
     /**
      * 用户openid

@@ -21,7 +21,7 @@ public class CommentVO implements Serializable {
     /**
      * 评论用户id
      */
-    private String uid;
+    private String openid;
 
     /**
      * 评论者名字

@@ -9,13 +9,10 @@ import javax.validation.constraints.NotBlank;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommentForm {
+public class LikeForm {
 
     @NotBlank(message = "openid不能为空")
     private String openid;
-
-    @NotBlank(message = "评论不能为空")
-    private String content;
 
     private Integer entityType;
 

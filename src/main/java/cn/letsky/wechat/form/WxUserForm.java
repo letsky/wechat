@@ -9,7 +9,7 @@ import javax.validation.constraints.NotEmpty;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class WxUserForm implements Form {
+public class WxUserForm {
 
     @NotEmpty(message = "openid为null")
     private String openid;
