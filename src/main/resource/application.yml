@@ -3,7 +3,7 @@ spring:
     driver-class-name: org.mariadb.jdbc.Driver
     username: root
     password: 1234
-    url: jdbc:mysql://127.0.0.1:3306/wechat?characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
+    url: jdbc:mariadb://127.0.0.1:3306/wechat?characterEncoding=utf-8&useSSL=false&serverTimezone=UTC
   jpa:
     show-sql: true
     open-in-view: true
@@ -21,10 +21,10 @@ logging:
   file: wechat-dev.log
 wechat:
   miniapp:
-    app-id: wx0cc8960bc84466a1
-    secret: e7786b74eb1293e2eabd6155fcfd294d
+    app-id:
+    secret:
   qiniu:
-    access-key: dNM2QQ0Y_tA5f4dVeIy9pYBi3PMKYczXJoF8bJiz
-    secret-key: _E205cCsUnO88Q6Xb2AzlquAvFgGUyU0t0wZ7lRn
-    bucket: wechat-dev
-    domain: http://img-dev.letsky.cn/
+    access-key:
+    secret-key:
+    bucket:
+    domain:
