@@ -37,4 +37,6 @@ public interface UserService {
      * @param openid
      */
     void delete(String openid);
+
+    boolean checkUser(String openid);
 }

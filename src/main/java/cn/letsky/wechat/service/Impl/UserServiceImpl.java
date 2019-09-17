@@ -48,4 +48,9 @@ public class UserServiceImpl implements UserService {
 		userDao.delete(user);
 	}
 
+	@Override
+	public boolean checkUser(String openid) {
+		return userDao.findById(openid).isPresent();
+	}
+
 }

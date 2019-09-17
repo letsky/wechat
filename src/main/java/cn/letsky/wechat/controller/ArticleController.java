@@ -81,7 +81,7 @@ public class ArticleController {
             @RequestParam(value = "openid") String openid,
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "size", defaultValue = "20") int size) {
-        Set<String> ids = followService.getFollows(openid);
+        Set<String> ids = followService.getFollowing(openid);
         Page<Article> articlePage = articleService.getFollowingArticles(ids, page, size);
         List<ArticleVO> list = articlePage.stream()
                 .map(e -> transform(e, openid))
@@ -172,7 +172,7 @@ public class ArticleController {
             //是否点赞
             liked = likeService.getLikeStatus(openid, EntityType.ARTICLE, article.getId());
             //是否关注
-            followed = followService.isFollowed(openid, articleUserOpenid);
+            followed = (followService.isFollowing(openid, articleUserOpenid)) ? UserStatus.FOLLOWING : UserStatus.UNFOLLOW;
             //是否显示关注按钮
             if (openid.equals(articleUserOpenid)) {
                 showFollowButton = false;

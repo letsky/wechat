@@ -22,28 +22,6 @@ public class LikeController {
     }
 
     /**
-     * 获取点赞状态
-     *
-     * @param openid
-     * @param entityType
-     * @param entityId
-     * @return 0未点赞，1已点赞
-     */
-    @GetMapping("/status")
-    public ResponseEntity<Map<String, Integer>> getLikeStatus(
-            @RequestParam("openid") String openid,
-            @RequestParam("entityType") Integer entityType,
-            @RequestParam("entityId") Integer entityId) {
-
-        Map<String, Integer> map = new HashMap<>();
-        Integer liked = likeService.getLikeStatus(
-                openid, entityType, entityId
-        );
-        map.put("liked", liked);
-        return ResultUtils.ok(map);
-    }
-
-    /**
      * 点赞
      *
      * @param likeForm

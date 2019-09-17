@@ -7,36 +7,36 @@ public interface FollowService {
     /**
      * 关注
      *
-     * @param openid 关注人openid
-     * @param follow 被关注人openid
+     * @param fromUser 关注人openid
+     * @param toUser 被关注人openid
      * @return
      */
-    Long follow(String openid, String follow);
+    void follow(String fromUser, String toUser);
 
     /**
      * 取消关注
      *
-     * @param openid   取消关注人openid
-     * @param unFollow 被取消关注人openid
+     * @param fromUser   取消关注人openid
+     * @param toUser 被取消关注人openid
      * @return
      */
-    Long unFollow(String openid, String unFollow);
+    void unFollow(String fromUser, String toUser);
 
     /**
-     * 获取给定人的关注数
+     * 获取已关注的用户
      *
      * @param openid
      * @return
      */
-    Set<String> getFollows(String openid);
+    Set<String> getFollowing(String openid);
 
     /**
-     * 获取给定人的粉丝数
+     * 获取粉丝
      *
      * @param openid
      * @return
      */
-    Set<String> getFans(String openid);
+    Set<String> getFollowers(String openid);
 
     /**
      * 获取关注用户人数
@@ -44,7 +44,7 @@ public interface FollowService {
      * @param openid
      * @return
      */
-    Long getFollowCount(String openid);
+    Long getFollowingCount(String openid);
 
     /**
      * 获取粉丝人数
@@ -52,14 +52,23 @@ public interface FollowService {
      * @param openid
      * @return
      */
-    Long getFansCount(String openid);
+    Long getFollowersCount(String openid);
 
     /**
      * 判断是否关注
      *
-     * @param openid
-     * @param anotherOpenid
+     * @param fromUser
+     * @param toUser
      * @return
      */
-    Integer isFollowed(String openid, String anotherOpenid);
+    boolean isFollowing(String fromUser, String toUser);
+
+    /**
+     * 是否互相关注
+     *
+     * @param fromUser
+     * @param toUser
+     * @return
+     */
+    boolean isMutualFollowing(String fromUser, String toUser);
 }

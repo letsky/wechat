@@ -8,7 +8,7 @@ public class UserStatus {
     /**
      * 关注
      */
-    public static final Integer FOLLOW = 0;
+    public static final Integer FOLLOWING = 0;
 
     /**
      * 非关注

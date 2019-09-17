@@ -9,7 +9,6 @@ import cn.letsky.wechat.form.WxUserForm;
 import cn.letsky.wechat.model.User;
 import cn.letsky.wechat.service.UserService;
 import cn.letsky.wechat.util.ResultUtils;
-import cn.letsky.wechat.vo.UserVO;
 import me.chanjar.weixin.common.error.WxErrorException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -17,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
@@ -64,15 +62,4 @@ public class WxController {
         userService.save(user);
         return ResultUtils.ok();
     }
-
-    @GetMapping("/users/{openid}")
-    public ResponseEntity<UserVO> getUserInfo(@PathVariable String openid) {
-        //TODO
-        User user = userService.getUser(openid)
-                .orElseThrow(EntityNotFoundException::new);
-        UserVO userVO = new UserVO();
-        BeanUtils.copyProperties(user, userVO);
-        return ResultUtils.ok(userVO);
-    }
-
 }

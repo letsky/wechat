@@ -1,8 +1,10 @@
 package cn.letsky.wechat.service.Impl;
 
-import cn.letsky.wechat.constant.status.UserStatus;
+import cn.letsky.wechat.exception.CommonException;
 import cn.letsky.wechat.service.FollowService;
-import org.springframework.data.redis.core.RedisTemplate;
+import cn.letsky.wechat.service.UserService;
+import org.springframework.data.redis.core.SetOperations;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -11,74 +13,91 @@ import java.util.Set;
 public class FollowServiceImpl implements FollowService {
 
     private static final String SPLIT = ":";
-    private static final String FOLLOW = "follow";
-    private static final String FANS = "fans";
+    //正在关注的
+    private static final String FOLLOWING = "following";
+    //关注我的
+    private static final String FOLLOWERS = "followers";
 
-    private final RedisTemplate<String, String> redisTemplate;
+    private final SetOperations<String, String> setOperations;
+    private final UserService userService;
 
-    public FollowServiceImpl(RedisTemplate<String, String> redisTemplate) {
-        this.redisTemplate = redisTemplate;
+    public FollowServiceImpl(StringRedisTemplate redisTemplate, UserService userService) {
+        this.setOperations = redisTemplate.opsForSet();
+        this.userService = userService;
     }
 
     @Override
-    public Long follow(String openid, String follow) {
-        String followKey = getFollowKey(openid);
-        String fansKey = getFansKey(follow);
-        Long followCount = redisTemplate.opsForSet().add(followKey, follow);
-        redisTemplate.opsForSet().add(fansKey, openid);
-        return followCount;
-    }
-
-    @Override
-    public Long unFollow(String openid, String unFollow) {
-        String followKey = getFollowKey(openid);
-        String fansKey = getFansKey(unFollow);
-        Long followCount = redisTemplate.opsForSet().remove(followKey, unFollow);
-        redisTemplate.opsForSet().remove(fansKey, openid);
-        return followCount;
-    }
-
-    @Override
-    public Set<String> getFollows(String openid) {
-        return redisTemplate.opsForSet().members(getFollowKey(openid));
-    }
-
-    @Override
-    public Set<String> getFans(String openid) {
-        return redisTemplate.opsForSet().members(getFansKey(openid));
-    }
-
-    @Override
-    public Long getFollowCount(String openid) {
-        return redisTemplate.opsForSet().size(getFollowKey(openid));
-    }
-
-    @Override
-    public Long getFansCount(String openid) {
-        return redisTemplate.opsForSet().size(getFansKey(openid));
-    }
-
-    @Override
-    public Integer isFollowed(String openid, String anotherOpenid) {
-        String key = getFollowKey(openid);
-        boolean result = redisTemplate.opsForSet().isMember(key, anotherOpenid);
-        if (result){
-            return UserStatus.FOLLOW;
+    public void follow(String fromUser, String toUser) {
+        if (fromUser.equals(toUser)) {
+            throw new CommonException("不能关注自己哦！");
         }
-        return UserStatus.UNFOLLOW;
+        boolean r1 = userService.checkUser(fromUser);
+        boolean r2 = userService.checkUser(toUser);
+        if (!(r1 && r2)) {
+            throw new CommonException("用户不存在");
+        }
+        String followKey = getFollowingKey(fromUser);
+        String fansKey = getFollowersKey(toUser);
+        setOperations.add(followKey, toUser);
+        setOperations.add(fansKey, fromUser);
+    }
+
+    @Override
+    public void unFollow(String fromUser, String toUser) {
+        String followKey = getFollowingKey(fromUser);
+        String fansKey = getFollowersKey(toUser);
+        setOperations.remove(followKey, toUser);
+        setOperations.remove(fansKey, fromUser);
+    }
+
+    @Override
+    public Set<String> getFollowing(String openid) {
+        return setOperations.members(getFollowingKey(openid));
+    }
+
+    @Override
+    public Set<String> getFollowers(String openid) {
+        return setOperations.members(getFollowersKey(openid));
+    }
+
+    @Override
+    public Long getFollowingCount(String openid) {
+        return setOperations.size(getFollowingKey(openid));
+    }
+
+    @Override
+    public Long getFollowersCount(String openid) {
+        return setOperations.size(getFollowersKey(openid));
+    }
+
+    @Override
+    public boolean isFollowing(String fromUser, String toUser) {
+        String key = getFollowingKey(fromUser);
+        return setOperations.isMember(key, toUser);
+    }
+
+    @Override
+    public boolean isMutualFollowing(String fromUser, String toUser) {
+        String followingKey = getFollowingKey(fromUser);
+        String followersKey = getFollowersKey(fromUser);
+        Boolean r1 = setOperations.isMember(followingKey, toUser);
+        Boolean r2 = setOperations.isMember(followersKey, toUser);
+        if (r1 && r2) {
+            return true;
+        }
+        return false;
     }
 
     /**
      * 获取存储在redis上关注的key
-     * 格式：follow:<openid>:<followId>
      * @param openid
      * @return
      */
-    private String getFollowKey(String openid){
+    private String getFollowingKey(String openid) {
         StringBuffer sb = new StringBuffer();
-        sb.append(FOLLOW)
+        sb.append(openid)
                 .append(SPLIT)
-                .append(openid);
+                .append(FOLLOWING);
         return sb.toString();
     }
 
@@ -87,11 +106,11 @@ public class FollowServiceImpl implements FollowService {
      * @param openid
      * @return
      */
-    private String getFansKey(String openid){
+    private String getFollowersKey(String openid) {
         StringBuffer sb = new StringBuffer();
-        sb.append(FANS)
+        sb.append(openid)
                 .append(SPLIT)
-                .append(openid);
+                .append(FOLLOWERS);
         return sb.toString();
     }
 }
