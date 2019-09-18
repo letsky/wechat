@@ -71,4 +71,13 @@ public interface FollowService {
      * @return
      */
     boolean isMutualFollowing(String fromUser, String toUser);
+
+    /**
+     * 共同关注
+     *
+     * @param user  用户
+     * @param other 用户
+     * @return
+     */
+    Set<String> commonFollowing(String user, String other);
 }

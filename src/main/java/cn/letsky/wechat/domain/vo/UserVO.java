@@ -4,11 +4,14 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Data
 @NoArgsConstructor
-public class UserVO {
+public class UserVO implements Serializable {
+
+    private static final long serialVersionUID = 8667616947001969L;
 
     /**
      * 微信用户唯一标识

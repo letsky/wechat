@@ -11,14 +11,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/following")
 public class FollowController {
 
     private final FollowService followService;
@@ -35,8 +32,8 @@ public class FollowController {
      * @param followForm
      * @return
      */
-    @PostMapping
-    public ResponseEntity<Long> follow(@RequestBody @Valid FollowForm followForm, BindingResult bindingResult) {
+    @PutMapping(value = "/following")
+    public ResponseEntity follow(@RequestBody @Valid FollowForm followForm, BindingResult bindingResult) {
         followService.follow(followForm.getFromUser(), followForm.getToUser());
         return ResultUtils.ok();
     }
@@ -47,70 +44,79 @@ public class FollowController {
      * @param followForm
      * @return
      */
-    @DeleteMapping
-    public ResponseEntity<Long> unFollow(@RequestBody @Valid FollowForm followForm, BindingResult bindingResult) {
+    @DeleteMapping(value = "/following")
+    public ResponseEntity unFollow(@RequestBody @Valid FollowForm followForm, BindingResult bindingResult) {
         followService.unFollow(followForm.getFromUser(), followForm.getToUser());
         return ResultUtils.ok();
     }
 
-//    /**
-//     * 获取给定用户的关注用户
-//     *
-//     * @param openid 给定用户的openid
-//     * @return
-//     */
-//    @GetMapping("/{openid}/following")
-//    public ResultVO<List<UserVO>> getFollows(
-//            @PathVariable("openid") String openid) {
-//        Set<String> followIds = followService.getFollows(openid);
-//        List<UserVO> voList = getUsers(followIds);
-//        Map<String, Long> map = new HashMap<>();
-//        map.put("count", followService.getFollowCount(openid));
-//
-//        return ResultUtils.success(voList, map);
-//    }
-
-//    /**
-//     * 获取粉丝
-//     *
-//     * @param openid
-//     * @return
-//     */
-//    @GetMapping("/{openid}/followers")
-//    public ResultVO<List<UserVO>> getFans(@PathVariable("openid") String openid) {
-//        Set<String> fansIds = followService.getFans(openid);
-//        List<UserVO> voList = getUsers(fansIds);
-//        Map<String, Long> map = new HashMap<>();
-//        map.put("count", followService.getFansCount(openid));
-//
-//        return ResultUtils.success(voList, map);
-//    }
-//
-//    @GetMapping("/getFollowInfo/{openid}")
-//    public ResponseEntity<Map<String, Long>> getFollowAndFans(@PathVariable String openid) {
-//        Long followCount = followService.getFollowCount(openid);
-//        Long fansCount = followService.getFansCount(openid);
-//        Map<String, Long> map = new HashMap<>();
-//        map.put("followCount", followCount);
-//        map.put("fansCount", fansCount);
-//        return ResultUtils.ok(map);
-//    }
-
-
-
     /**
-     * 将给定的id集合转换成UserVO对象
+     * 获取给定用户的关注用户
      *
-     * @param ids 用户id集合
+     * @param openid 给定用户的openid
      * @return
      */
-    private List<UserVO> getUsers(Set<String> ids) {
-        List<UserVO> userVOList = ids.stream().map(id -> {
-            User user = userService.getUser(id).orElseThrow(EntityNotFoundException::new);
+    @GetMapping(value = "/users/{openid}/following")
+    public ResponseEntity<List<UserVO>> getFollowing(@PathVariable("openid") String openid) {
+        Set<String> followingIds = followService.getFollowing(openid);
+        List<UserVO> collect = getUserVOS(followingIds);
+        return ResultUtils.ok(collect);
+    }
+
+    /**
+     * 获取粉丝
+     *
+     * @param openid
+     * @return
+     */
+    @GetMapping(value = "/users/{openid}/followers")
+    public ResponseEntity<List<UserVO>> getFollowers(@PathVariable("openid") String openid) {
+        Set<String> followersIds = followService.getFollowers(openid);
+        List<UserVO> collect = getUserVOS(followersIds);
+        return ResultUtils.ok(collect);
+    }
+
+    /**
+     * 共同关注
+     *
+     * @param one
+     * @param other
+     * @return
+     */
+    @GetMapping(value = "/following/common")
+    public ResponseEntity<List<UserVO>> getCommonFriends(
+            @RequestParam("one") String one, @RequestParam("other") String other) {
+        Set<String> commonFollowing = followService.commonFollowing(one, other);
+        List<UserVO> collect = getUserVOS(commonFollowing);
+        return ResultUtils.ok(collect);
+    }
+
+    /**
+     * 获取关注信息
+     *
+     * @param openid
+     * @return
+     */
+    @GetMapping("/following/info")
+    public ResponseEntity<Map<String, Long>> getInfo(@RequestParam("openid") String openid) {
+        Long following = followService.getFollowingCount(openid);
+        Long followers = followService.getFollowersCount(openid);
+        Map<String, Long> map = new HashMap<>();
+        map.put("following", following);
+        map.put("followers", followers);
+        return ResultUtils.ok(map);
+    }
+
+
+    private List<UserVO> getUserVOS(Set<String> ids) {
+        return ids.stream().map(id -> {
+            User user = userService.getUser(id).orElse(null);
             UserVO userVO = new UserVO();
-            BeanUtils.copyProperties(user, userVO);
-            return userVO;
-        }).collect(Collectors.toList());
-        return userVOList;
+            if (user != null) {
+                BeanUtils.copyProperties(user, userVO);
+                return userVO;
+            }
+            return null;
+        }).filter(Objects::nonNull).collect(Collectors.toList());
     }
 }

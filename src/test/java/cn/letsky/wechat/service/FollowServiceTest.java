@@ -38,6 +38,7 @@ public class FollowServiceTest {
     public void getFollowers() {
         Set<String> followers = followService.getFollowers(FROM_USER);
         System.out.println(followers);
+        System.out.println(followers.isEmpty());
     }
 
     @Test
@@ -62,5 +63,11 @@ public class FollowServiceTest {
     public void isMutualFollowing() {
         boolean mutualFollowing = followService.isMutualFollowing(FROM_USER, "b");
         System.out.println(mutualFollowing);
+    }
+
+    @Test
+    public void commonFriends() {
+        Set<String> strings = followService.commonFollowing(FROM_USER, TO_USER);
+        System.out.println(strings);
     }
 }

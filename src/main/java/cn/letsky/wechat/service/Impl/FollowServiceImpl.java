@@ -7,6 +7,7 @@ import org.springframework.data.redis.core.SetOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 
@@ -58,7 +59,8 @@ public class FollowServiceImpl implements FollowService {
 
     @Override
     public Set<String> getFollowers(String openid) {
-        return setOperations.members(getFollowersKey(openid));
+        Set<String> members = setOperations.members(getFollowersKey(openid));
+        return members == null ? Collections.emptySet() : members;
     }
 
     @Override
@@ -87,6 +89,14 @@ public class FollowServiceImpl implements FollowService {
         Boolean r1 = Optional.ofNullable(setOperations.isMember(followingKey, toUser)).orElse(false);
         Boolean r2 = Optional.ofNullable(setOperations.isMember(followersKey, toUser)).orElse(false);
         return r1 && r2;
+    }
+
+    @Override
+    public Set<String> commonFollowing(String user, String other) {
+        String userFollowingKey = getFollowingKey(user);
+        String otherFollowingKey = getFollowingKey(other);
+        Set<String> intersect = setOperations.intersect(userFollowingKey, otherFollowingKey);
+        return intersect == null ? Collections.emptySet() : intersect;
     }
 
     /**
