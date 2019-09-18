@@ -30,6 +30,12 @@
       multipart:
         max-request-size: 10MB
         max-file-size: 10MB
+    data:
+      web:
+        pageable:
+          default-page-size: 20
+          one-indexed-parameters: true
+          max-page-size: 100
   logging:
     file: wechat-dev.log
   wechat:

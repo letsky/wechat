@@ -2,6 +2,7 @@ package cn.letsky.wechat.service;
 
 import cn.letsky.wechat.domain.model.User;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
@@ -25,11 +26,10 @@ public interface UserService {
     /**
      * 获取用户列表
      *
-     * @param page 页码
-     * @param size 每页的数量
+     * @param pageable
      * @return
      */
-    Page<User> getUsers(Integer page, Integer size);
+    Page<User> getUsers(Pageable pageable);
 
     /**
      * 删除用户

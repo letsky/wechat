@@ -10,6 +10,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,14 +45,16 @@ public class ArticleServiceImplTest {
 
     @Test
     public void findAll() {
-        Page<Article> articlePage = articleService.getPublicArticles(1, 20);
+        Pageable pageable = PageRequest.of(1, 20);
+        Page<Article> articlePage = articleService.getPublicArticles(pageable);
         Long num = articlePage.getTotalElements();
         Assert.assertNotEquals(Long.valueOf(0), num);
     }
 
     @Test
     public void findAllByOpenid() {
-        Page<Article> articlePage = articleService.getUserArticles(OPENId, 1, 20);
+        Pageable pageable = PageRequest.of(1, 20);
+        Page<Article> articlePage = articleService.getUserArticles(OPENId, pageable);
         Long num = articlePage.getTotalElements();
         Assert.assertNotEquals(Long.valueOf(0), num);
     }

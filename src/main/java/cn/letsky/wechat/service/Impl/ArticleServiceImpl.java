@@ -5,7 +5,6 @@ import cn.letsky.wechat.constant.status.ArticleStatus;
 import cn.letsky.wechat.domain.model.Article;
 import cn.letsky.wechat.repository.ArticleRepository;
 import cn.letsky.wechat.service.ArticleService;
-import cn.letsky.wechat.util.PageUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,20 +34,18 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Page<Article> getPublicArticles(Integer page, Integer size) {
-        return getArticles(Visible.PUBLIC, page, size);
+    public Page<Article> getPublicArticles(Pageable pageable) {
+        return getArticles(Visible.PUBLIC, pageable);
     }
 
     @Override
-    public Page<Article> getArticles(Integer visible, Integer page, Integer size) {
-        Pageable pageable = PageUtils.getPageable(page, size);
+    public Page<Article> getArticles(Integer visible, Pageable pageable) {
         return articleRepository.findAllByStatusAndVisibleOrderByCreatedDesc(
                 ArticleStatus.NORMAL, visible, pageable);
     }
 
     @Override
-    public Page<Article> getUserArticles(String openid, Integer page, Integer size) {
-        Pageable pageable = PageUtils.getPageable(page, size);
+    public Page<Article> getUserArticles(String openid, Pageable pageable) {
         return articleRepository.findAllByOpenidOrderByCreatedDesc(openid, pageable);
     }
 
@@ -68,8 +65,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Page<Article> getFollowingArticles(Collection<String> ids, Integer page, Integer size) {
-        Pageable pageable = PageUtils.getPageable(page, size);
+    public Page<Article> getFollowingArticles(Collection<String> ids, Pageable pageable) {
         return articleRepository.findAllByOpenidInAndStatusAndVisibleOrderByCreatedDesc(
                 ids, ArticleStatus.NORMAL, Visible.PUBLIC, pageable
         );

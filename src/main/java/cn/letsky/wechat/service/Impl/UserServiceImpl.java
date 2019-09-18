@@ -3,7 +3,6 @@ package cn.letsky.wechat.service.Impl;
 import cn.letsky.wechat.domain.model.User;
 import cn.letsky.wechat.repository.UserRepository;
 import cn.letsky.wechat.service.UserService;
-import cn.letsky.wechat.util.PageUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -36,8 +35,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Page<User> getUsers(Integer page, Integer size) {
-		Pageable pageable = PageUtils.getPageable(page, size);
+	public Page<User> getUsers(Pageable pageable) {
 		return userRepository.findAll(pageable);
 	}
 

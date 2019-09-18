@@ -10,7 +10,6 @@ import cn.letsky.wechat.exception.CommonException;
 import cn.letsky.wechat.service.CommentService;
 import cn.letsky.wechat.service.UserService;
 import cn.letsky.wechat.util.FilterUtils;
-import cn.letsky.wechat.util.PageUtils;
 import cn.letsky.wechat.util.ResultUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
@@ -43,10 +42,8 @@ public class CommentController {
     public ResponseEntity<List<CommentVO>> getComments(
             @RequestParam("entityType") Integer entityType,
             @RequestParam("entityId") Integer entityId,
-            @RequestParam(value = "page", defaultValue = "1") Integer page,
-            @RequestParam(value = "size", defaultValue = "20") Integer size) {
+            Pageable pageable) {
 
-        Pageable pageable = PageUtils.getPageable(page, size);
         Page<Comment> commentPage =
                 commentService.getComments(entityType, entityId, pageable);
         List<CommentVO> commentVOList = commentPage.stream()

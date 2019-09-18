@@ -16,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -52,10 +54,8 @@ public class ArticleController {
 
     //未登录展示的文章
     @GetMapping
-    public ResponseEntity<List<ArticleVO>> getArticleList(
-            @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "size", defaultValue = "20") int size) {
-        Page<Article> articlePage = articleService.getPublicArticles(page, size);
+    public ResponseEntity<List<ArticleVO>> getArticleList(Pageable pageable) {
+        Page<Article> articlePage = articleService.getPublicArticles(pageable);
         List<ArticleVO> list = articlePage.stream()
                 .map(e -> transform(e, null))
                 .collect(Collectors.toList());
@@ -65,10 +65,8 @@ public class ArticleController {
     //登录后展示的文章
     @GetMapping(params = {"openid"})
     public ResponseEntity getArticleList(
-            @RequestParam(value = "openid") String openid,
-            @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "size", defaultValue = "20") int size) {
-        Page<Article> publicArticles = articleService.getPublicArticles(page, size);
+            @RequestParam(value = "openid") String openid, Pageable pageable) {
+        Page<Article> publicArticles = articleService.getPublicArticles(pageable);
         List<ArticleVO> collect = publicArticles.stream()
                 .map(e -> transform(e, openid))
                 .collect(Collectors.toList());
@@ -79,10 +77,9 @@ public class ArticleController {
     @GetMapping("/following")
     public ResponseEntity<List<ArticleVO>> getFollowedArticleList(
             @RequestParam(value = "openid") String openid,
-            @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "size", defaultValue = "20") int size) {
+            @PageableDefault(size = 20) Pageable pageable) {
         Set<String> ids = followService.getFollowing(openid);
-        Page<Article> articlePage = articleService.getFollowingArticles(ids, page, size);
+        Page<Article> articlePage = articleService.getFollowingArticles(ids, pageable);
         List<ArticleVO> list = articlePage.stream()
                 .map(e -> transform(e, openid))
                 .collect(Collectors.toList());
@@ -93,10 +90,9 @@ public class ArticleController {
     @GetMapping("/users/{openid}")
     public ResponseEntity<List<ArticleVO>> getArticleListByOpenid(
             @PathVariable("openid") String openid,
-            @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "size", defaultValue = "20") int size) {
+            @PageableDefault(size = 20) Pageable pageable) {
 
-        Page<Article> articlePage = articleService.getUserArticles(openid, page, size);
+        Page<Article> articlePage = articleService.getUserArticles(openid, pageable);
         List<ArticleVO> list = articlePage.get()
                 .map(e -> transform(e, openid))
                 .collect(Collectors.toList());

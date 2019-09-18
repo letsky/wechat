@@ -3,6 +3,7 @@ package cn.letsky.wechat.service;
 import cn.letsky.wechat.constant.status.CommentStatus;
 import cn.letsky.wechat.domain.model.Article;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Collection;
 
@@ -19,36 +20,33 @@ public interface ArticleService {
     /**
      * 获取文章列表
      *
-     * @param page 页码
-     * @param size 每页的数量
+     * @param pageable
      * @return 可见性为public的文章列表
      * <p>
      * {@link CommentStatus#ALLOW}
      */
-    Page<Article> getPublicArticles(Integer page, Integer size);
+    Page<Article> getPublicArticles(Pageable pageable);
 
     /**
      * 获取文章列表
      *
      * @param visible 文章可见性
-     * @param page    页码
-     * @param size    每页的数量
+     * @param pageable
      * @return 给定文章可见性的文章列表
      * <p>
      * {@link CommentStatus#ALLOW}
      * {@link CommentStatus#NOT_ALLOW}
      */
-    Page<Article> getArticles(Integer visible, Integer page, Integer size);
+    Page<Article> getArticles(Integer visible, Pageable pageable);
 
     /**
      * 返回给定用户所有已发送的文章
      *
      * @param openid 微信用户id
-     * @param page   页码
-     * @param size   每页的数量
+     * @param pageable
      * @return 给定用户的文章列表
      */
-    Page<Article> getUserArticles(String openid, Integer page, Integer size);
+    Page<Article> getUserArticles(String openid, Pageable pageable);
 
     /**
      * 发表文章
@@ -69,9 +67,8 @@ public interface ArticleService {
      * 查询关注的人发表的文章
      *
      * @param ids  关注人的集合
-     * @param page 页码
-     * @param size 大小
+     * @param pageable
      * @return
      */
-    Page<Article> getFollowingArticles(Collection<String> ids, Integer page, Integer size);
+    Page<Article> getFollowingArticles(Collection<String> ids, Pageable pageable);
 }

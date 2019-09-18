@@ -9,6 +9,8 @@ import cn.letsky.wechat.service.UserService;
 import cn.letsky.wechat.util.ResultUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,9 +35,8 @@ public class ArticleAdminController {
     }
 
     @GetMapping
-    public ResultVO getList(@RequestParam(value = "page", defaultValue = "1") Integer page,
-                            @RequestParam(value = "size", defaultValue = "20") Integer size) {
-        Page<Article> articlePage = articleService.getPublicArticles(page, size);
+    public ResultVO getList(@PageableDefault(size = 20) Pageable pageable) {
+        Page<Article> articlePage = articleService.getPublicArticles(pageable);
         Long count = articlePage.getTotalElements();
         Map<String, Long> map = new HashMap<>();
         map.put("count", count);
