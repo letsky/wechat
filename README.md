@@ -46,3 +46,12 @@
   ```
   mvn spring-boot:run
   ```
+## Documents
+API document: https://www.yuque.com/letsky/vtswur/zimd0b
+Introduction document: https://www.yuque.com/letsky/vtswur/gh46y9
+
+## Development environment
+- JDK 1.8
+- MariaDB 10.3
+- Spring Boot 2.x
+- Redis
