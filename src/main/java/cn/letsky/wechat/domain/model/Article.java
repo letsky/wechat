@@ -1,13 +1,11 @@
-package cn.letsky.wechat.model;
-
-import java.io.Serializable;
-import java.util.Date;
-
-import javax.persistence.*;
+package cn.letsky.wechat.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Date;
 
 @Data
 @Entity

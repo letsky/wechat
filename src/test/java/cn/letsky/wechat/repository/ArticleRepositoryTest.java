@@ -1,9 +1,8 @@
-package cn.letsky.wechat.dao;
+package cn.letsky.wechat.repository;
 
 import cn.letsky.wechat.constant.Visible;
 import cn.letsky.wechat.constant.status.ArticleStatus;
-import cn.letsky.wechat.model.Article;
-import org.junit.Assert;
+import cn.letsky.wechat.domain.model.Article;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,15 +11,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
+
 import java.util.HashSet;
 import java.util.Set;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class ArticleDaoTest {
+public class ArticleRepositoryTest {
 
 	@Autowired
-	private ArticleDao articleDao;
+	private ArticleRepository articleRepository;
 
 	@Test
 	public void findAllByStatusAndVisibleOrderByCreatedDesc() {
@@ -38,7 +38,7 @@ public class ArticleDaoTest {
 		set.add("oNSbI5XkGJPe6TQ2GSTj7O8zLPVo");
 		set.add("oNSbI5XYNzS2TsuQp47ZuJeJbj9g");
 		Pageable pageable = PageRequest.of(0, 20);
-		Page<Article> articlePage =  articleDao.findAllByOpenidInAndStatusAndVisibleOrderByCreatedDesc(
+		Page<Article> articlePage = articleRepository.findAllByOpenidInAndStatusAndVisibleOrderByCreatedDesc(
 				set, ArticleStatus.NORMAL, Visible.PUBLIC, pageable
 		);
 		articlePage.get().forEach(System.out::println);

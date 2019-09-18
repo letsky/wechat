@@ -2,8 +2,8 @@ package cn.letsky.wechat.service.Impl;
 
 import cn.letsky.wechat.constant.Visible;
 import cn.letsky.wechat.constant.status.ArticleStatus;
-import cn.letsky.wechat.dao.ArticleDao;
-import cn.letsky.wechat.model.Article;
+import cn.letsky.wechat.domain.model.Article;
+import cn.letsky.wechat.repository.ArticleRepository;
 import cn.letsky.wechat.service.ArticleService;
 import cn.letsky.wechat.util.PageUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -22,15 +22,15 @@ import java.util.Collection;
 @Service
 public class ArticleServiceImpl implements ArticleService {
 
-    private final ArticleDao articleDao;
+    private final ArticleRepository articleRepository;
 
-    public ArticleServiceImpl(ArticleDao articleDao) {
-        this.articleDao = articleDao;
+    public ArticleServiceImpl(ArticleRepository articleRepository) {
+        this.articleRepository = articleRepository;
     }
 
     @Override
     public Article getArticle(Integer id) {
-        return articleDao.findById(id)
+        return articleRepository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
     }
 
@@ -42,35 +42,35 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public Page<Article> getArticles(Integer visible, Integer page, Integer size) {
         Pageable pageable = PageUtils.getPageable(page, size);
-        return articleDao.findAllByStatusAndVisibleOrderByCreatedDesc(
+        return articleRepository.findAllByStatusAndVisibleOrderByCreatedDesc(
                 ArticleStatus.NORMAL, visible, pageable);
     }
 
     @Override
     public Page<Article> getUserArticles(String openid, Integer page, Integer size) {
         Pageable pageable = PageUtils.getPageable(page, size);
-        return articleDao.findAllByOpenidOrderByCreatedDesc(openid, pageable);
+        return articleRepository.findAllByOpenidOrderByCreatedDesc(openid, pageable);
     }
 
     @Override
     @Transactional
     public Article post(Article article) {
-        return articleDao.save(article);
+        return articleRepository.save(article);
     }
 
     @Override
     @Transactional
     public void delete(Integer id) {
-        Article article = articleDao.findById(id)
+        Article article = articleRepository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
         article.setStatus(ArticleStatus.DELETE);
-        articleDao.save(article);
+        articleRepository.save(article);
     }
 
     @Override
     public Page<Article> getFollowingArticles(Collection<String> ids, Integer page, Integer size) {
         Pageable pageable = PageUtils.getPageable(page, size);
-        return articleDao.findAllByOpenidInAndStatusAndVisibleOrderByCreatedDesc(
+        return articleRepository.findAllByOpenidInAndStatusAndVisibleOrderByCreatedDesc(
                 ids, ArticleStatus.NORMAL, Visible.PUBLIC, pageable
         );
     }

@@ -1,25 +1,23 @@
-package cn.letsky.wechat.dao;
+package cn.letsky.wechat.repository;
 
+import cn.letsky.wechat.domain.model.User;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Example;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
-
-import cn.letsky.wechat.model.User;
 
 import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
-public class UserDaoTest {
+public class UserRepositoryTest {
 
 	@Autowired
-	private UserDao userDao;
+	private UserRepository userRepository;
 	
 	@Test
 	public void save() {
@@ -28,13 +26,13 @@ public class UserDaoTest {
 		user.setNickname("漠轻桥");
 		user.setGender(1);
 		user.setAvatarUrl("https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTK3scd1NENlOKKXJQYwQibAuJkBbMV3VTCZuPial0DSicl66XSibgI0DJtRZhwfW3n8jcQ5XrTO5ibxepg/132");
-		User res = userDao.save(user);
+		User res = userRepository.save(user);
 		Assert.assertNotNull(res);
 	}
 
 	@Test
 	public void findOne(){
-		Optional<User> user = userDao.findById("ex");
+		Optional<User> user = userRepository.findById("ex");
 		if (user.isPresent()){
 			System.err.println(user);
 		}

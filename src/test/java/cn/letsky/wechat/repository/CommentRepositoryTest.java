@@ -1,7 +1,7 @@
-package cn.letsky.wechat.dao;
+package cn.letsky.wechat.repository;
 
 import cn.letsky.wechat.constant.EntityType;
-import cn.letsky.wechat.model.Comment;
+import cn.letsky.wechat.domain.model.Comment;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,22 +14,22 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class CommentDaoTest {
+public class CommentRepositoryTest {
 
     @Autowired
-    private CommentDao commentDao;
+    private CommentRepository commentRepository;
 
     @Test
     public void findAllByEntityTypeAndEntityId(){
         Pageable pageable = PageRequest.of(0, 5);
-        Page<Comment> comments = commentDao.findAllByEntityTypeAndEntityIdOrderByCreatedDesc(
+        Page<Comment> comments = commentRepository.findAllByEntityTypeAndEntityIdOrderByCreatedDesc(
                 EntityType.ARTICLE, 2, pageable);
         Assert.assertNotNull(comments.getContent());
     }
 
     @Test
     public void countByEntityTypeAndEntityId(){
-        long count = commentDao.countByEntityTypeAndEntityId(EntityType.ARTICLE, 2);
+        long count = commentRepository.countByEntityTypeAndEntityId(EntityType.ARTICLE, 2);
         Assert.assertNotEquals(0, count);
     }
 }

@@ -1,12 +1,12 @@
 package cn.letsky.wechat.controller.admin;
 
-import cn.letsky.wechat.model.Article;
-import cn.letsky.wechat.model.User;
+import cn.letsky.wechat.domain.model.Article;
+import cn.letsky.wechat.domain.model.User;
+import cn.letsky.wechat.domain.vo.ArticleVO;
+import cn.letsky.wechat.domain.vo.ResultVO;
 import cn.letsky.wechat.service.ArticleService;
 import cn.letsky.wechat.service.UserService;
 import cn.letsky.wechat.util.ResultUtils;
-import cn.letsky.wechat.vo.ArticleVO;
-import cn.letsky.wechat.vo.ResultVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;

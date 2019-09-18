@@ -1,7 +1,7 @@
 package cn.letsky.wechat.controller;
 
 import cn.letsky.wechat.constant.EntityType;
-import cn.letsky.wechat.form.LikeForm;
+import cn.letsky.wechat.domain.form.LikeForm;
 import cn.letsky.wechat.service.LikeService;
 import cn.letsky.wechat.util.ResultUtils;
 import org.springframework.http.ResponseEntity;

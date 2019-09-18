@@ -1,4 +1,4 @@
-package cn.letsky.wechat.vo;
+package cn.letsky.wechat.domain.vo;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

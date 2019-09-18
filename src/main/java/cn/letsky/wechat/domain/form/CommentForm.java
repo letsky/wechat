@@ -1,4 +1,4 @@
-package cn.letsky.wechat.form;
+package cn.letsky.wechat.domain.form;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,6 +1,6 @@
 package cn.letsky.wechat.service;
 
-import cn.letsky.wechat.model.Comment;
+import cn.letsky.wechat.domain.model.Comment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

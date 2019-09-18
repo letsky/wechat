@@ -1,13 +1,12 @@
-package cn.letsky.wechat.model;
+package cn.letsky.wechat.domain.model;
 
-import java.io.Serializable;
-import java.util.Date;
+import lombok.Data;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-
-import lombok.Data;
+import java.io.Serializable;
+import java.util.Date;
 
 @Data
 @Entity

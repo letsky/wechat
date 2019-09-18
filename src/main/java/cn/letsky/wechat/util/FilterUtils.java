@@ -1,8 +1,8 @@
 package cn.letsky.wechat.util;
 
 import cn.letsky.wechat.constant.ResultEnum;
+import cn.letsky.wechat.domain.model.Trie;
 import cn.letsky.wechat.exception.CommonException;
-import cn.letsky.wechat.model.Trie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

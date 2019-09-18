@@ -11,6 +11,9 @@ public class WechatApplicationTests {
 
 	@Test
 	public void contextLoads() {
+		boolean a = true;
+		Boolean b = null;
+		System.out.println(a && b);
 	}
 
 }

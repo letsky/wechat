@@ -1,4 +1,4 @@
-package cn.letsky.wechat.vo;
+package cn.letsky.wechat.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;

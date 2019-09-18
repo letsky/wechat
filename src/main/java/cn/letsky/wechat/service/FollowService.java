@@ -44,7 +44,7 @@ public interface FollowService {
      * @param openid
      * @return
      */
-    Long getFollowingCount(String openid);
+    long getFollowingCount(String openid);
 
     /**
      * 获取粉丝人数
@@ -52,7 +52,7 @@ public interface FollowService {
      * @param openid
      * @return
      */
-    Long getFollowersCount(String openid);
+    long getFollowersCount(String openid);
 
     /**
      * 判断是否关注

@@ -1,6 +1,7 @@
-package cn.letsky.wechat.model;
+package cn.letsky.wechat.domain.model;
 
 import org.springframework.stereotype.Component;
+
 import java.util.TreeMap;
 
 @Component

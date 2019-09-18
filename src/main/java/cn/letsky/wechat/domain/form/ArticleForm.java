@@ -1,4 +1,4 @@
-package cn.letsky.wechat.form;
+package cn.letsky.wechat.domain.form;
 
 import cn.letsky.wechat.constant.Visible;
 import cn.letsky.wechat.constant.status.CommentStatus;

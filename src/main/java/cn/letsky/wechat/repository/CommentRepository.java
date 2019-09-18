@@ -1,14 +1,14 @@
-package cn.letsky.wechat.dao;
+package cn.letsky.wechat.repository;
 
 import cn.letsky.wechat.constant.EntityType;
-import cn.letsky.wechat.model.Comment;
+import cn.letsky.wechat.domain.model.Comment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CommentDao extends JpaRepository<Comment, Integer> {
+public interface CommentRepository extends JpaRepository<Comment, Integer> {
 
     /**
      * 查询评论

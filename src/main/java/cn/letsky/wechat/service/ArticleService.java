@@ -1,7 +1,7 @@
 package cn.letsky.wechat.service;
 
 import cn.letsky.wechat.constant.status.CommentStatus;
-import cn.letsky.wechat.model.Article;
+import cn.letsky.wechat.domain.model.Article;
 import org.springframework.data.domain.Page;
 
 import java.util.Collection;

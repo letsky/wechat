@@ -1,7 +1,7 @@
 package cn.letsky.wechat.util;
 
 import cn.letsky.wechat.constant.ResultEnum;
-import cn.letsky.wechat.vo.ResultVO;
+import cn.letsky.wechat.domain.vo.ResultVO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 

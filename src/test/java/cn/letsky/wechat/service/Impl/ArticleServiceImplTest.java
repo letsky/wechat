@@ -1,6 +1,6 @@
 package cn.letsky.wechat.service.Impl;
 
-import cn.letsky.wechat.model.Article;
+import cn.letsky.wechat.domain.model.Article;
 import cn.letsky.wechat.service.ArticleService;
 import org.junit.After;
 import org.junit.Assert;

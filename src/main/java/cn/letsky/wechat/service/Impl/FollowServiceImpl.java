@@ -7,6 +7,7 @@ import org.springframework.data.redis.core.SetOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -61,31 +62,31 @@ public class FollowServiceImpl implements FollowService {
     }
 
     @Override
-    public Long getFollowingCount(String openid) {
-        return setOperations.size(getFollowingKey(openid));
+    public long getFollowingCount(String openid) {
+        Long count = setOperations.size(getFollowingKey(openid));
+        return count == null ? 0L : count;
     }
 
     @Override
-    public Long getFollowersCount(String openid) {
-        return setOperations.size(getFollowersKey(openid));
+    public long getFollowersCount(String openid) {
+        Long count = setOperations.size(getFollowersKey(openid));
+        return count == null ? 0L : count;
     }
 
     @Override
     public boolean isFollowing(String fromUser, String toUser) {
         String key = getFollowingKey(fromUser);
-        return setOperations.isMember(key, toUser);
+        Boolean isFollowing = setOperations.isMember(key, toUser);
+        return isFollowing == null ? false : isFollowing;
     }
 
     @Override
     public boolean isMutualFollowing(String fromUser, String toUser) {
         String followingKey = getFollowingKey(fromUser);
         String followersKey = getFollowersKey(fromUser);
-        Boolean r1 = setOperations.isMember(followingKey, toUser);
-        Boolean r2 = setOperations.isMember(followersKey, toUser);
-        if (r1 && r2) {
-            return true;
-        }
-        return false;
+        Boolean r1 = Optional.ofNullable(setOperations.isMember(followingKey, toUser)).orElse(false);
+        Boolean r2 = Optional.ofNullable(setOperations.isMember(followersKey, toUser)).orElse(false);
+        return r1 && r2;
     }
 
     /**

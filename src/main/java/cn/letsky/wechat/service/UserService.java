@@ -1,6 +1,6 @@
 package cn.letsky.wechat.service;
 
-import cn.letsky.wechat.model.User;
+import cn.letsky.wechat.domain.model.User;
 import org.springframework.data.domain.Page;
 
 import java.util.Optional;

@@ -1,9 +1,9 @@
 package cn.letsky.wechat.controller;
 
-import cn.letsky.wechat.model.User;
+import cn.letsky.wechat.domain.model.User;
+import cn.letsky.wechat.domain.vo.UserVO;
 import cn.letsky.wechat.service.UserService;
 import cn.letsky.wechat.util.ResultUtils;
-import cn.letsky.wechat.vo.UserVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

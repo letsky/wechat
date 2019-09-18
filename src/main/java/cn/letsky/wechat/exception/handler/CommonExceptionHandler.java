@@ -1,9 +1,9 @@
 package cn.letsky.wechat.exception.handler;
 
 import cn.letsky.wechat.constant.ResultEnum;
+import cn.letsky.wechat.domain.vo.ResultVO;
 import cn.letsky.wechat.exception.CommonException;
 import cn.letsky.wechat.util.ResultUtils;
-import cn.letsky.wechat.vo.ResultVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

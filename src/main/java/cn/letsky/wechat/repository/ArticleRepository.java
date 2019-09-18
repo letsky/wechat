@@ -1,8 +1,8 @@
-package cn.letsky.wechat.dao;
+package cn.letsky.wechat.repository;
 
 import cn.letsky.wechat.constant.Visible;
 import cn.letsky.wechat.constant.status.ArticleStatus;
-import cn.letsky.wechat.model.Article;
+import cn.letsky.wechat.domain.model.Article;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Collection;
 
 @Repository
-public interface ArticleDao extends JpaRepository<Article, Integer> {
+public interface ArticleRepository extends JpaRepository<Article, Integer> {
 
     /**
      * 根据状态查询所有的文章(按发表时间降序)

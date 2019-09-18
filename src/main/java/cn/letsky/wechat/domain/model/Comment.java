@@ -1,4 +1,4 @@
-package cn.letsky.wechat.model;
+package cn.letsky.wechat.domain.model;
 
 import lombok.Data;
 
