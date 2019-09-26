@@ -7,6 +7,7 @@ import cn.letsky.wechat.service.UserService;
 import cn.letsky.wechat.util.ResultUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,10 +29,8 @@ public class UserAdminController {
     }
 
     @RequestMapping
-    public ResultVO getList(
-            @RequestParam(value = "page", defaultValue = "1") Integer page,
-            @RequestParam(value = "size", defaultValue = "20") Integer size) {
-        Page<User> userPage = userService.getUsers(page, size);
+    public ResultVO getList(Pageable pageable) {
+        Page<User> userPage = userService.getUsers(pageable);
         List<UserVO> list = userPage.get()
                 .map(e -> transform(e, new UserVO()))
                 .collect(Collectors.toList());
