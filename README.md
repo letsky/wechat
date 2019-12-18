@@ -1,4 +1,5 @@
 # Mini Program Back End
+This is a wechat mini program backend.
 
 ## Quick Start
 
